@@ -170,8 +170,6 @@ const checkPassword = (password) => {
 
   return password;
 };
-=======
-const { ObjectId } = require("mongodb");
 
 function checkId(id, varName) {
   if (!id) throw `Error: You must provide a ${varName}`;
