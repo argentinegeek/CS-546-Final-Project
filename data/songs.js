@@ -469,15 +469,21 @@ const updateSongLinks = async (songId, userId, nl) => {
 };
 
 /**
- * searches through songs and returns songs where title or artist matches the search term
- * @param {*} searchTerm : string being searched for
+ * searches through songs and returns songs where title matches the search term
+ * @param {*} songName : string being searched for
  * @returns list of song objects
  */
-const searchSongs = async (searchTerm) => {
-    if (!searchTerm) throw 'missng input parameters';
-    if (typeof(searchTerm) !== 'string') throw 'invalid data type';
-    if (validation.validString(searchTerm.trim())) ;
+const searchSongs = async (songName) => {
+    if (!songName) throw 'missng input parameters';
+    if (typeof(songName) !== 'string') throw 'invalid data type';
+    if (validation.validString(songName.trim())) songName = songName.trim();
     
+    let search = new RegExp('.*' + songName + '.*', 'i');
+    const songCollection = await songs();
+    let match = await songCollection.find({title: search}).toArray();
+    if (match.length === 0) throw `No songs with title ${songName} found`;
+
+    return match;
 };
 
 /**
