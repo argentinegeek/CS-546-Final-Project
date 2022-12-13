@@ -194,8 +194,8 @@ function checkUsername(username) {
     throw "Error: Username is not of type string!";
   username = username.trim();
   if (username.length === 0) throw "Error: username cannot contain just spaces";
-  if (username.length <= 4)
-    throw "Error: username cannot be less than 5 characters";
+  if (username.length < 4)
+    throw "Error: username cannot be less than 4 characters";
   const letters = /[a-zA-Z]/; //regex to check for at least one letter character
   const letterCheck = letters.test(username);
   if (!letterCheck)
