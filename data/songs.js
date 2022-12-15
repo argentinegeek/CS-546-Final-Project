@@ -693,7 +693,7 @@ const recommendedSongs = async (songId) => {
 
   // sort them from highest to lowest rating
   recommendations = [...new Set([...genreMatches, ...artistMatches])];
-  recommendations = recommendations.sort((a, b) => a.overallRating - b.overallRating);
+  recommendations = recommendations.sort((a, b) => b.overallRating - a.overallRating);
   
   let result = [];
   if (recommendations.length > 5) {
@@ -736,7 +736,7 @@ const mostPopularArtists = async () => {
 
   // convert map to array to store found artists in form [{artist, rating}, ...] and sorting
   let ranked = Array.from(artistRating, ([artist, rating]) => ({artist, rating}));
-  ranked = ranked.sort((a, b) => a.rating - b.rating);
+  ranked = ranked.sort((a, b) => b.rating - a.rating);
   return ranked;
 };
 
