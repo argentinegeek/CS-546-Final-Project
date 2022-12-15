@@ -1,0 +1,44 @@
+/*
+Shared CSS
+*/
+
+body {
+    color: #62EDD6;
+}
+
+
+
+/* Home Page */
+#homepage {
+    border-radius: 10px;
+    background-color: #8FC33A;
+}
+
+#join {
+    color: white;
+    font-weight: bold;
+}
+
+/* Register Page */
+
+
+/* Login Page */
+
+
+/* Logout Page */
+
+
+/* Settings Page */
+
+
+/* Individual Playlist Page */
+
+/* Songs Page */
+
+
+/* Song Page */
+
+
+/* Playlists Page */
+
+/* Activity Page */
