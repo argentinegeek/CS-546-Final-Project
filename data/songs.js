@@ -38,7 +38,7 @@ const postSong = async (posterId, title, artist, genres, links) => {
     for (let genre of genres) {
       if (validation.validString(genre.trim())) {
         if (validation.hasNumbers(genre.trim()))
-          throw "Genre cannot contian numbers";
+          throw "Genre cannot contain numbers";
         genre = genre.trim();
 
         // testing for invalid characters
@@ -663,7 +663,7 @@ const sortSongs = async (songList, order, flag) => {
  * @param {*} songId : id of song - string
  * @returns list of songs
  */
-const recommendSongs = async (songId) => {
+const recommendedSongs = async (songId) => {
   // get all songs with similar genres to current song
   // sort them from highest to lowest rating
   // grab, at most, top 2 songs with same genre, excluding current song
@@ -676,16 +676,32 @@ const recommendSongs = async (songId) => {
  * @returns list of artists from most popular to least popular
  */
 const mostPopularArtists = async () => {
-  // make array to store found artists in form [{artist, rating}, ...]
-  // let artistRating = [];
+  // making map
+  let artistRating = new Map();
   // get all songs
-  // check if artist is in array
-  // get all songs by artist
-  // compute the average score for the artist based on song
-  // add to array
-  // sort artists
-  // const ranked = artistRating.sort((a,b) => a.rating - b.rating);
-  // return ranked;
+  const songCollection = await songs();
+
+  // build map
+  for (const song in songCollection) {
+    let artist = song.artist;
+    let songRating = song.overallRating;
+    // check if in map
+    if (artistRating.has(artist)) {
+      // if they are, compute new average score
+      let currentRating = artistRating.get(artist);
+      let newRating = (currentRating + songRating) / 2;
+      // updating map
+      artistRating.set(artist, newRating);
+    } else {
+      // if not, enter tuple into map
+      artistRating.set(artist, songRating);
+    }
+  }
+
+  // convert map to array to store found artists in form [{artist, rating}, ...] and sorting
+  let ranked = Array.from(artistRating, ([artist, rating]) => ({artist, rating}));
+  ranked = ranked.sort((a,b) => a.rating - b.rating);
+  return ranked;
 };
 
 module.exports = {
@@ -704,4 +720,6 @@ module.exports = {
   searchArtist,
   filterByRating,
   sortSongs,
+  recommendedSongs,
+  mostPopularArtists
 };
