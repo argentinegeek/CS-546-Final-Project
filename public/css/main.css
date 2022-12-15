@@ -2,10 +2,30 @@
 Shared CSS
 */
 
+h1 {
+    align-items: center;
+    font-weight: bold;
+}
+
 body {
     color: #62EDD6;
 }
 
+.square {
+    height: 50px;
+    width: 50px;
+    border-radius: 10px;
+    background-color: white;
+    align-items: center;
+}
+
+#colorstrip {
+    width: 100%;
+    height: 2px;
+    border-style: solid;
+    border-color: #FE65B7;
+    background-color: #FE65B7;
+}
 
 
 /* Home Page */
