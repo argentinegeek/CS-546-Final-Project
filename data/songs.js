@@ -183,8 +183,7 @@ const deleteSong = async (songId, userId) => {
     _id: ObjectId(songId),
   });
 
-  if (deletionInfo.deleteCount === 0)
-    throw `Could not delete song with id of ${songId}`;
+  if (deletionInfo.deleteCount === 0) throw `Could not delete song with id of ${songId}`;
 
   // delete comment connections for comment commentId on song
   // // remove from user's songReview
@@ -530,4 +529,6 @@ module.exports = {
   updateArtist,
   updateGenre,
   updateSongLinks,
+  searchSongs,
+
 };
