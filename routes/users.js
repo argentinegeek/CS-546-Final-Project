@@ -80,11 +80,14 @@ router
     //return res.render("login_page");
   });
 
-router.route("/private").get(async (req, res) => {});
+router.route("/private").get(async (req, res) => {
+  //this should render the account info page
+  return res.render("settings_page");
+});
 
 router.route("/logout").get(async (req, res) => {
   req.session.destroy();
-  //add return render(logout-page/redirect back to home page)
+  return res.render("logout_page");
 });
 
 module.exports = router;
