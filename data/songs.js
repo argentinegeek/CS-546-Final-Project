@@ -168,14 +168,14 @@ const deleteSong = async (songId, userId) => {
 
   // getting DB
   const songCollection = await songs();
-  // const userCollection = await users();
+  const userCollection = await users();
 
   // getting song and individual tags
   const song = await getSongById(songId);
-  if (userId !== song.posterId) throw `Song must be deleted by poster`;
+  // if (userId !== song.posterId) throw `Song must be deleted by poster`;
   const title = song.title;
   const artist = song.artist;
-  // const comments = song.comments;
+  const comments = song.comments;
 
   // deleting song from DB
 
@@ -186,14 +186,30 @@ const deleteSong = async (songId, userId) => {
   if (deletionInfo.deleteCount === 0) throw `Could not delete song with id of ${songId}`;
 
   // delete comment connections for comment commentId on song
-  // // remove from user's songReview
-  // let deletes = [];
-  // for (const comment in comments) {
-  //     let deleted = await user.deleteComment(comment._id.toString());
-  //     deletes.push(deleted);
-  // }
-  // // deleting songId from admin's songPosts
-  // const updatedAdmin = await user.deleteSong(songId, userId);
+  // remove from user's songReview
+  let deletes = [];
+  for (const comment in comments) {
+      let deleted = comment._id.toString();
+      let commentId = comment._id.toString(); // id of comment
+      let commenter = comment.userId;
+      let interactions = comment.userInteractions; // array of userIds of people who interacted
+
+      // remove commentId from user
+      const updateCommenter = await userCollection.updateOne({_id: ObjectId(commenter)}, {$pull: {songReviews: songId}});
+      if (updateCommenter.modifiedCount === 0) throw `Could not remove comment from commenter (${commenter}) profile`;
+
+      // remove commentId from interactions
+      for (const interaction in interactions) {
+        let interactor = interaction.userId;
+        const updateInteractor = await userCollection.updateOne({_id: ObjectId(interactor)}, {$pull: {commentInteractions: commentId}});
+        if (updateInteractor.modifiedCount === 0) throw `Could not remove interaction from interactor (${interactor}) profile`;
+      }
+      deletes.push(deleted);
+  }
+  // deleting songId from admin's songPosts
+  if (deletes.length !== comments.length) throw `Could not delete all comments for song ${songId}`;
+  const updateAdmin = await userCollection.updateOne({_id: ObjectId(posterId)}, {$pull: {songPosts: songId}});
+  if (updateAdmin.modifiedCount === 0) throw `Could not remove the song from the poster (${posterId}) profile`;
 
   //output
   const message = `${title} by ${artist} has been successfully deleted`;
