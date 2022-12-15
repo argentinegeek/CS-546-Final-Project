@@ -26,11 +26,15 @@ async function main() {
     let comment3 = await comments.createComment(parseSong1, parseUser2, "It's mid, this song", 2);
 
     let parseComment1 = comment1["_id"].toString();
+    let parseComment2 = comment2["_id"].toString();
+
     let testGetComment = await comments.getComment(parseComment1);
     let testGetAllComments = await comments.getAllComments(parseSong1);
     //console.log(testGetComment);
 
     let userInteraction1 = await comments.createUserInteraction(parseComment1, parseUser1, parseSong1, true);
+
+    let testDeleteComment = await comments.deleteComment(parseComment2, parseUser2);
 
 
     //last two lines

@@ -122,37 +122,42 @@ const getComment = async (commentId) => {
     return grabComment;
 };
 
-// //needs to remove by UserID!!!!
-// const removeComment = async (commentId, userId) => {
-//     commentId = validation.checkId(commentId, "ID");
-//     userId = validation.checkId(userId, "ID");
-//     const allSongs = await songs.getAllSongs();
-//     const songCollection = await song();
+const deleteComment = async (commentId, userId) => {
+    commentId = validation.checkId(commentId, "ID");
+    userId = validation.checkId(userId, "ID");
 
-//     const findSong = allSongs.filter((song) => {
-//         const searchComment = song.comments.filter((comment) => comment._id === commentId.trim());
+    //find the user
+    let userFound = await user.getUserById(userId);
+    if (!userFound) {
+        throw "user is not found";
+    }
 
-//         if (searchComment === false) {
-//             throw "comment not found";
-//         }
-//     });
+    //isolate the comment
+    //let findComment = await getComment(commentId);
 
-//     const newId = ObjectId(findSong._id);
+    //go into the user database and pulling out the comment 
+    const userCollection = await users();
+    let currentSongReviews = userFound.songReviews;
 
-//     if (!(getComment(commentId.trim()))) {
-//         throw "comment cannot be found";
-//     } else {
-//         const update = findSong.comments.filter((comment) => commentId._id !== commentId.trim());
+    for (let i = 0; i < currentSongReviews.length; i++) {
+        if (currentSongReviews[i] === commentId) {
+            currentSongReviews.splice(i, 1);
+            break;
+        }
+    }
 
-//         const updateSong = await songCollection.updateOne({ _id: newId }, { $set: { comments: update } });
+    const updateUser = await userCollection.updateOne(
+        { _id: ObjectId(userId) },
+        { $set: { songReviews: currentSongReviews } }
+    )
 
-//         if (!(updateSong.matchCount && updateSong.modifiedCount)) {
-//             throw "could not update song";
-//         }
+    if (updateUser.modifiedCount === 0) {
+        throw "could not remove comment from user's post"
+    }
 
-//         return "removed successfully";
-//     }
-// }
+    return "comment removed successfully";
+
+}
 
 const createUserInteraction = async (commentId, userId, songId, interactionType) => {
     commentId = validation.checkId(commentId, "ID");
@@ -260,5 +265,6 @@ module.exports = {
     createComment,
     getAllComments,
     getComment,
+    deleteComment,
     createUserInteraction,
 };
