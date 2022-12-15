@@ -472,7 +472,7 @@ const updateSongLinks = async (songId, userId, nl) => {
  * @param {*} songName : string being searched for
  * @returns list of song objects
  */
-const searchSongs = async (searchTerm) => {
+const searchSongs = async (songName) => {
   if (!songName) throw 'missng input parameters';
   if (typeof(songName) !== 'string') throw 'invalid data type';
   if (validation.validString(songName.trim())) songName = songName.trim();
