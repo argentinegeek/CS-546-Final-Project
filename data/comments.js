@@ -236,7 +236,6 @@ const removeInteraction = async (commentId, userId) => {
     commentId = validation.checkId(commentId, "ID");
     userId = validation.checkId(userId, "ID");
 
-
 }
 
 // const addInteraction = async (commentId, usersInteractionId) => {
