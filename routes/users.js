@@ -1,5 +1,4 @@
 // All routes related to user profiles
-const e = require("express");
 const express = require("express");
 const router = express.Router();
 const data = require("../data");
