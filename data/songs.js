@@ -472,7 +472,18 @@ const updateSongLinks = async (songId, userId, nl) => {
  * @param {*} songName : string being searched for
  * @returns list of song objects
  */
-const searchSongs = async (searchTerm) => {};
+const searchSongs = async (searchTerm) => {
+  if (!songName) throw 'missng input parameters';
+  if (typeof(songName) !== 'string') throw 'invalid data type';
+  if (validation.validString(songName.trim())) songName = songName.trim();
+  
+  let search = new RegExp('.*' + songName + '.*', 'i');
+  const songCollection = await songs();
+  let match = await songCollection.find({title: search}).toArray();
+  if (match.length === 0) throw `No songs with title ${songName} found`;
+
+  return match;
+};
 
 /**
  * gets songs to recommend to user based on song with songId's artist and genre
