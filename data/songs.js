@@ -705,37 +705,40 @@ const recommendedSongs = async (songId) => {
 };
 
 /**
- * makes list of all artists in order from highest to lowest rating
+ * makes list of all artists in order from highest to lowest rating or an empty list if no songs in db
  * @returns list of artists from most popular to least popular in form [{artist: artistName, rating: rating}, ...]
  * artist - string
  * rating - number
  */
 const mostPopularArtists = async () => {
-  // making map
-  let artistRating = new Map();
   // get all songs
   const songCollection = await songs();
+  let ranked = [];
 
-  // build map
-  for (const song in songCollection) {
-    let artist = song.artist;
-    let songRating = song.overallRating;
-    // check if in map
-    if (artistRating.has(artist)) {
-      // if they are, compute new average score
-      let currentRating = artistRating.get(artist);
-      let newRating = (currentRating + songRating) / 2;
-      // updating map
-      artistRating.set(artist, newRating);
-    } else {
-      // if not, enter tuple into map
-      artistRating.set(artist, songRating);
-    }
+  if (songCollection.length !== 0) {
+    // making map
+    let artistRating = new Map();
+    // build map
+    for (const song in songCollection) {
+      let artist = song.artist;
+      let songRating = song.overallRating;
+      // check if in map
+      if (artistRating.has(artist)) {
+        // if they are, compute new average score
+        let currentRating = artistRating.get(artist);
+        let newRating = (currentRating + songRating) / 2;
+        // updating map
+        artistRating.set(artist, newRating);
+      } else {
+        // if not, enter tuple into map
+        artistRating.set(artist, songRating);
+      }
+    } 
+    // convert map to array to store found artists in form [{artist, rating}, ...] and sorting
+    ranked = Array.from(artistRating, ([artist, rating]) => ({artist, rating}));
+    ranked = ranked.sort((a, b) => b.rating - a.rating);
   }
-
-  // convert map to array to store found artists in form [{artist, rating}, ...] and sorting
-  let ranked = Array.from(artistRating, ([artist, rating]) => ({artist, rating}));
-  ranked = ranked.sort((a, b) => b.rating - a.rating);
+  
   return ranked;
 };
 
