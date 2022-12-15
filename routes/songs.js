@@ -52,7 +52,7 @@ router.post("/", async (req, res) => {
 
   try {
     const { posterId, title, artist, genres, links } = songPostData;
-    const newSong = await songData.addSong(
+    const newSong = await songData.postSong(
       posterId,
       title,
       artist,
