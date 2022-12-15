@@ -33,9 +33,12 @@ async function main() {
     //console.log(testGetComment);
 
     let userInteraction1 = await comments.createUserInteraction(parseComment1, parseUser1, parseSong1, true);
+    let userInteraction2 = await comments.createUserInteraction(parseComment1, parseUser2, parseSong1, false);
+    let parseInteraction1 = userInteraction1["_id"].toString();
+
 
     let testDeleteComment = await comments.deleteComment(parseComment2, parseUser2);
-
+    let testDeleteInteraction = await comments.removeInteraction(parseComment1, parseUser1, parseSong1, parseInteraction1);
 
     //last two lines
     await connection.closeConnection();
