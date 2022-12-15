@@ -1,8 +1,8 @@
 // functions for songs
 const mongoCollections = require("../config/mongoCollections");
 const songs = mongoCollections.songs;
+const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
-// const users = mongoCollections.users;
 const validation = require("../helpers");
 const user = require("./users");
 const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Tidal"];
@@ -263,7 +263,7 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
     for (const genre of ng) {
       if (validation.validString(genre.trim())) {
         if (validation.hasNumbers(genre.trim()))
-          throw "Genre cannot contian numbers";
+          throw "Genre cannot contain numbers";
         genre = genre.trim();
         // testing invalid characters
         let badChars = /[@#$%^*_+=\\|<>~\[\]{}()'"`!:;,.?]/;
@@ -546,7 +546,7 @@ const updateSong = async (songId, updatedSong) => {
  */
 const searchSongs = async (songName) => {
   // input checking
-  if (!songName) throw "missng input parameters";
+  if (!songName) throw "missing input parameters";
   if (typeof songName !== "string") throw "invalid data type";
   if (validation.validString(songName.trim())) songName = songName.trim();
 
@@ -566,10 +566,10 @@ const searchSongs = async (songName) => {
  */
 const searchGenres = async (genre) => {
   // input checking
-  if (!genre) throw "missng input parameters";
+  if (!genre) throw "missing input parameters";
   if (typeof genre !== "string") throw "invalid data type";
   if (validation.validString(genre.trim())) genre = genre.trim();
-  if (validation.hasNumbers(genre.trim())) throw "Genre cannot contian numbers";
+  if (validation.hasNumbers(genre.trim())) throw "Genre cannot contain numbers";
   //testing for invalid characters
   let badChars = /[@#$%^*_+=\\|<>~\[\]{}()'"`!:;,.?]/;
   let badEntry = badChars.test(genre);
@@ -588,12 +588,12 @@ const searchGenres = async (genre) => {
 };
 
 /**
- *
- * @param {*} artistName
+ *  finds artist with artistName
+ * @param {*} artistName : name of artist - string
  */
 const searchArtist = async (artistName) => {
   // input checking
-  if (!artistName) throw "missng input parameters";
+  if (!artistName) throw "missing input parameters";
   if (typeof artistName !== "string") throw "invalid data type";
   if (validation.validString(artistName.trim())) artistName = artistName.trim();
 
@@ -668,8 +668,8 @@ const recommendSongs = async (songId) => {
   // sort them from highest to lowest rating
   // grab, at most, top 2 songs with same genre, excluding current song
   // get all songs with same artist
-  // sort them from highest to lowet rating
-  // grab, at most, top 3 songs, excluding curren song
+  // sort them from highest to lowest rating
+  // grab, at most, top 3 songs, excluding current song
 };
 
 /**
@@ -680,7 +680,7 @@ const mostPopularArtists = async () => {
   // let artistRating = [];
   // get all songs
   // check if artist is in array
-  // get all songs by artsist
+  // get all songs by artist
   // compute the average score for the artist based on song
   // add to array
   // sort artists
