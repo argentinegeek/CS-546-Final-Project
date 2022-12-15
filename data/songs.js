@@ -493,10 +493,10 @@ const searchSongs = async (songName) => {
   if (!songName) throw 'missng input parameters';
   if (typeof (songName) !== 'string') throw 'invalid data type';
   if (validation.validString(songName.trim())) songName = songName.trim();
-  
+
   let search = new RegExp('.*' + songName + '.*', 'i');
   const songCollection = await songs();
-  let match = await songCollection.find({title: search}).toArray();
+  let match = await songCollection.find({ title: search }).toArray();
   if (match.length === 0) throw `No songs with title ${songName} found`;
 
   return matches;
@@ -510,7 +510,7 @@ const searchSongs = async (songName) => {
 const searchGenres = async (genre) => {
   // input checking
   if (!genre) throw 'missng input parameters';
-  if (typeof(genre) !== 'string') throw 'invalid data type';
+  if (typeof (genre) !== 'string') throw 'invalid data type';
   if (validation.validString(genre.trim())) genre = genre.trim();
   if (validation.hasNumbers(genre.trim())) throw "Genre cannot contian numbers";
   //testing for invalid characters
@@ -521,8 +521,8 @@ const searchGenres = async (genre) => {
   // searching for matches
   let search = RegExp('.*' + genre + '.*', 'i');
   const songCollection = await songs();
-  let matches = await songCollection.find({genres: {$in: [search]}}).toArray();
-  if (matches.length === 0) `No songs in the genre ${genre}`;
+  let matches = await songCollection.find({ genres: { $in: [search] } }).toArray();
+  if (matches.length === 0)`No songs in the genre ${genre}`;
 
   return matches;
 };
@@ -534,13 +534,13 @@ const searchGenres = async (genre) => {
 const searchArtist = async (artistName) => {
   // input checking
   if (!artistName) throw 'missng input parameters';
-  if (typeof(artistName) !== 'string') throw 'invalid data type';
+  if (typeof (artistName) !== 'string') throw 'invalid data type';
   if (validation.validString(artistName.trim())) artistName = artistName.trim();
-  
+
   // searching for match
   let search = new RegExp('.*' + artistName + '.*', 'i');
   const songCollection = await songs();
-  let match = await songCollection.find({artist: search}).toArray();
+  let match = await songCollection.find({ artist: search }).toArray();
   if (match.length === 0) throw `No songs by artist ${artistName} found`;
 
   return match;
@@ -555,15 +555,15 @@ const searchArtist = async (artistName) => {
 const filterByRating = async (min, max) => {
   // input checking
   if (!min || !max) throw 'missing input parameters';
-  if (typeof(min) !== Number || typeof(max) !== Number) throw 'inputs must be numbers';
+  if (typeof (min) !== Number || typeof (max) !== Number) throw 'inputs must be numbers';
   if (!Number.isInteger(min) || !Number.isInteger(max)) throw 'inputs must be whole numbers';
   if (min >= 1 && min <= 5) throw 'min must be between 1 and 5';
   if (max >= 1 && max <= 5) throw 'max must be between 1 and 5';
   if (min > max) throw 'min must be less than max';
 
   const songCollection = await songs();
-  const matches = await songCollection.find({rating: {$and: {$gte: min, $lte: max}}});
-  
+  const matches = await songCollection.find({ rating: { $and: { $gte: min, $lte: max } } });
+
   return matches;
 };
 
@@ -578,14 +578,14 @@ const sortSongs = async (songList, order, flag) => {
   // input checking
   if (!songList || !order || !flag) throw 'missing input parameters';
   if (!validation.validArray(songList)) throw 'input must be an array'
-  if (typeof(order) !== Number) throw 'order must be a number';
+  if (typeof (order) !== Number) throw 'order must be a number';
   if (order !== 1 || order !== -1) throw 'order must be 1 or -1';
-  if (typeof(flag) !== 'string') throw 'flag must be a string';
+  if (typeof (flag) !== 'string') throw 'flag must be a string';
   if (flag !== 'title' && flag === 'artist' && flag === 'overallRating') throw 'invalid flag';
-  
+
   // sorting
   const songCollection = await songs();
-  const sorted = await songCollection.find({}).sort({title: order}).toArray();
+  const sorted = await songCollection.find({}).sort({ title: order }).toArray();
 
   return sorted;
 }
@@ -602,7 +602,7 @@ const recommendSongs = async (songId) => {
   // get all songs with similar genres to current song
   // sort them from highest to lowest rating
   // grab, at most, top 2 songs with same genre, excluding current song
-  
+
   // get all songs with same artist
   // sort them from highest to lowet rating
   // grab, at most, top 3 songs, excluding curren song
@@ -616,7 +616,7 @@ const mostPopularArtists = async () => {
   // let artistRating = [];
 
   // get all songs
-  
+
   // check if artist is in array
 
   // get all songs by artsist
