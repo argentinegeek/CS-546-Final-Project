@@ -472,52 +472,33 @@ const updateSongLinks = async (songId, userId, nl) => {
  * @param {*} songName : string being searched for
  * @returns list of song objects
  */
-const searchSongs = async (songName) => {
-    if (!songName) throw 'missng input parameters';
-    if (typeof(songName) !== 'string') throw 'invalid data type';
-    if (validation.validString(songName.trim())) songName = songName.trim();
-    
-    let search = new RegExp('.*' + songName + '.*', 'i');
-    const songCollection = await songs();
-    let match = await songCollection.find({title: search}).toArray();
-    if (match.length === 0) throw `No songs with title ${songName} found`;
-
-    return match;
-};
+const searchSongs = async (searchTerm) => {};
 
 /**
  * gets songs to recommend to user based on song with songId's artist and genre
  * @param {*} songId
  * @returns list of songs
  */
-const recommendSongs = async (songId) => {
-
-};
+const recommendSongs = async (songId) => {};
 
 /**
  * @returns list of artists from most popular to least popular
  */
-const mostPopularArtists = async () => {
-
-};
+const mostPopularArtists = async () => {};
 
 /**
  * gets all songs with that genre
  * @param {*} genres
  * @returns list of songs that have genre
  */
-const filterGenre = async (genres) => {
-
-};
+const filterGenre = async (genres) => {};
 
 /**
  * gets all songs from the artist
  * @param {*} artist : artist name - string
  * @returns list of songs
  */
-const getArtistSongs = async (artist) => {
-
-};
+const getArtistSongs = async (artist) => {};
 
 module.exports = {
   postSong,
