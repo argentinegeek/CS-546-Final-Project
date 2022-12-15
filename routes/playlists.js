@@ -1,10 +1,8 @@
 // All routes related to singular posts
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const data = require('../data');
+const data = require("../data");
 const postDate = data.posts;
-const helper = require('../helpers');
+const validation = require("../helpers");
 
-module.exports = {
-    
-};
+module.exports = router;

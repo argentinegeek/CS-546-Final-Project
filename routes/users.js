@@ -1,10 +1,9 @@
 // All routes related to user profiles
-const e = require("express");
 const express = require("express");
 const router = express.Router();
 const data = require("../data");
 const userData = data.users;
-const helper = require("../helpers");
+const validation = require("../helpers");
 //make sure to include error checking for routes
 router.route("/").get(async (req, res) => {
   if (req.session.user) return res.redirect("/private");
@@ -19,15 +18,34 @@ router
     return res.render("register_page");
   })
   .post(async (req, res) => {
-    let info = req.body;
-    //let fName info.firstName
-    // let lName = info.lastName
-    //let uName = info.userName <-- register page inputs have no IDs yet
-    //let pass = info.password
-    //let cPass = info.confirmPassword
-    //error check all parameters above (try catch)
-    //userData.createUser (try catch)
-    return res.redirect("/login");
+    let userInfo = req.body;
+    let fName = userInfo.firstName;
+    let lName = userInfo.lastName;
+    let uName = userInfo.userName; //<-- register page inputs have no IDs yet
+    let pass = userInfo.password;
+    let cPass = userInfo.confirmPassword;
+    try {
+      fName = validation.checkString(fName, "First Name");
+      lName = validation.checkString(lName, "Last Name");
+      uName = validation.checkUsername(uName, "Username");
+      pass = validation.checkPassword(pass, "Password");
+      cPass = validation.checkPassword(cPass, "Confirm Password");
+    } catch (e) {
+      res.status(400).json({ error: e });
+    }
+    try {
+      const newUser = await userData.createUser(
+        fName,
+        lName,
+        uName,
+        pass,
+        cPass
+      );
+      res.json(newUser);
+    } catch (e) {
+      res.sendStatus(500);
+    }
+    //return res.redirect("/login");
   });
 
 router
@@ -38,16 +56,28 @@ router
     return res.render("login_page");
   })
   .post(async (req, res) => {
-    let info = req.body;
-    //let uName = info.username <-- register page inputs have no IDs yet
-    //let pass = info.password
+    let userInfo = req.body;
+    let uName = userInfo.userName; //<-- register page inputs have no IDs yet
+    let pass = userInfo.password;
+    try {
+      uName = validation.checkUsername(uName, "Username");
+      pass = validation.checkPassword(pass, "Password");
+    } catch (e) {
+      return res.status(400).json({ error: e });
+    }
+    try {
+      const auth = await userData.checkUser(uName, pass);
+      res.json(auth);
+    } catch (e) {
+      res.sendStatus(500);
+    }
     //error check all parameters above (try catch)
     //let auth = userData.checkUser (try catch)
     //req.session.user = {userName: uName, userId: auth.uID} < -- if the user does exist
-    return res.redirect("/private");
+    //return res.redirect("/private");
     //if invalid credentials or user doesn't exist / also
     //add error messages for both cases
-    return res.render("login_page");
+    //return res.render("login_page");
   });
 
 router.route("/private").get(async (req, res) => {});
