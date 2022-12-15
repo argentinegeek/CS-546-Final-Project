@@ -129,7 +129,7 @@ const getAllSongs = async () => {
  * @param {*} songId : ObjectId of song - string
  */
 const getSongById = async (songId) => {
-  // getting all songs
+  // input checking
   if (!songId) throw "You must provide an id to search for";
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -337,7 +337,7 @@ const updateSongTitle = async (songId, userId, nt) => {
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
   if (!ObjectId.isValid(songId)) throw "Invalid songId";
-  if (typeof nt !== "string") throw "invalid data type";
+  if (typeof nt !== "string") throw "Invalid data type";
   if (validation.validString(nt.trim())) nt = nt.trim();
 
   const songCollection = await songs();
@@ -414,7 +414,7 @@ const updateGenre = async (songId, userId, ng) => {
     for (const genre of ng) {
       if (validation.validString(genre.trim())) {
         if (validation.hasNumbers(genre.trim()))
-          throw "Genre cannot contian numbers";
+          throw "Genre cannot contain numbers";
         genre = genre.trim();
         //testing for invalid characters
         let badChars = /[@#$%^*_+=\\|<>~\[\]{}()'"`!:;,.?]/;
@@ -588,8 +588,9 @@ const searchGenres = async (genre) => {
 };
 
 /**
- *  finds artist with artistName
+ * finds all songs from artist with artistName and returns as an array of song objects
  * @param {*} artistName : name of artist - string
+ * @returns list of song objects
  */
 const searchArtist = async (artistName) => {
   // input checking
@@ -657,23 +658,63 @@ const sortSongs = async (songList, order, flag) => {
 
 /**
  * gets songs to recommend to user based on song with songId's artist and genre
- * 5 songs recommendations
- *    2 - top 2 songs with same genre as song, excluding current song
- *    3 - top 3 songs with same artist as song, excluding current song
+ * 5 song recommendations
  * @param {*} songId : id of song - string
  * @returns list of songs
  */
 const recommendedSongs = async (songId) => {
+  // checking input
+  if (!songId) throw 'missing songId';
+  if (typeof(songId) !== 'string') throw 'input must be string';
+  if (validation.validString(songId.trim())) songId = songId.trim();
+  if (!ObjectId.idValid(songId)) throw 'invalid songId';
+
+  // variables
+  let genreMatches = [];
+  let artistMatches = [];
+  let recommendations = [];
+
+  // get song
+  const song = await getSongById(songId);
+
   // get all songs with similar genres to current song
-  // sort them from highest to lowest rating
-  // grab, at most, top 2 songs with same genre, excluding current song
+  for (const genre in song.genres) {
+    let matches = searchGenres(genre);
+    // removing current song
+    let filtered = matches.filter((ms) => {
+      if (ms.songId.toString() !== songId) return ms;
+    });
+    // removing duplicate additions and updating matches
+    genreMatches = [...new Set([...genreMatches, ...filtered])];
+  }
+  // // sort them from highest to lowest rating
+  // genreMatches = genreMatches.sort((a, b) => a.overallRating - b.overallRating);
+  
   // get all songs with same artist
+  let artistSongs = searchArtist(song.artist);
+  let filtered = artistSongs.filter((ms) => {
+    if (ms.songId.toString() !== songId) return ms;
+  })
+  artistMatches = [...new Set([...artistMatches, ...filtered])];
+
   // sort them from highest to lowest rating
-  // grab, at most, top 3 songs, excluding current song
+  recommendations = [...new Set([...genreMatches, ...artistMatches])];
+  recommendations = recommendations.sort((a, b) => a.overallRating - b.overallRating);
+  
+  let result = [];
+  if (recommendations.length > 5) {
+
+  } else {
+
+  }
+
 };
 
 /**
- * @returns list of artists from most popular to least popular
+ * makes list of all artists in order from highest to lowest rating
+ * @returns list of artists from most popular to least popular in form [{artist: artistName, rating: rating}, ...]
+ * artist - string
+ * rating - number
  */
 const mostPopularArtists = async () => {
   // making map
@@ -700,7 +741,7 @@ const mostPopularArtists = async () => {
 
   // convert map to array to store found artists in form [{artist, rating}, ...] and sorting
   let ranked = Array.from(artistRating, ([artist, rating]) => ({artist, rating}));
-  ranked = ranked.sort((a,b) => a.rating - b.rating);
+  ranked = ranked.sort((a, b) => a.rating - b.rating);
   return ranked;
 };
 
