@@ -687,8 +687,6 @@ const recommendedSongs = async (songId) => {
     // removing duplicate additions and updating matches
     genreMatches = [...new Set([...genreMatches, ...filtered])];
   }
-  // // sort them from highest to lowest rating
-  // genreMatches = genreMatches.sort((a, b) => a.overallRating - b.overallRating);
   
   // get all songs with same artist
   let artistSongs = searchArtist(song.artist);
@@ -703,11 +701,12 @@ const recommendedSongs = async (songId) => {
   
   let result = [];
   if (recommendations.length > 5) {
-
+    result = recommendations.slice(0, 5);
   } else {
-
+    result = recommendations;
   }
 
+  return recommendations;
 };
 
 /**
