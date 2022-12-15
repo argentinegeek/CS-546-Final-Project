@@ -1,1 +1,10 @@
-{{!-- Layout for errors --}}
+
+{{#if error}}
+    {{#if error.message}}
+        {{error.message}}
+    {{else}}
+        {{error}}
+    {{/if}}
+{{/if}}
+
+{{! Path: views\index.handlebars }}
