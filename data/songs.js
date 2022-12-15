@@ -355,7 +355,6 @@ const updateSongTitle = async (songId, userId, nt) => {
   let song = await getSongById(songId);
   return song;
 };
-
 /**
  * updates artist of a song
  * @param {*} songId : ObjectId of song - string
@@ -586,7 +585,6 @@ const searchGenres = async (genre) => {
 
   return matches;
 };
-
 /**
  *
  * @param {*} artistName
@@ -630,7 +628,6 @@ const filterByRating = async (min, max) => {
 
   return matches;
 };
-
 /**
  * takes in a list of songs and sorts them in a predetermined order based on rating
  * @param {*} songList : array of song objects
@@ -654,7 +651,6 @@ const sortSongs = async (songList, order, flag) => {
 
   return sorted;
 };
-
 /**
  * gets songs to recommend to user based on song with songId's artist and genre
  * 5 songs recommendations
