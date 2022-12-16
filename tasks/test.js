@@ -221,8 +221,10 @@ const main = async () => {
     console.log('----recommendedSongs() test----');
     try {
         let test = songs.recommendedSongs();
-        console.log('recommendedSongs() invalid input case failed');
-    } catch (e) {}
+        console.log(`recommendedSongs() invalid input case failed: ${test}`);
+    } catch (e) {
+        console.log(`error: ${e}`);
+    }
     try {
         let test = songs.recommendedSongs(ps3);
         console.log(`recommended songs for song ${song2.title}: ${test}`)

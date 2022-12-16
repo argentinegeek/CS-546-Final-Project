@@ -658,7 +658,7 @@ const sortSongs = async (songList, order, flag) => {
  */
 const recommendedSongs = async (songId) => {
   // checking input
-  console.log(`songId: ${songId}`);
+  console.log(!undefined);
   if (!songId) throw "missing songId";
   if (typeof songId !== "string") throw "input must be string";
   if (validation.validString(songId.trim())) songId = songId.trim();
