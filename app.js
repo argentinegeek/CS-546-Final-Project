@@ -20,10 +20,27 @@ app.set('view engine', 'handlebars');
 app.use(
   session({
     name: 'AuthCookie',
+    secret: 'some secret string!',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
   })
 );
+
+app.use('/private', (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(401).render('homepage', {error: "You are not logged in"});
+  } else {
+    next();
+  }
+});
+
+app.use('/register', (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect('/private');
+  } else {
+    next();
+  }
+});
 
 configRoutes(app);
 

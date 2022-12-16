@@ -6,7 +6,7 @@ const songData = data.songs;
 const validation = require("../helpers");
 
 //route to show all songs on a page
-router.get("/songs", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const songList = await songData.getAllSongs();
     res.json(songList);
@@ -23,7 +23,7 @@ router.get("/:id", async (req, res) => {
   }
   try {
     const song = await songData.getSongById(req.params.id);
-    res.json(song);
+    res.render('song_page', {songTitle: song.title, songArtist: song.artist, songGenres: song.genres, songLinks: song.links, songRating: song.overallRating, songComments: song.comments});
   } catch (e) {
     res.status(404).json({ error: e });
   }
@@ -46,7 +46,8 @@ router.post("/", async (req, res) => {
       songPostData.links,
       "Links"
     );
-    res.render('song_page', {songTitle: songPostData.title});
+    let createSong = await songData.postSong(songPostData.posterId, songPostData.title, songPostData.artist, songPostData.genres, songPostData.links);
+    res.redirect('/songs');
   } catch (e) {
     return res.status(400).json({ error: e });
   }

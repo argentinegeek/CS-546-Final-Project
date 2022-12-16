@@ -3,12 +3,16 @@ Shared CSS
 */
 
 h1 {
-    align-items: center;
+    text-align: center;
     font-weight: bold;
 }
 
 body {
-    color: #62EDD6;
+    background-color: #62EDD6;
+}
+
+p {
+    text-align: center;
 }
 
 .square {
