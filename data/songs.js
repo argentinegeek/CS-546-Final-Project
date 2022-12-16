@@ -158,8 +158,7 @@ const deleteSong = async (songId, userId) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -171,7 +170,7 @@ const deleteSong = async (songId, userId) => {
 
   // getting song and individual tags
   const song = await getSongById(songId);
-  // if (userId !== song.posterId) throw `Song must be deleted by poster`;
+  const posterId = song.posterId.toString()
   const title = song.title;
   const artist = song.artist;
   const comments = song.comments;
@@ -215,12 +214,12 @@ const deleteSong = async (songId, userId) => {
     if (deletes.length !== comments.length)
       throw `Could not delete all comments for song ${songId}`;
   }
-  
-  const updateAdmin = await userCollection.updateOne(
+  // update poster
+  const updatePoster = await userCollection.updateOne(
     { _id: ObjectId(posterId) },
     { $pull: { songPosts: songId } }
   );
-  if (updateAdmin.modifiedCount === 0)
+  if (updatePoster.modifiedCount === 0)
     throw `Could not remove the song from the poster (${posterId}) profile`;
 
   //output
@@ -247,8 +246,7 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -318,6 +316,48 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
 };
 
 /**
+ * updates a song
+ * @param {*} songId : ObjectId of song - string
+ * @param {*} updatedSong Song : Object containing what is requested to be udpated - string/array
+ */
+const updateSong = async (songId, updatedSong) => {
+  const songCollection = await songs();
+  const updatedSongData = {};
+  if (updatedSong.posterId) {
+    updatedSongData.posterId = validation.checkId(
+      updatedSong.posterId,
+      "Poster ID"
+    );
+  }
+  if (updatedSong.title) {
+    updatedSongData.title = validation.checkString(updatedSong.title, "Title");
+  }
+  if (updatedSong.artist) {
+    updatedSongData.artist = validation.checkString(
+      updatedSong.artist,
+      "Artist"
+    );
+  }
+  if (updatedSong.genres) {
+    updatedSongData.genres = validation.checkStringArray(
+      updatedSong.genres,
+      "Genres"
+    );
+  }
+  if (updatedSong.links) {
+    updatedSongData.links = validation.checkStringArray(
+      updatedSong.links,
+      "Links"
+    );
+  }
+  await songCollection.updateOne(
+    { _id: ObjectId(songId) },
+    { $set: updatedSongData }
+  );
+  return await this.getSongById(songId);
+};
+
+/**
  * updates title of song
  * @param {*} songId : ObjectId of song - string
  * @param {*} userId : ObjectId of user invoking function - string
@@ -329,8 +369,7 @@ const updateSongTitle = async (songId, userId, nt) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -364,8 +403,7 @@ const updateArtist = async (songId, userId, na) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -401,8 +439,7 @@ const updateGenre = async (songId, userId, ng) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -450,8 +487,7 @@ const updateSongLinks = async (songId, userId, nl) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -492,48 +528,6 @@ const updateSongLinks = async (songId, userId, nl) => {
   // outputting updated song
   let song = await getSongById(songId);
   return song;
-};
-
-/**
- * updates a song
- * @param {*} songId : ObjectId of song - string
- * @param {*} updatedSong Song : Object containing what is requested to be udpated - string/array
- */
-const updateSong = async (songId, updatedSong) => {
-  const songCollection = await songs();
-  const updatedSongData = {};
-  if (updatedSong.posterId) {
-    updatedSongData.posterId = validation.checkId(
-      updatedSong.posterId,
-      "Poster ID"
-    );
-  }
-  if (updatedSong.title) {
-    updatedSongData.title = validation.checkString(updatedSong.title, "Title");
-  }
-  if (updatedSong.artist) {
-    updatedSongData.artist = validation.checkString(
-      updatedSong.artist,
-      "Artist"
-    );
-  }
-  if (updatedSong.genres) {
-    updatedSongData.genres = validation.checkStringArray(
-      updatedSong.genres,
-      "Genres"
-    );
-  }
-  if (updatedSong.links) {
-    updatedSongData.links = validation.checkStringArray(
-      updatedSong.links,
-      "Links"
-    );
-  }
-  await songCollection.updateOne(
-    { _id: ObjectId(songId) },
-    { $set: updatedSongData }
-  );
-  return await this.getSongById(songId);
 };
 
 /**
