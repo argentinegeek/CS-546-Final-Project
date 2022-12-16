@@ -22,8 +22,8 @@ router.get("/:id", async (req, res) => {
     return res.status(400).json({ error: e });
   }
   try {
-    const post = await postData.getPostById(req.params.id);
-    res.json(post);
+    const song = await songData.getSongById(req.params.id);
+    res.json(song);
   } catch (e) {
     res.status(404).json({ error: e });
   }
@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
 
   try {
     const { posterId, title, artist, genres, links } = songPostData;
-    const newSong = await songData.addSong(
+    const newSong = await songData.postSong(
       posterId,
       title,
       artist,
@@ -88,7 +88,7 @@ router.put("/:id", async (req, res) => {
   try {
     await songData.getSongById(req.params.id);
   } catch (e) {
-    return res.status(404).json({ error: "Post not found" });
+    return res.status(404).json({ error: "Song not found" });
   }
 
   try {
@@ -160,6 +160,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+//route to delete song
 router.delete("/:id", async (req, res) => {
   try {
     req.params.id = validation.checkId(req.params.id, "Id URL Param");
