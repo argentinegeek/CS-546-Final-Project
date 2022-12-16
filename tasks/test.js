@@ -145,7 +145,7 @@ const main = async () => {
         console.log(`Invalid input test fail: ${test}`);
     } catch (e) {}
     try {
-        let test = await songs.deleteSong(song1._id, parseUser3);
+        let test = await songs.deleteSong(ps1, parseUser3);
         console.log(`Not admin test fail: ${test}`);
     } catch (e) {}
     // song doesn't exist
@@ -155,27 +155,27 @@ const main = async () => {
     } catch (e) {}
     // not poster but admin
     try {
-        let test = await songs.deleteSong(song1._id, parseUser2);
+        let test = await songs.deleteSong(ps1, parseUser2);
         console.log(test);
-        song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
-        ps1 = song1["_id"].toString();
-        s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
-        s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
-        parseS1c1 = s1c1["_id"].toString();
-        parseS1c2 = s1c2["_id"].toString();
+        // song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
+        // ps1 = song1["_id"].toString();
+        // s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
+        // s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
+        // parseS1c1 = s1c1["_id"].toString();
+        // parseS1c2 = s1c2["_id"].toString();
     } catch (e) {
         console.log(`Not poster but admin test fail: ${e}`);
     }
     // poster and admin
     try {
-        let test = await songs.deleteSong(song6._id, parseUser2);
+        let test = await songs.deleteSong(ps6, parseUser2);
         console.log(test);
-        song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
-        ps6 = song6["_id"].toString();
-        s6c1 = await comments.createComment(ps1, parseUser2, "so happy", 4);
-        s6c2 = await comments.createComment(ps1, parseUser3, "the original was better", 1);
-        parseS6c1 = s6c1["_id"].toString();
-        parseS6c2 = s6c2["_id"].toString();
+        // song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
+        // ps6 = song6["_id"].toString();
+        // s6c1 = await comments.createComment(ps1, parseUser2, "so happy", 4);
+        // s6c2 = await comments.createComment(ps1, parseUser3, "the original was better", 1);
+        // parseS6c1 = s6c1["_id"].toString();
+        // parseS6c2 = s6c2["_id"].toString();
     } catch (e) {
         console.log(`poster and admin test fail: ${e}`);
     }
