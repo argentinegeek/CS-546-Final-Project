@@ -1,16 +1,15 @@
-{{!--
---> All the ids, fors need to be changed
 
---}}
+<h1>Songs</h1>
+ 
+<table>
+    {{#each song}}
+    <tr></tr>
+        <th>Artist</th>
+            <td>{{{this.artist}}}</td>
+        <th>Genre</th>
+            <td>{{{this.genres}}}</td>
+        <th>Overall Rating</th>
+            <td>{{{this.overallRating}}}</td>
+    {{/each}}
+</table>
 
-<h1></h1>
-<form>
-    <label for="">Artist</label>
-    <input>
-    <label for="">Genre</label>
-    <input>
-    <label for="">Overall Rating</label>
-    <input>
-</form>
-
-<a href></a>

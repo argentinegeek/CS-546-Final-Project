@@ -85,7 +85,8 @@ router
 
 router.route("/private").get(async (req, res) => {
   //this should render the account info page
-  return res.render("settings_page");
+  //12/16 - rendering to the songs page
+  return res.render("activity_page");
 });
 
 router.route("/logout").get(async (req, res) => {
