@@ -551,7 +551,7 @@ const searchSongs = async (songName) => {
   let search = new RegExp(".*" + songName + ".*", "i");
   const songCollection = await songs();
   let matches = await songCollection.find({ title: search }).toArray();
-  if (match.length === 0) throw `No songs with title ${songName} found`;
+  if (matches.length === 0) throw `No songs with title ${songName} found`;
 
   return matches;
 };
@@ -612,19 +612,17 @@ const searchArtist = async (artistName) => {
 const filterByRating = async (min, max) => {
   // input checking
   if (!min || !max) throw "missing input parameters";
-  if (typeof min !== Number || typeof max !== Number)
-    throw "inputs must be numbers";
+  // if (typeof min !== 'number' || typeof max !== 'number')
+  //   throw "inputs must be numbers";
   if (!Number.isInteger(min) || !Number.isInteger(max))
     throw "inputs must be whole numbers";
-  if (min >= 1 && min <= 5) throw "min must be between 1 and 5";
-  if (max >= 1 && max <= 5) throw "max must be between 1 and 5";
+  if (min < 1 && min > 4) throw "min must be between 1 and 4";
+  if (max < 2 && max > 5) throw "max must be between 2 and 5";
   if (min > max) throw "min must be less than max";
 
   const songCollection = await songs();
-  const matches = await songCollection.find({
-    rating: { $and: { $gte: min, $lte: max } },
-  });
-
+  const matches = await songCollection.find({rating: { $gte: min, $lte: max }});
+  // console.log(matches);
   return matches;
 };
 /**
@@ -638,8 +636,8 @@ const sortSongs = async (songList, order, flag) => {
   // input checking
   if (!songList || !order || !flag) throw "missing input parameters";
   if (!validation.validArray(songList)) throw "input must be an array";
-  if (typeof order !== Number) throw "order must be a number";
-  if (order !== 1 || order !== -1) throw "order must be 1 or -1";
+  if (typeof order !== 'number') throw "order must be a number";
+  if (order !== 1 && order !== -1) throw "order must be 1 or -1";
   if (typeof flag !== "string") throw "flag must be a string";
   if (flag !== "title" && flag === "artist" && flag === "overallRating")
     throw "invalid flag";
@@ -716,29 +714,50 @@ const mostPopularArtists = async () => {
   let ranked = [];
 
   if (songCollection.length !== 0) {
-    // making map
-    let artistRating = new Map();
-    // build map
+    let artistRating = [];
     for (const song in songCollection) {
-      let artist = song.artist;
+      let artistName = song.artist;
       let songRating = song.overallRating;
-      // check if in map
-      if (artistRating.has(artist)) {
-        // if they are, compute new average score
-        let currentRating = artistRating.get(artist);
-        let newRating = (currentRating + songRating) / 2;
-        // updating map
-        artistRating.set(artist, newRating);
+
+      let found = artistRating.findIndex(element => element.artist === artistName);
+      if (found >= 0) {
+        let old = artistRating[found];
+        let oldRating = old.rating;
+        let newRating = (oldRating + songRating) / 2;
+        artistRating[found].rating = newRating;
       } else {
-        // if not, enter tuple into map
-        artistRating.set(artist, songRating);
+        artistRating.push({artist: artistName, rating: songRating});
       }
-    } 
-    // convert map to array to store found artists in form [{artist, rating}, ...] and sorting
-    ranked = Array.from(artistRating, ([artist, rating]) => ({artist, rating}));
-    ranked = ranked.sort((a, b) => b.rating - a.rating);
+    }
+    // // making map
+    // let artistRating = new Map();
+    // // build map
+    // for (const song in songCollection) { 
+    // // songCollection.forEach(song => {
+    //   let artist = song.artist;
+    //   let songRating = song.overallRating;
+    //   // check if in map
+    //   if (artistRating.has(artist)) {
+    //     // if they are, compute new average score
+    //     let currentRating = artistRating.get(artist);
+    //     let newRating = (currentRating + songRating) / 2;
+    //     // updating map
+    //     artistRating.set(artist, newRating);
+    //   } else {
+    //     // if not, enter tuple into map
+    //     artistRating.set(artist, songRating);
+    //   }
+    // }
+    // // ! artist rating is empty
+    // // console.log(artistRating);
+    // // convert map to array to store found artists in form [{artist : rating}, ...] and sorting
+    // ranked = Array.from(artistRating, ([name, value]) => ({name, value}));
+    // console.log(ranked);
+    // // artistRating.forEach(function(key, value) {
+    // //   ranked.push({artist: key, rating: value})
+    // // })
+    ranked = ranked.sort((a, b) => b.artist - a.artist);
   }
-  
   return ranked;
 };
 

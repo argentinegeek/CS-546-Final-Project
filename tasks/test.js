@@ -2,6 +2,7 @@
 const connection = require("../config/mongoConnection");
 const { ObjectId } = require("mongodb");
 const data = require("../data");
+const { getAllSongs } = require("../data/songs");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
@@ -112,8 +113,8 @@ const main = async () => {
     // console.log("MAKING PLAYLISTS");
     
     // * Testing functions only output messages when there is an undesirable output
-    // ! TESTING USER FUNCTIONS
-    console.log('!-----TESTING SONG FUNCTIONS-----!');
+    // // ! TESTING USER FUNCTIONS
+    // console.log('!-----TESTING USER FUNCTIONS-----!');
 
     // ! TESTING SONG FUNCTIONS
     console.log('!-----TESTING SONG FUNCTIONS-----!');
@@ -204,42 +205,106 @@ const main = async () => {
     
     // // searchSongs()
     // console.log('----searchSongs() test----');
+    // try {
+    //     let test = await songs.searchSongs();
+    //     console.log( `search song invalid input test failed: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.searchSongs('kill bill');
+    // } catch (e) {
+    //     console.log( `search song failed to find a match: ${e}`);
+    // }
+    // try {
+    //     let test = await songs.searchSongs('Kill Bill');       
+    // } catch (e) {
+    //     console.log( `search song failed to find a match: ${e}`);
+    // }
     
     // // searchGenres()
     // console.log('----searchGenres() test----');
-    
+    // try {
+    //     let test = await songs.searchGenres()
+    //     console.log(`failed invalid input case: ${test}`);
+    // } catch (e) {}
+
     // // searchArtist()
     // console.log('----searchArtist() test----');
+    // try {
+    //     let test = await songs.searchArtist();
+    //     console.log(`failed invalid input case: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.searchArtist('sza');
+    //     console.log(test);
+    // } catch (e) {
+    //     console.log(`failed search case: ${e}`);
+    // }
     
-    // // filterByRating()
+    // filterByRating()
     // console.log('----filterByRating() test----');
-    
+    // try {
+    //     let test = await songs.filterByRating()
+    //     console.log(`failed invalid input case: ${test}`)
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.filterByRating(1)
+    //     console.log(`failed invalid input case: ${test}`)
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.filterByRating(5, 1)
+    //     console.log(`failed invalid input case: ${test}`)
+    // } catch (e) {}
+    // !doesn't return array of songs instead returns a ref
+    // try {
+    //     let test = await songs.filterByRating(2, 5)
+    //     console.log(test);
+    // } catch (e) {
+    //     console.log(`failed filter case: ${e}`)
+    // }
+
     // // sortSongs()
     // console.log('----sortSongs() test----');
+    // try {
+    //     let sl = await getAllSongs();
+    //     let test = await songs.sortSongs(sl, -1, 'overallRating')
+    //     console.log(test);
+    // } catch (e) {}
+    // try {
+    //     let sl = await getAllSongs();
+    //     let test = await songs.sortSongs(sl, 1, 'artist')
+    //     console.log(test);
+    // } catch (e) {}
+    // try {
+    //     let sl = await getAllSongs();
+    //     let test = await songs.sortSongs(sl, -1, 'title')
+    //     console.log(test);
+    // } catch (e) {}
 
     // recommendedSongs()
-    console.log('----recommendedSongs() test----');
+    // console.log('----recommendedSongs() test----');
     // try {
     //     let test = await songs.recommendedSongs();
     //     console.log(`recommendedSongs() invalid input case failed: ${test}`);
     // } catch (e) {
     //     console.log(`error: ${e}`);
     // }
-    try {
-        let test = await songs.recommendedSongs(ps3);
-        console.log(`recommended songs for song ${song2.title}: ${test}`)
-    } catch (e) {
-        console.log(`recommended songs failed: ${e}`);
-    }
+    // try {
+    //     let test = await songs.recommendedSongs(ps3);
+    //     console.log(`recommended songs for song ${song2.title}: ${test}`)
+    // } catch (e) {
+    //     console.log(`recommended songs failed: ${e}`);
+    // }
     
     // mostPopularArtists()
-    // console.log('----mostPopularArtists() test----');
-    // try {
-    //     let test = await songs.mostPopularArtists();
-    //     console.log(test);
-    // } catch (e) {
-    //     console.log(e);
-    // }
+    // TODO
+    console.log('----mostPopularArtists() test----');
+    // !returns [{artist: undefined, rating: undefined}]
+    try {
+        let test = await songs.mostPopularArtists();
+        console.log(test);
+    } catch (e) {
+        console.log(e);
+    }
 
     // // ! TESTING COMMENT FUNCTIONS
     // console.log('!-----TESTING COMMENT FUNCTIONS-----!');
