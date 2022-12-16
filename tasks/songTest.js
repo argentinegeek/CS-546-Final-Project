@@ -1,5 +1,6 @@
 // test
 const connection = require("../config/mongoConnection");
+const { ObjectId } = require("mongodb");
 const data = require("../data/");
 const users = data.users;
 const songs = data.songs;
@@ -27,16 +28,16 @@ const main = async () => {
     // * songs
     // made by user 1
     let song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
-    let song2 = await songs.postSong();
-    let song3 = await songs.postSong();
-    let song4 = await songs.postSong();
-    let song5 = await songs.postSong();
+    let song2 = await songs.postSong(parseUser1, "All I Want for Christmans Is You", "Mariah Carey", ["Pop", "Christmas"], [["Spotify", "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn?si=14779c5fc14f4f23"]]);
+    let song3 = await songs.postSong(parseUser1, "Kill Bill", "SZA", ["R&B"], [["Youtube", "https://youtu.be/61ymOWwOwuk"], ["Spotify", "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13"]]);
+    let song4 = await songs.postSong(parseUser1, "Me Porto Bonito", "Bad Bunny", ["Regaeton", "Latin Pop", "Pop"], [["Youtube", "https://youtu.be/SQnc1QibapQ"], ["Spotify", "https://open.spotify.com/track/1Qrg8KqiBpW07V7PNxwwwL?si=ab67351382194aa0"]]);
+    let song5 = await songs.postSong(parseUser1, "Bad Habit", "Steve Lacy", ["R&B", "Alternative R&B"], [["Youtube", "https://youtu.be/VF-FGf_ZZiI"], ["Spotify", "https://open.spotify.com/track/4k6Uh1HXdhtusDW5y8Gbvy?si=72d31a366f8e4a70"]]);
     // made by user 2
-    let song6 = await songs.postSong();
-    let song7 = await songs.postSong();
-    let song8 = await songs.postSong();
-    let song9 = await songs.postSong();
-    let song10 = await songs.postSong();
+    let song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
+    let song7 = await songs.postSong(parseUser2, "Glimpse of Us", "Joji", ["R&B"], [["Youtube", "https://youtu.be/NgsWGfUlwJI"], ["Spotify", ]]);
+    let song8 = await songs.postSong(parseUser2, "Blue in Green", "Miles Davis", ["Jazz"], [["Youtube", "https://youtu.be/TLDflhhdPCg"], ["Spotify", "https://open.spotify.com/track/0aWMVrwxPNYkKmFthzmpRi?si=a60071f9e3714f6e"]]);
+    let song9 = await songs.postSong(parseUser2, "Midnight Rain", "Taylor Swift", ["Pop"], [["Youtube", "https://youtu.be/Odh9ddPUkEY"], ["Spotify", "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad"]]);
+    let song10 = await songs.postSong(parseUser2, "Never Gonna Give You Up", "Rick Astley", ["Pop"], [["Youtube", "https://youtu.be/dQw4w9WgXcQ"], ["Spotify", "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=832bcda624d84bd1"]]);
     // parse songs
     let ps1 = song1["_id"].toString();
     let ps2 = song2["_id"].toString();
@@ -51,62 +52,102 @@ const main = async () => {
 
     // * comments
     // song1
-    let s1c1 = null;
-    let s1c2 = null;
+    let s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
+    let s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
     let parseS1c1 = s1c1["_id"].toString();
     let parseS1c2 = s1c2["_id"].toString();
     // song2
-    let s2c1 = null;
-    let s2c2 = null;
+    let s2c1 = await comments.createComment(ps1, parseUser2, "noooooo", 2);
+    let s2c2 = await comments.createComment(ps1, parseUser4, "so happy", 5);
     let parseS2c1 = s2c1["_id"].toString();
     let parseS2c2 = s2c2["_id"].toString();
     // song3
-    let s3c1 = null;
-    let s3c2 = null;
+    let s3c1 = await comments.createComment(ps1, parseUser1, ";lasjfoishg", 4);
+    let s3c2 = await comments.createComment(ps1, parseUser2, " tkjienfsa ddd", 1);
     let parseS3c1 = s3c1["_id"].toString();
     let parseS3c2 = s3c2["_id"].toString();
     // song4
-    let s4c1 = null;
-    let s4c2 = null;
+    let s4c1 = await comments.createComment(ps1, parseUser3, "fire", 4);
+    let s4c2 = await comments.createComment(ps1, parseUser4, "very fun, not well written", 2);
     let parseS4c1 = s4c1["_id"].toString();
     let parseS4c2 = s4c2["_id"].toString();
     // song5
-    let s5c1 = null;
-    let s5c2 = null;
+    let s5c1 = await comments.createComment(ps1, parseUser1, "i'm crying", 5);
+    let s5c2 = await comments.createComment(ps1, parseUser4, "meh", 1);
     let parseS5c1 = s5c1["_id"].toString();
     let parseS5c2 = s5c2["_id"].toString();
     // song6
-    let s6c1 = null;
-    let s6c2 = null;
+    let s6c1 = await comments.createComment(ps1, parseUser2, "so happy", 4);
+    let s6c2 = await comments.createComment(ps1, parseUser3, "the original was better", 1);
     let parseS6c1 = s6c1["_id"].toString();
     let parseS6c2 = s6c2["_id"].toString();
     // song7
-    let s7c1 = null;
-    let s7c2 = null;
+    let s7c1 = await comments.createComment(ps1, parseUser1, "too sad", 5);
+    let s7c2 = await comments.createComment(ps1, parseUser3, "not for me", 2);
     let parseS7c1 = s7c1["_id"].toString();
     let parseS7c2 = s7c2["_id"].toString();
     // song8
-    let s8c1 = null;
-    let s8c2 = null;
+    let s8c1 = await comments.createComment(ps1, parseUser2, "smooth", 4);
+    let s8c2 = await comments.createComment(ps1, parseUser4, "they don't make music like this anymore", 5);
     let parseS8c1 = s8c1["_id"].toString();
     let parseS8c2 = s8c2["_id"].toString();
     // song9
-    let s9c1 = null;
-    let s9c2 = null;
+    let s9c1 = await comments.createComment(ps1, parseUser1, "yesssss", 5);
+    let s9c2 = await comments.createComment(ps1, parseUser2, "amazing!!!!!!!!!!!!!!!!!!!!!", 5);
     let parseS9c1 = s9c1["_id"].toString();
     let parseS9c2 = s9c2["_id"].toString();
     // song10
-    let s10c1 = null;
-    let s10c2 = null;
+    let s10c1 = await comments.createComment(ps1, parseUser3, "Life changing", 5);
+    let s10c2 = await comments.createComment(ps1, parseUser4, "classic", 5);
     let parseS10c1 = s10c1["_id"].toString();
     let parseS10c2 = s10c2["_id"].toString();
 
     // * user interactions
 
-
+    // ! Testing functions only output messages when there is an undesirable output
     // * TESTING SONG FUNCTIONS
+    // postSong()
+    console.log('----postSong() test----');
+    // invalid inputs
+    try { // missing inputs
+        let test = await songs.postSong();
+        console.log(`Invalid input test fail: ${test}`);
+    } catch (e) {}
+    try { // wrong types
+        let test = await songs.postSong(user1, "x", "x", [5, "test"], ['test']);
+        console.log(`Invalid input test fail: ${test}`);
+    } catch (e) {}
+    try { // not admin
+        let test = await songs.postSong(user2, 'x', 'x', ['x'], [['Youtube', 'x']]);
+        console.log(`Invalid input test fail: ${test}`);
+    } catch (e) {}
+
     // deleteSong()
-    
+    console.log('----deleteSong() test----');
+    // invalid inputs
+    try {
+        let test = await songs.deleteSong();
+        console.log(`Invalid input test fail: ${test}`);
+    } catch (e) {}
+    try {
+        let test = await songs.deleteSong(1, parseUser1);
+        console.log(`Invalid input test fail: ${test}`);
+    } catch (e) {}
+    try {
+        let test = await songs.deleteSong(song1._id, parseUser3);
+        console.log(`Invalid input test fail: ${test}`);
+    } catch (e) {}
+    // song doesn't exist
+    try {
+        let test = await songs.deleteSong(ObjectId(), );
+    } catch (e) {
+        
+    }
+    // not poster but admin
+    try {
+        let test = await songs.deleteSong();
+        console.log(`Input check test fail: ${test}`);
+    } catch (e) {}
 
     // getAllSongs()
     
