@@ -8,20 +8,20 @@ const validation = require("../helpers");
 
 /**
  *
- * @param {*} userId : ObjectId of user who created playlist - string
+ * @param {*} posterId : ObjectId of user who created playlist - string
  * @param {*} name : Playlist title - string
  * @param {*} description : Playlist description - string
  * @param {*} songs : List of songs in the playlist - array
  * @returns Playlist creation with its information
  */
-const createPlaylist = async (userId, name, description, songs) => {
-  validation.checkId(userId, "ID");
+const createPlaylist = async (posterId, name, description, songs) => {
+  validation.checkId(posterId, "ID");
   validation.checkString(name, "name");
   validation.checkString(description, "description");
   validation.checkStringArray(songs, "songs");
   const playlistCollection = await playlists();
   let newPlaylist = {
-    userId: userId,
+    posterId: posterId,
     name: name,
     description: description,
     songs: songs,
@@ -41,32 +41,51 @@ const getPlaylistById = async (id) => {
   const playlistCollection = await playlists();
   const playlist = await playlistCollection.findOne({ _id: ObjectId(id) });
   if (!playlist) throw "Playlist not found";
+  // formatting output
+  playlist._id = playlist._id.toString();
   return playlist;
 };
 
 /**
+ * returns all playlist objects from DB in an array
+ */
+const getAllPlaylists = async () => {
+  // getting all songs
+  let playlistCollection = await playlists();
+  let playlistList = await playlistCollection.find({}).toArray();
+  if (!playlistList) throw "Could not get all playlists";
+
+  // formatting output
+  for (let i = 0; i < playlistList.length; i++) {
+    playlistList[i]._id = playlistList[i]._id.toString();
+  }
+  // output
+  return playlistList;
+};
+
+/**
  * @param {*} playlistId : ObjectId of playlist - string
- * @param {*} userId : ObjectId of user who created and is updating the playlist - string
+ * @param {*} posterId : ObjectId of user who created and is updating the playlist - string
  * @param {*} n_Name : new name of the playlist - string
  * @param {*} n_Description : new description of the playlist - string
  * @param {*} n_Songs : new list of songs for the playlist - array
  * @returns updated playlist
  */
-const updatePlaylist = async (
+const updateAllPlaylist = async (
   playlistId,
-  userId,
+  posterId,
   n_Name,
   n_Description,
   n_Songs
 ) => {
   playlistId = validation.checkId(playlistId, "playlist ID");
-  userId = validation.checkId(userId, "user ID");
+  posterId = validation.checkId(posterId, "Poster ID");
   n_Name = validation.checkString(n_Name, "new name");
   n_Description = validation.checkString(n_Description, "new description");
   n_Songs = validation.checkStringArray(n_Songs, "new songs");
   const playlistCollection = await playlists();
   let updatedPlaylist = {
-    userId: userId,
+    posterId: posterId,
     playlistId: playlistId,
     name: n_Name,
     description: n_Description,
@@ -79,22 +98,68 @@ const updatePlaylist = async (
   if (!updatedInfo.modifiedCount === 0)
     throw "Could not update playlist successfully";
   let playlist = await getPlaylistById(playlistId);
+  playlist._id = playlist._id.toString();
+
   return playlist;
 };
 
 /**
+ * updates a playlist
  * @param {*} playlistId : ObjectId of playlist - string
- * @param {*} userId : ObjectId of user who created and is updating the playlist - string
+ * @param {*} posterId : ObjectId of poster of playlist - string
+ * @param {*} updatedPlaylist : Object containing what is requested to be udpated - string/array
+ */
+// TODO: Add checks for admin or user who posted playlist
+const updatePlaylist = async (playlistId, updatedPlaylist) => {
+  const playlistCollection = await songs();
+  const updatedPlaylistData = {};
+  if (updatedPlaylist.posterId) {
+    updatedPlaylistData.posterId = validation.checkId(
+      updatedPlaylist.posterId,
+      "Poster ID"
+    );
+  }
+  if (updatedPlaylist.name) {
+    updatedPlaylistData.name = validation.checkString(
+      updatedPlaylist.name,
+      "Name"
+    );
+  }
+  if (updatedPlaylist.description) {
+    updatedPlaylistData.description = validation.checkString(
+      updatedPlaylist.description,
+      "Description"
+    );
+  }
+  if (updatedPlaylist.songs) {
+    updatedPlaylistData.songs = validation.checkStringArray(
+      updatedSong.songs,
+      "Songs"
+    );
+  }
+  await playlistCollection.updateOne(
+    { _id: ObjectId(playlistId) },
+    { $set: updatedPlaylistData }
+  );
+  return await this.getPlaylistById(playlistId);
+};
+
+/**
+ * @param {*} playlistId : ObjectId of playlist - string
+ * @param {*} posterId : ObjectId of user who created and is updating the playlist - string
  * @returns message confirming deletion of playlist
  */
-const deletePlaylist = async (userId, playlistId) => {
-  userId = validation.checkId(userId, "userID");
+const deletePlaylist = async (posterId, playlistId) => {
+  posterId = validation.checkId(posterId, "posterId");
   playlistId = validation.checkId(playlistId, "playlistID");
   const playlistCollection = await playlists();
-  const playlist = await getPlaylistById(playlistId);
-  const name = playlist.name;
-  const description = playlist.description;
-  const songs = playlist.songs;
+  try {
+    //TODO: check if user deleting is the same user who posted the playlist
+    const playlist = await this.getPlaylistById(playlistId);
+  } catch (e) {
+    console.log(e);
+    return;
+  }
   const deletionInfo = await playlistCollection.deleteOne({
     _id: ObjectId(playlistId),
   });
@@ -108,6 +173,8 @@ const deletePlaylist = async (userId, playlistId) => {
 module.exports = {
   createPlaylist,
   getPlaylistById,
+  getAllPlaylists,
+  updateAllPlaylist,
   updatePlaylist,
   deletePlaylist,
 };

@@ -652,10 +652,10 @@ const sortSongs = async (songList, order, flag) => {
  */
 const recommendedSongs = async (songId) => {
   // checking input
-  if (!songId) throw 'missing songId';
-  if (typeof(songId) !== 'string') throw 'input must be string';
+  if (!songId) throw "missing songId";
+  if (typeof songId !== "string") throw "input must be string";
   if (validation.validString(songId.trim())) songId = songId.trim();
-  if (!ObjectId.idValid(songId)) throw 'invalid songId';
+  if (!ObjectId.idValid(songId)) throw "invalid songId";
 
   // variables
   let genreMatches = [];
@@ -675,12 +675,12 @@ const recommendedSongs = async (songId) => {
     // removing duplicate additions and updating matches
     genreMatches = [...new Set([...genreMatches, ...filtered])];
   }
-  
+
   // get all songs with same artist
   let artistSongs = searchArtist(song.artist);
   let filtered = artistSongs.filter((ms) => {
     if (ms.songId.toString() !== songId) return ms;
-  })
+  });
   artistMatches = [...new Set([...artistMatches, ...filtered])];
 
   // sort them from highest to lowest rating
@@ -752,5 +752,5 @@ module.exports = {
   filterByRating,
   sortSongs,
   recommendedSongs,
-  mostPopularArtists
+  mostPopularArtists,
 };
