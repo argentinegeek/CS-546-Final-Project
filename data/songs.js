@@ -176,7 +176,6 @@ const deleteSong = async (songId, userId) => {
 
   // getting song and individual tags
   const song = await getSongById(songId);
-  console.log(song);
   const posterId = song.posterId
   const title = song.title;
   const artist = song.artist;
@@ -201,7 +200,7 @@ const deleteSong = async (songId, userId) => {
       // remove commentId from user
       const updateCommenter = await userCollection.updateOne(
         { _id: ObjectId(commenter) },
-        { $pull: { songReviews: songId } }
+        { $pull: { songReviews: commentId } }
       );
       if (updateCommenter.modifiedCount === 0) throw `Could not remove comment from commenter (${commenter}) profile`;
       // removing interactions

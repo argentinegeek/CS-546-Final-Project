@@ -114,7 +114,7 @@ const getUserById = async (id) => {
  */
 const isAdmin = async (userId) => {
   userId = validation.checkId(userId, "ID");
-  const user = getUserById(userId);
+  const user = await getUserById(userId);
   if (user.isAdmin === false) return false; //not admin return false
   else return true; // admin return true
 };
