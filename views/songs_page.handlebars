@@ -3,14 +3,15 @@
 
 --}}
 
-<h1></h1>
-<form>
+<h1>My Songs</h1>
+
+{{{#each songs}}}
     <label for="">Artist</label>
-    <input>
+   <p>{{{artist}}}</p>
     <label for="">Genre</label>
-    <input>
+    <p>{{{genre}}}</p>
     <label for="">Overall Rating</label>
-    <input>
-</form>
+    <p>{{{overallRating}}}</p>
+{{{/each}}}
 
 <a href></a>
