@@ -685,14 +685,14 @@ const recommendedSongs = async (songId) => {
   // get all songs with same artist
   // console.log('artist')
   let artistSongs = await searchArtist(song.artist);
-  // console.log(artistSongs);
+  console.log(artistSongs);
   if (artistSongs.length > 1) {
     let filtered = artistSongs.filter((ms) => {
       console.log(ms);
-      if (ms.songId.toString() !== songId) return ms;
+      if (ms._id.toString() !== songId) return ms;
     });
-    console.log('1');
-    console.log(filtered)
+    // console.log('1');
+    // console.log(filtered)
     artistMatches = [...new Set([...artistMatches, ...filtered])];
     // console.log(artistMatches);
   }
