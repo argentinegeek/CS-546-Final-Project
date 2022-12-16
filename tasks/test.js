@@ -2,7 +2,6 @@
 const connection = require("../config/mongoConnection");
 const { ObjectId } = require("mongodb");
 const data = require("../data");
-const { updateSong } = require("../data/songs");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
@@ -12,6 +11,7 @@ const main = async () => {
     await db.dropDatabase();
 
     // * users
+    console.log('MAKING USERS');
     const user1 = await users.createUser("Mya", "Phu", "mxfu", "KevinsucksD32!", "KevinsucksD32!");
     let parseUser1 = user1["_id"].toString();
     await users.createAdmin(parseUser1);
@@ -25,33 +25,35 @@ const main = async () => {
 
     const user4 = await users.createUser("BBBB", "BBBB", "bbbb", "Meow123!", "Meow123!");
     let parseUser4 = user4["_id"].toString();
-    
+
     // * songs
+    console.log('MAKING SONGS');
     // made by user 1
-    let song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
-    let song2 = await songs.postSong(parseUser1, "All I Want for Christmans Is You", "Mariah Carey", ["Pop", "Christmas"], [["Spotify", "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn?si=14779c5fc14f4f23"]]);
-    let song3 = await songs.postSong(parseUser1, "Kill Bill", "SZA", ["R&B"], [["Youtube", "https://youtu.be/61ymOWwOwuk"], ["Spotify", "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13"]]);
-    let song4 = await songs.postSong(parseUser1, "Me Porto Bonito", "Bad Bunny", ["Regaeton", "Latin Pop", "Pop"], [["Youtube", "https://youtu.be/SQnc1QibapQ"], ["Spotify", "https://open.spotify.com/track/1Qrg8KqiBpW07V7PNxwwwL?si=ab67351382194aa0"]]);
-    let song5 = await songs.postSong(parseUser1, "Bad Habit", "Steve Lacy", ["R&B", "Alternative R&B"], [["Youtube", "https://youtu.be/VF-FGf_ZZiI"], ["Spotify", "https://open.spotify.com/track/4k6Uh1HXdhtusDW5y8Gbvy?si=72d31a366f8e4a70"]]);
+    song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
+    song2 = await songs.postSong(parseUser1, "All I Want for Christmans Is You", "Mariah Carey", ["Pop", "Christmas"], [["Spotify", "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn?si=14779c5fc14f4f23"]]);
+    song3 = await songs.postSong(parseUser1, "Kill Bill", "SZA", ["R&B"], [["Youtube", "https://youtu.be/61ymOWwOwuk"], ["Spotify", "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13"]]);
+    song4 = await songs.postSong(parseUser1, "Me Porto Bonito", "Bad Bunny", ["Regaeton", "Latin Pop", "Pop"], [["Youtube", "https://youtu.be/SQnc1QibapQ"], ["Spotify", "https://open.spotify.com/track/1Qrg8KqiBpW07V7PNxwwwL?si=ab67351382194aa0"]]);
+    song5 = await songs.postSong(parseUser1, "Bad Habit", "Steve Lacy", ["R&B", "Alternative R&B"], [["Youtube", "https://youtu.be/VF-FGf_ZZiI"], ["Spotify", "https://open.spotify.com/track/4k6Uh1HXdhtusDW5y8Gbvy?si=72d31a366f8e4a70"]]);
     // made by user 2
-    let song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
-    let song7 = await songs.postSong(parseUser2, "Glimpse of Us", "Joji", ["R&B"], [["Youtube", "https://youtu.be/NgsWGfUlwJI"], ["Spotify", ]]);
-    let song8 = await songs.postSong(parseUser2, "Blue in Green", "Miles Davis", ["Jazz"], [["Youtube", "https://youtu.be/TLDflhhdPCg"], ["Spotify", "https://open.spotify.com/track/0aWMVrwxPNYkKmFthzmpRi?si=a60071f9e3714f6e"]]);
-    let song9 = await songs.postSong(parseUser2, "Midnight Rain", "Taylor Swift", ["Pop"], [["Youtube", "https://youtu.be/Odh9ddPUkEY"], ["Spotify", "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad"]]);
-    let song10 = await songs.postSong(parseUser2, "Never Gonna Give You Up", "Rick Astley", ["Pop"], [["Youtube", "https://youtu.be/dQw4w9WgXcQ"], ["Spotify", "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=832bcda624d84bd1"]]);
+    song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
+    song7 = await songs.postSong(parseUser2, "Glimpse of Us", "Joji", ["R&B"], [["Youtube", "https://youtu.be/NgsWGfUlwJI"], ["Spotify", "https://open.spotify.com/track/4ewazQLXFTDC8XvCbhvtXs?si=2890b48175514471"]]);
+    song8 = await songs.postSong(parseUser2, "Blue in Green", "Miles Davis", ["Jazz"], [["Youtube", "https://youtu.be/TLDflhhdPCg"], ["Spotify", "https://open.spotify.com/track/0aWMVrwxPNYkKmFthzmpRi?si=a60071f9e3714f6e"]]);
+    song9 = await songs.postSong(parseUser2, "Midnight Rain", "Taylor Swift", ["Pop"], [["Youtube", "https://youtu.be/Odh9ddPUkEY"], ["Spotify", "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad"]]);
+    song10 = await songs.postSong(parseUser2, "Never Gonna Give You Up", "Rick Astley", ["Pop"], [["Youtube", "https://youtu.be/dQw4w9WgXcQ"], ["Spotify", "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=832bcda624d84bd1"]]);
     // parse songs
-    let ps1 = song1["_id"].toString();
-    let ps2 = song2["_id"].toString();
-    let ps3 = song3["_id"].toString();
-    let ps4 = song4["_id"].toString();
-    let ps5 = song5["_id"].toString();
-    let ps6 = song6["_id"].toString();
-    let ps7 = song7["_id"].toString();
-    let ps8 = song8["_id"].toString();
-    let ps9 = song9["_id"].toString();
-    let ps10 = song10["_id"].toString();
+    ps1 = song1["_id"].toString();
+    ps2 = song2["_id"].toString();
+    ps3 = song3["_id"].toString();
+    ps4 = song4["_id"].toString();
+    ps5 = song5["_id"].toString();
+    ps6 = song6["_id"].toString();
+    ps7 = song7["_id"].toString();
+    ps8 = song8["_id"].toString();
+    ps9 = song9["_id"].toString();
+    ps10 = song10["_id"].toString();
 
     // * comments
+    console.log("MAKING COMMENTS");
     // song1
     let s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
     let s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
@@ -104,10 +106,14 @@ const main = async () => {
     let parseS10c2 = s10c2["_id"].toString();
 
     // * user interactions
+    // console.log("MAKING USER INTERACTIONS");
 
+    // * playlists
+    // console.log("MAKING PLAYLISTS");
+    
     // * Testing functions only output messages when there is an undesirable output
     // ! TESTING USER FUNCTIONS
-    // console.log('!-----TESTING SONG FUNCTIONS-----!');
+    console.log('!-----TESTING SONG FUNCTIONS-----!');
 
     // ! TESTING SONG FUNCTIONS
     console.log('!-----TESTING SONG FUNCTIONS-----!');

@@ -49,7 +49,6 @@ const postSong = async (posterId, title, artist, genres, links) => {
       }
     }
   }
-  //console.log(links);
   if (validation.validArray(links, 1)) {
     // checking link pairs
     for (let link of links) {
