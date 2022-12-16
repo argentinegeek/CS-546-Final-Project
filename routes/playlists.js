@@ -2,11 +2,12 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data");
+const { getPlaylistById } = require("../data/playlists");
 const playlistData = data.playlists;
 const validation = require("../helpers");
 
 //route to show all playlists on a page
-router.get("/playlists", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const playlistList = await playlistData.getAllPlaylists();
     res.json(playlistList);
@@ -69,6 +70,16 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const updatedData = req.body;
   try {
+    if (
+      !isAdmin(req.session.user.userId) ||
+      req.session.user.userId !==
+        (await getPlaylistById(req.params.id)).posterId
+    )
+      throw "User is original poster or admin.";
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
+  try {
     req.params.id = validation.checkId(req.params.id, "ID url param");
     updatedData.playlistId = validation.checkId(
       updatedData.playlistId,
@@ -109,6 +120,16 @@ router.put("/:id", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   const requestBody = req.body;
   let updatedObject = {};
+  try {
+    if (
+      !isAdmin(req.session.user.userId) ||
+      req.session.user.userId !==
+        (await getPlaylistById(req.params.id)).posterId
+    )
+      throw "User is original poster or admin.";
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
   try {
     req.params.id = validation.checkId(req.params.id, "Playlist ID");
     if (requestBody.posterId)
@@ -167,6 +188,16 @@ router.patch("/:id", async (req, res) => {
 
 //route to delete Playlist
 router.delete("/:id", async (req, res) => {
+  try {
+    if (
+      !isAdmin(req.session.user.userId) ||
+      req.session.user.userId !==
+        (await getPlaylistById(req.params.id)).posterId
+    )
+      throw "User is original poster or admin.";
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
   try {
     req.params.id = validation.checkId(req.params.id, "Id URL Param");
   } catch (e) {

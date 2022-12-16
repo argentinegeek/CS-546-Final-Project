@@ -2,7 +2,7 @@
 const mongoCollections = require("../config/mongoCollections");
 const songs = mongoCollections.songs;
 const users = mongoCollections.users;
-const {ObjectId} = require("mongodb");
+const { ObjectId } = require("mongodb");
 const validation = require("../helpers");
 const user = require("./users");
 const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Tidal"];
@@ -99,8 +99,12 @@ const postSong = async (posterId, title, artist, genres, links) => {
   song._id = song._id.toString();
 
   // updating poster
-  const updatedInfo = await userCollection.updateOne({_id: ObjectId(posterId)}, {$push: {songPosts: song._id}});
-  if (updatedInfo.modifiedCount === 0) throw `Could not update poster ${posterId}`;
+  const updatedInfo = await userCollection.updateOne(
+    { _id: ObjectId(posterId) },
+    { $push: { songPosts: song._id } }
+  );
+  if (updatedInfo.modifiedCount === 0)
+    throw `Could not update poster ${posterId}`;
 
   // outputting newly made song
   return song;
@@ -174,15 +178,18 @@ const deleteSong = async (songId, userId) => {
 
   // getting song and individual tags
   const song = await getSongById(songId);
-  const posterId = song.posterId
+  const posterId = song.posterId;
   const title = song.title;
   const artist = song.artist;
   const comments = song.comments;
 
   // deleting song from DB
-  const deletionInfo = await songCollection.deleteOne({_id: ObjectId(songId)});
+  const deletionInfo = await songCollection.deleteOne({
+    _id: ObjectId(songId),
+  });
 
-  if (deletionInfo.deleteCount === 0) throw `Could not delete song with id of ${songId}`;
+  if (deletionInfo.deleteCount === 0)
+    throw `Could not delete song with id of ${songId}`;
 
   if (comments.length !== 0) {
     // delete comment connections for comment commentId on song
@@ -199,7 +206,8 @@ const deleteSong = async (songId, userId) => {
         { _id: ObjectId(commenter) },
         { $pull: { songReviews: commentId } }
       );
-      if (updateCommenter.modifiedCount === 0) throw `Could not remove comment from commenter (${commenter}) profile`;
+      if (updateCommenter.modifiedCount === 0)
+        throw `Could not remove comment from commenter (${commenter}) profile`;
       // removing interactions
       if (interactions.length !== 0) {
         // remove commentId from interactions
@@ -210,7 +218,8 @@ const deleteSong = async (songId, userId) => {
             { _id: ObjectId(interactor) },
             { $pull: { commentInteractions: commentId } }
           );
-          if (updateInteractor.modifiedCount === 0) throw `Could not remove interaction from interactor (${interactor}) profile`;
+          if (updateInteractor.modifiedCount === 0)
+            throw `Could not remove interaction from interactor (${interactor}) profile`;
         }
       }
       deletes.push(deleted);
@@ -319,12 +328,15 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
 
 /**
  * updates a song
+ *  @param {*} userId : ObjectId of admin attempting to update - string
  * @param {*} songId : ObjectId of song - string
  * @param {*} updatedSong Song : Object containing what is requested to be udpated - string/array
  */
-const updateSong = async (songId, updatedSong) => {
+const updateSong = async (userId, songId, updatedSong) => {
   const songCollection = await songs();
   const updatedSongData = {};
+  let admin = await user.isAdmin(userId);
+  if (!admin) throw "Not admin";
   if (updatedSong.posterId) {
     updatedSongData.posterId = validation.checkId(
       updatedSong.posterId,
@@ -614,7 +626,9 @@ const filterByRating = async (min, max) => {
   if (min > max) throw "min must be less than max";
 
   const songCollection = await songs();
-  const matches = await songCollection.find({overallRating: {$gte: min, $lte: max}}).toArray();
+  const matches = await songCollection
+    .find({ overallRating: { $gte: min, $lte: max } })
+    .toArray();
   return matches;
 };
 
@@ -627,10 +641,11 @@ const filterByRating = async (min, max) => {
 const sortSongs = async (order, flag) => {
   // input checking
   if (!order || !flag) throw "missing input parameters";
-  if (typeof order !== 'number') throw "order must be a number";
+  if (typeof order !== "number") throw "order must be a number";
   if (order !== 1 && order !== -1) throw "order must be 1 or -1";
   if (typeof flag !== "string") throw "flag must be a string";
-  if (flag !== "title" && flag !== "artist" && flag !== "overallRating") throw "invalid flag";
+  if (flag !== "title" && flag !== "artist" && flag !== "overallRating")
+    throw "invalid flag";
   // sorting
   const songCollection = await songs();
   const sorted = await songCollection.find({}).sort({ title: order }).toArray();
@@ -658,7 +673,7 @@ const recommendedSongs = async (songId) => {
   const song = await getSongById(songId);
 
   // get all songs with similar genres to current song
-  for (let i = 0; i < song.genres.length ; i++) {
+  for (let i = 0; i < song.genres.length; i++) {
     let matches = await searchGenres(song.genres[i]);
     // removing current song
     let filtered = matches.filter((ms) => {
@@ -677,8 +692,10 @@ const recommendedSongs = async (songId) => {
   }
   // sort them from highest to lowest rating
   recommendations = [...new Set([...genreMatches, ...artistMatches])];
-  recommendations = recommendations.sort((a, b) => b.overallRating - a.overallRating);
-  
+  recommendations = recommendations.sort(
+    (a, b) => b.overallRating - a.overallRating
+  );
+
   let result = [];
   if (recommendations.length > 5) {
     result = recommendations.slice(0, 5);
@@ -696,7 +713,7 @@ const recommendedSongs = async (songId) => {
  */
 const mostPopularArtists = async () => {
   // get all songs
-  let allSongs = await getAllSongs()
+  let allSongs = await getAllSongs();
   let ranked = [];
 
   if (allSongs.length !== 0) {
@@ -707,7 +724,9 @@ const mostPopularArtists = async () => {
       let artistName = song.artist;
       let songRating = song.overallRating;
       // seeing if artist is in array
-      let found = artistRating.findIndex(element => element.artist === artistName);
+      let found = artistRating.findIndex(
+        (element) => element.artist === artistName
+      );
       if (found >= 0) {
         let old = artistRating[found];
         let oldRating = old.rating;
@@ -716,7 +735,7 @@ const mostPopularArtists = async () => {
         artistRating[found].rating = newRating;
       } else {
         // adding to array
-        artistRating.push({artist: artistName, rating: songRating});
+        artistRating.push({ artist: artistName, rating: songRating });
       }
     }
     ranked = artistRating.sort((a, b) => b.rating - a.rating);

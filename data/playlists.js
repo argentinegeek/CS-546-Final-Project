@@ -3,6 +3,7 @@ const mongoCollections = require("../config/mongoCollections");
 const playlists = mongoCollections.posts;
 const { ObjectId } = require("mongodb");
 const validation = require("../helpers");
+const { isAdmin } = require("./users");
 
 // data functions for playlists
 
@@ -78,6 +79,9 @@ const updateAllPlaylist = async (
   n_Description,
   n_Songs
 ) => {
+  const playlist = await this.getPlaylistById(playlistId);
+  if (playlist.posterId !== posterId || !isAdmin(posterId))
+    throw "User attempting to delete is not the original poster or an Admin.";
   playlistId = validation.checkId(playlistId, "playlist ID");
   posterId = validation.checkId(posterId, "Poster ID");
   n_Name = validation.checkString(n_Name, "new name");
@@ -97,10 +101,10 @@ const updateAllPlaylist = async (
   );
   if (!updatedInfo.modifiedCount === 0)
     throw "Could not update playlist successfully";
-  let playlist = await getPlaylistById(playlistId);
-  playlist._id = playlist._id.toString();
+  let updatedPL = await this.getPlaylistById(playlistId);
+  updatedPL._id = updatedPL._id.toString();
 
-  return playlist;
+  return updatedPL;
 };
 
 /**
@@ -109,14 +113,23 @@ const updateAllPlaylist = async (
  * @param {*} posterId : ObjectId of poster of playlist - string
  * @param {*} updatedPlaylist : Object containing what is requested to be udpated - string/array
  */
-// TODO: Add checks for admin or user who posted playlist
-const updatePlaylist = async (playlistId, updatedPlaylist) => {
+const updatePlaylist = async (posterId, playlistId, updatedPlaylist) => {
   const playlistCollection = await songs();
   const updatedPlaylistData = {};
+  const playlist = await this.getPlaylistById(playlistId);
+  if (playlist.posterId !== posterId || !isAdmin(posterId))
+    throw "User attempting to delete is not the original poster or an Admin.";
+
   if (updatedPlaylist.posterId) {
     updatedPlaylistData.posterId = validation.checkId(
       updatedPlaylist.posterId,
       "Poster ID"
+    );
+  }
+  if (updatedPlaylist.playlistId) {
+    updatedPlaylistData.playlistId = validation.checkId(
+      updatedPlaylist.playlistId,
+      "Playlist ID"
     );
   }
   if (updatedPlaylist.name) {
@@ -146,7 +159,7 @@ const updatePlaylist = async (playlistId, updatedPlaylist) => {
 
 /**
  * @param {*} playlistId : ObjectId of playlist - string
- * @param {*} posterId : ObjectId of user who created and is updating the playlist - string
+ * @param {*} posterId : ObjectId of user who created and is deleting the playlist - string
  * @returns message confirming deletion of playlist
  */
 const deletePlaylist = async (posterId, playlistId) => {
@@ -154,12 +167,14 @@ const deletePlaylist = async (posterId, playlistId) => {
   playlistId = validation.checkId(playlistId, "playlistID");
   const playlistCollection = await playlists();
   try {
-    //TODO: check if user deleting is the same user who posted the playlist
-    const playlist = await this.getPlaylistById(playlistId);
+    await this.getPlaylistById(playlistId);
   } catch (e) {
     console.log(e);
     return;
   }
+  const playlist = await this.getPlaylistById(playlistId);
+  if (playlist.posterId !== posterId || !isAdmin(posterId))
+    throw "User attempting to delete is not the original poster or an Admin.";
   const deletionInfo = await playlistCollection.deleteOne({
     _id: ObjectId(playlistId),
   });

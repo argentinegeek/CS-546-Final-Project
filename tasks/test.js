@@ -2,7 +2,7 @@
 const connection = require("../config/mongoConnection");
 const { ObjectId } = require("mongodb");
 const data = require("../data");
-const { getAllSongs } = require("../data/songs");
+const { getAllSongs, updateSong } = require("../data/songs");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
@@ -229,13 +229,20 @@ const main = async () => {
     
     // TODO : test updateSong() with routes
     // // updateSong()
-    // console.log('----updateSong() test----');
+    // ! update song test
+    //console.log('----updateSong() test----');
     
     // // * WORK OF THESE IS DONE BY updateSong()
     // // // updateSongTitle()
     // // // updateArtist()
     // // // updateGenre()
     // // // updateSongLinks()
+    // try {
+    //     updateSong(parseUser1, ps1, {artist: "JB"})
+    // }
+    // catch (e) {
+    //     console.log(e)
+    // }
     
     // // searchSongs()
     // console.log('----searchSongs() test----');
