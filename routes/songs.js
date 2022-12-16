@@ -11,7 +11,9 @@ const validation = require("../helpers");
 router.get("/", async (req, res) => {
   try {
     const songList = await songData.getAllSongs();
-    res.json(songList);
+    // res.json(songList);
+    console.log(songList)
+    res.render("songs_page", {song: songList});
   } catch (e) {
     res.status(500).json({ error: e });
   }

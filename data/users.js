@@ -4,7 +4,7 @@ const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
 //const helper = require("../helpers");
 const bcrypt = require("bcryptjs");
-const saltRounds = 16;
+const saltRounds = 8;
 const validation = require('../helpers');
 
 /**

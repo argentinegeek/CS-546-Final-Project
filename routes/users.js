@@ -26,17 +26,12 @@ router
     let cPass = userInfo.confirmPassword;
     try {
       fName = validation.checkString(fName, "First Name");
-      console.log(fName);
       lName = validation.checkString(lName, "Last Name");
-      console.log(lName);
       uName = validation.checkUsername(uName);
-      console.log(uName);
       pass = validation.checkPassword(pass);
-      console.log(pass);
       cPass = validation.checkPassword(cPass);
-      console.log(cPass);
     } catch (e) {
-      res.status(400).json({ error: e });
+      return res.status(400).json({ error: `${e}` });
     }
     try {
       const newUser = await userData.createUser(
@@ -46,12 +41,12 @@ router
         pass,
         cPass
       );
-      res.json(newUser);
+      // res.json(newUser);
     } catch (e) {
       res.status(500);
       return;
     }
-    //return res.redirect("/login");
+    return res.redirect("/login");
   });
 
 router
@@ -66,24 +61,32 @@ router
     let uName = userInfo.userName; //<-- register page inputs have no IDs yet
     let pass = userInfo.password;
     try {
-      uName = validation.checkUsername(uName, "Username");
-      pass = validation.checkPassword(pass, "Password");
+      uName = validation.checkUsername(uName);
+      console.log(uName);
+      pass = validation.checkPassword(pass);
+      console.log(pass);
     } catch (e) {
       return res.status(400).json({ error: e });
     }
     try {
       const auth = await userData.checkUser(uName, pass);
-      res.json(auth);
+      if (auth) {
+        req.session.user = { userName: uName, userId: auth.uID };
+      } else {
+        throw 'error';
+      }
+      // res.json(auth);
     } catch (e) {
-      res.sendStatus(500);
+      res.status(400).json({error: e});
     }
-    req.session.user = { userName: uName, userId: auth.uID };
+    // req.session.user = { userName: uName, userId: auth.uID };
     return res.redirect("/private");
   });
 
 router.route("/private").get(async (req, res) => {
   //this should render the account info page
-  return res.render("settings_page");
+  //12/16 - rendering to the songs page
+  return res.render("activity_page");
 });
 
 router.route("/logout").get(async (req, res) => {
