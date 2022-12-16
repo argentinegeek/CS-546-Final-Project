@@ -2,7 +2,7 @@
 const mongoCollections = require("../config/mongoCollections");
 const songs = mongoCollections.songs;
 const users = mongoCollections.users;
-const { ObjectId } = require("mongodb");
+const {ObjectId} = require("mongodb");
 const validation = require("../helpers");
 const user = require("./users");
 const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Tidal"];
@@ -76,10 +76,12 @@ const postSong = async (posterId, title, artist, genres, links) => {
   }
 
   // getting DB
-  let songCollection = await songs();
+  const songCollection = await songs();
+  const userCollection = await users();
+
   // creating song object
   let newSong = {
-    posterId: ObjectId(posterId),
+    posterId: posterId,
     title: title,
     artist: artist,
     genres: genres,
@@ -97,6 +99,10 @@ const postSong = async (posterId, title, artist, genres, links) => {
   //testing input
   let song = await getSongById(newId);
   song._id = song._id.toString();
+
+  // updating poster
+  const updatedInfo = await userCollection.updateOne({_id: ObjectId(posterId)}, {$push: {songPosts: song._id}});
+  if (updatedInfo.modifiedCount === 0) throw `Could not update poster ${posterId}`;
 
   // outputting newly made song
   return song;
@@ -652,6 +658,7 @@ const sortSongs = async (songList, order, flag) => {
  */
 const recommendedSongs = async (songId) => {
   // checking input
+  console.log(`songId: ${songId}`);
   if (!songId) throw "missing songId";
   if (typeof songId !== "string") throw "input must be string";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -693,7 +700,7 @@ const recommendedSongs = async (songId) => {
   } else {
     result = recommendations;
   }
-
+  console.log(recommendations);
   return recommendations;
 };
 

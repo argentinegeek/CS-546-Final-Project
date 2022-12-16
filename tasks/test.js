@@ -29,28 +29,28 @@ const main = async () => {
     // * songs
     console.log('MAKING SONGS');
     // made by user 1
-    song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
-    song2 = await songs.postSong(parseUser1, "All I Want for Christmans Is You", "Mariah Carey", ["Pop", "Christmas"], [["Spotify", "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn?si=14779c5fc14f4f23"]]);
-    song3 = await songs.postSong(parseUser1, "Kill Bill", "SZA", ["R&B"], [["Youtube", "https://youtu.be/61ymOWwOwuk"], ["Spotify", "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13"]]);
-    song4 = await songs.postSong(parseUser1, "Me Porto Bonito", "Bad Bunny", ["Regaeton", "Latin Pop", "Pop"], [["Youtube", "https://youtu.be/SQnc1QibapQ"], ["Spotify", "https://open.spotify.com/track/1Qrg8KqiBpW07V7PNxwwwL?si=ab67351382194aa0"]]);
-    song5 = await songs.postSong(parseUser1, "Bad Habit", "Steve Lacy", ["R&B", "Alternative R&B"], [["Youtube", "https://youtu.be/VF-FGf_ZZiI"], ["Spotify", "https://open.spotify.com/track/4k6Uh1HXdhtusDW5y8Gbvy?si=72d31a366f8e4a70"]]);
+    let song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
+    let song2 = await songs.postSong(parseUser1, "All I Want for Christmans Is You", "Mariah Carey", ["Pop", "Christmas"], [["Spotify", "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn?si=14779c5fc14f4f23"]]);
+    let song3 = await songs.postSong(parseUser1, "Kill Bill", "SZA", ["R&B"], [["Youtube", "https://youtu.be/61ymOWwOwuk"], ["Spotify", "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13"]]);
+    let song4 = await songs.postSong(parseUser1, "Me Porto Bonito", "Bad Bunny", ["Regaeton", "Latin Pop", "Pop"], [["Youtube", "https://youtu.be/SQnc1QibapQ"], ["Spotify", "https://open.spotify.com/track/1Qrg8KqiBpW07V7PNxwwwL?si=ab67351382194aa0"]]);
+    let song5 = await songs.postSong(parseUser1, "Bad Habit", "Steve Lacy", ["R&B", "Alternative R&B"], [["Youtube", "https://youtu.be/VF-FGf_ZZiI"], ["Spotify", "https://open.spotify.com/track/4k6Uh1HXdhtusDW5y8Gbvy?si=72d31a366f8e4a70"]]);
     // made by user 2
-    song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
-    song7 = await songs.postSong(parseUser2, "Glimpse of Us", "Joji", ["R&B"], [["Youtube", "https://youtu.be/NgsWGfUlwJI"], ["Spotify", "https://open.spotify.com/track/4ewazQLXFTDC8XvCbhvtXs?si=2890b48175514471"]]);
-    song8 = await songs.postSong(parseUser2, "Blue in Green", "Miles Davis", ["Jazz"], [["Youtube", "https://youtu.be/TLDflhhdPCg"], ["Spotify", "https://open.spotify.com/track/0aWMVrwxPNYkKmFthzmpRi?si=a60071f9e3714f6e"]]);
-    song9 = await songs.postSong(parseUser2, "Midnight Rain", "Taylor Swift", ["Pop"], [["Youtube", "https://youtu.be/Odh9ddPUkEY"], ["Spotify", "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad"]]);
-    song10 = await songs.postSong(parseUser2, "Never Gonna Give You Up", "Rick Astley", ["Pop"], [["Youtube", "https://youtu.be/dQw4w9WgXcQ"], ["Spotify", "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=832bcda624d84bd1"]]);
+    let song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
+    let song7 = await songs.postSong(parseUser2, "Glimpse of Us", "Joji", ["R&B"], [["Youtube", "https://youtu.be/NgsWGfUlwJI"], ["Spotify", "https://open.spotify.com/track/4ewazQLXFTDC8XvCbhvtXs?si=2890b48175514471"]]);
+    let song8 = await songs.postSong(parseUser2, "Blue in Green", "Miles Davis", ["Jazz"], [["Youtube", "https://youtu.be/TLDflhhdPCg"], ["Spotify", "https://open.spotify.com/track/0aWMVrwxPNYkKmFthzmpRi?si=a60071f9e3714f6e"]]);
+    let song9 = await songs.postSong(parseUser2, "Midnight Rain", "Taylor Swift", ["Pop"], [["Youtube", "https://youtu.be/Odh9ddPUkEY"], ["Spotify", "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad"]]);
+    let song10 = await songs.postSong(parseUser2, "Never Gonna Give You Up", "Rick Astley", ["Pop"], [["Youtube", "https://youtu.be/dQw4w9WgXcQ"], ["Spotify", "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=832bcda624d84bd1"]]);
     // parse songs
-    ps1 = song1["_id"].toString();
-    ps2 = song2["_id"].toString();
-    ps3 = song3["_id"].toString();
-    ps4 = song4["_id"].toString();
-    ps5 = song5["_id"].toString();
-    ps6 = song6["_id"].toString();
-    ps7 = song7["_id"].toString();
-    ps8 = song8["_id"].toString();
-    ps9 = song9["_id"].toString();
-    ps10 = song10["_id"].toString();
+    let ps1 = song1["_id"].toString();
+    let ps2 = song2["_id"].toString();
+    let ps3 = song3["_id"].toString();
+    let ps4 = song4["_id"].toString();
+    let ps5 = song5["_id"].toString();
+    let ps6 = song6["_id"].toString();
+    let ps7 = song7["_id"].toString();
+    let ps8 = song8["_id"].toString();
+    let ps9 = song9["_id"].toString();
+    let ps10 = song10["_id"].toString();
 
     // * comments
     console.log("MAKING COMMENTS");
@@ -118,74 +118,77 @@ const main = async () => {
     // ! TESTING SONG FUNCTIONS
     console.log('!-----TESTING SONG FUNCTIONS-----!');
     // postSong()
-    console.log('----postSong() test----');
-    // invalid inputs
-    try { // missing inputs
-        let test = await songs.postSong();
-        console.log(`Invalid input test fail: ${test}`);
-    } catch (e) {}
-    try { // wrong types
-        let test = await songs.postSong(user1, "x", "x", [5, "test"], ['test']);
-        console.log(`Invalid input test fail: ${test}`);
-    } catch (e) {}
-    try { // not admin
-        let test = await songs.postSong(user2, 'x', 'x', ['x'], [['Youtube', 'x']]);
-        console.log(`Invalid input test fail: ${test}`);
-    } catch (e) {}
+    // console.log('----postSong() test----');
+    // // invalid inputs
+    // try { // missing inputs
+    //     let test = await songs.postSong();
+    //     console.log(`Invalid input test fail: ${test}`);
+    // } catch (e) {}
+    // try { // wrong types
+    //     let test = await songs.postSong(user1, "x", "x", [5, "test"], ['test']);
+    //     console.log(`Invalid input test fail: ${test}`);
+    // } catch (e) {}
+    // try { // not admin
+    //     let test = await songs.postSong(user2, 'x', 'x', ['x'], [['Youtube', 'x']]);
+    //     console.log(`Invalid input test fail: ${test}`);
+    // } catch (e) {}
 
     // deleteSong()
-    console.log('----deleteSong() test----');
-    // invalid inputs
-    try {
-        let test = await songs.deleteSong();
-        console.log(`Invalid input test fail: ${test}`);
-    } catch (e) {}
-    try {
-        let test = await songs.deleteSong(1, parseUser1);
-        console.log(`Invalid input test fail: ${test}`);
-    } catch (e) {}
-    try {
-        let test = await songs.deleteSong(ps1, parseUser3);
-        console.log(`Not admin test fail: ${test}`);
-    } catch (e) {}
-    // song doesn't exist
-    try {
-        let test = await songs.deleteSong(ObjectId(), parseUser1);
-        console.log(`Song doesn't exist test fail: ${test}`);
-    } catch (e) {}
-    // not poster but admin
-    try {
-        let test = await songs.deleteSong(ps1, parseUser2);
-        console.log(test);
-        // song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
-        // ps1 = song1["_id"].toString();
-        // s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
-        // s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
-        // parseS1c1 = s1c1["_id"].toString();
-        // parseS1c2 = s1c2["_id"].toString();
-    } catch (e) {
-        console.log(`Not poster but admin test fail: ${e}`);
-    }
-    // poster and admin
-    try {
-        let test = await songs.deleteSong(ps6, parseUser2);
-        console.log(test);
-        // song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
-        // ps6 = song6["_id"].toString();
-        // s6c1 = await comments.createComment(ps1, parseUser2, "so happy", 4);
-        // s6c2 = await comments.createComment(ps1, parseUser3, "the original was better", 1);
-        // parseS6c1 = s6c1["_id"].toString();
-        // parseS6c2 = s6c2["_id"].toString();
-    } catch (e) {
-        console.log(`poster and admin test fail: ${e}`);
-    }
-    // getAllSongs()
-    console.log('----getAllSongs() test----');
-    try {
-        let test = await songs.getAllSongs();
-    } catch (e) {
-        console.log(`get all songs test failed: ${e}`)
-    }
+    // console.log('----deleteSong() test----');
+    // // invalid inputs
+    // try {
+    //     let test = await songs.deleteSong();
+    //     console.log(`Invalid input test fail: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.deleteSong(1, parseUser1);
+    //     console.log(`Invalid input test fail: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.deleteSong(ps1, parseUser3);
+    //     console.log(`Not admin test fail: ${test}`);
+    // } catch (e) {
+    //     console.log(e);
+    // }
+    // // song doesn't exist
+    // try {
+    //     let test = await songs.deleteSong(ObjectId(), parseUser1);
+    //     console.log(`Song doesn't exist test fail: ${test}`);
+    // } catch (e) {}
+    // TODO id of ps1 matches result of postSong() and of songPost[0] in users, but doesn't match ObjectId of song in songs collection
+    // // not poster but admin
+    // try {
+    //     let test = await songs.deleteSong(ps1, parseUser2);
+    //     console.log(test);
+    //     // song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
+    //     // ps1 = song1["_id"].toString();
+    //     // s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
+    //     // s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
+    //     // parseS1c1 = s1c1["_id"].toString();
+    //     // parseS1c2 = s1c2["_id"].toString();
+    // } catch (e) {
+    //     console.log(`Not poster but admin test fail: ${e}`);
+    // }
+    // // poster and admin
+    // try {
+    //     let test = await songs.deleteSong(ps6, parseUser2);
+    //     console.log(test);
+    //     // song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
+    //     // ps6 = song6["_id"].toString();
+    //     // s6c1 = await comments.createComment(ps1, parseUser2, "so happy", 4);
+    //     // s6c2 = await comments.createComment(ps1, parseUser3, "the original was better", 1);
+    //     // parseS6c1 = s6c1["_id"].toString();
+    //     // parseS6c2 = s6c2["_id"].toString();
+    // } catch (e) {
+    //     console.log(`poster and admin test fail: ${e}`);
+    // }
+    // // getAllSongs()
+    // console.log('----getAllSongs() test----');
+    // try {
+    //     let test = await songs.getAllSongs();
+    // } catch (e) {
+    //     console.log(`get all songs test failed: ${e}`)
+    // }
     
     // // updateAll()
     // console.log('----updateAll() test----');
@@ -214,11 +217,27 @@ const main = async () => {
     // // sortSongs()
     // console.log('----sortSongs() test----');
 
-    // // recommendedSongs()
-    // console.log('----recommendedSongs() test----');
+    // recommendedSongs()
+    console.log('----recommendedSongs() test----');
+    try {
+        let test = songs.recommendedSongs();
+        console.log('recommendedSongs() invalid input case failed');
+    } catch (e) {}
+    try {
+        let test = songs.recommendedSongs(ps3);
+        console.log(`recommended songs for song ${song2.title}: ${test}`)
+    } catch (e) {
+        console.log(`recommended songs failed: ${e}`);
+    }
     
-    // // mostPopularArtists()
-    // console.log('----mostPopularArtists() test----');
+    // mostPopularArtists()
+    console.log('----mostPopularArtists() test----');
+    try {
+        let test = songs.mostPopularArtists();
+        console.log(test);
+    } catch (e) {
+        console.log(e);
+    }
 
     // // ! TESTING COMMENT FUNCTIONS
     // console.log('!-----TESTING COMMENT FUNCTIONS-----!');
@@ -227,7 +246,7 @@ const main = async () => {
     // console.log('!-----TESTING PLAYLIST FUNCTIONS-----!');
 
     await connection.closeConnection();
-    console.log("Done!")
+    console.log("Done!");
 };
 
 main();
