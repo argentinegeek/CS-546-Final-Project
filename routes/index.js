@@ -6,7 +6,8 @@ const userRoutes = require("./users");
 
 const constructorMethod = (app) => {
   // // figure out what route base should be stored in
-  app.use("/user", userRoutes);
+  app.use("/", userRoutes);
+  // app.use("/user", userRoutes);
   app.use("/songs", songRoutes);
   app.use("/playlists", playlistRoutes);
   app.use("*", (req, res) => {
