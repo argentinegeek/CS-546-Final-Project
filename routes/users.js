@@ -71,13 +71,8 @@ router
     } catch (e) {
       res.sendStatus(500);
     }
-    //error check all parameters above (try catch)
-    //let auth = userData.checkUser (try catch)
-    //req.session.user = {userName: uName, userId: auth.uID} < -- if the user does exist
-    //return res.redirect("/private");
-    //if invalid credentials or user doesn't exist / also
-    //add error messages for both cases
-    //return res.render("login_page");
+    req.session.user = { userName: uName, userId: auth.uID };
+    return res.redirect("/private");
   });
 
 router.route("/private").get(async (req, res) => {
