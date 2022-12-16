@@ -7,8 +7,6 @@ const validation = require("../helpers");
 const user = require("./users");
 const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Tidal"];
 
-// data functions for songs
-
 /**
  * creates song post
  * @param {*} posterId : ObjectId of admin user who is posting song - string
@@ -263,7 +261,7 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
   if (typeof na !== "string") throw "invalid data type";
   if (validation.validString(na.trim())) na = na.trim();
   if (validation.validArray(ng, 1, "string")) {
-    for (const genre of ng) {
+    for (let genre of ng) {
       if (validation.validString(genre.trim())) {
         if (validation.hasNumbers(genre.trim()))
           throw "Genre cannot contain numbers";
@@ -278,10 +276,10 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
   }
   if (validation.validArray(nl, 1)) {
     // checking link pairs
-    for (const link of nl) {
+    for (let link of nl) {
       if (validation.validArray(link, 1, "string") && link.length === 2) {
         // checking platform
-        if (validation.validString(link[0].trim())) link = link.trim();
+        if (validation.validString(link[0].trim())) link[0] = link[0].trim();
         if (
           !platforms.some((element) => {
             return element.toLowerCase() === link[0].toLowerCase();
@@ -289,7 +287,7 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
         )
           throw "Invalid Platform";
         // checking url
-        if (validation.validString(link[1].trim())) link = link.trim();
+        if (validation.validString(link[1].trim())) link[1] = link[1].trim();
         // testing for whitespace
         if (validation.hasSpace(link[1])) throw "Links cannot contain spaces";
       } else {
@@ -297,28 +295,25 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
       }
     }
   }
-
   // getting all songs
   const songCollection = await songs();
-
   // creating song object
-  let updatedSong = {
-    title: title,
-    artist: artist,
-    genres: genres,
-    listenLinks: links,
+  const updatedSong = {
+    title: nt,
+    artist: na,
+    genres: ng,
+    listenLinks: nl,
   };
-
+  // updating
   const updatedInfo = await songCollection.updateOne(
     { _id: ObjectId(songId) },
     { $set: updatedSong }
   );
   if (!updatedInfo.modifiedCount === 0)
     throw `Could not update song successfully`;
-
+  // returning
   let song = await getSongById(songId);
   song._id = song._id.toString();
-
   return song;
 };
 
@@ -398,6 +393,7 @@ const updateSongTitle = async (songId, userId, nt) => {
   let song = await getSongById(songId);
   return song;
 };
+
 /**
  * updates artist of a song
  * @param {*} songId : ObjectId of song - string
@@ -450,7 +446,7 @@ const updateGenre = async (songId, userId, ng) => {
   if (validation.validString(songId.trim())) songId = songId.trim();
   if (!ObjectId.isValid(songId)) throw "Invalid songId";
   if (validation.validArray(ng, 1, "string")) {
-    for (const genre of ng) {
+    for (let genre of ng) {
       if (validation.validString(genre.trim())) {
         if (validation.hasNumbers(genre.trim()))
           throw "Genre cannot contain numbers";
@@ -497,7 +493,7 @@ const updateSongLinks = async (songId, userId, nl) => {
   if (!ObjectId.isValid(songId)) throw "Invalid songId";
   if (validation.validArray(nl, 1)) {
     // checking link pairs
-    for (const link of nl) {
+    for (let link of nl) {
       if (validation.validArray(link, 1, "string") && link.length === 2) {
         // checking platform
         if (validation.validString(link[0].trim())) link = link.trim();
@@ -579,6 +575,7 @@ const searchGenres = async (genre) => {
 
   return matches;
 };
+
 /**
  * finds all songs from artist with artistName and returns as an array of song objects
  * @param {*} artistName : name of artist - string
@@ -639,6 +636,7 @@ const sortSongs = async (order, flag) => {
   const sorted = await songCollection.find({}).sort({ title: order }).toArray();
   return sorted;
 };
+
 /**
  * gets songs to recommend to user based on song with songId's artist and genre
  * 5 song recommendations

@@ -191,7 +191,32 @@ const main = async () => {
     
     // // updateAll()
     // console.log('----updateAll() test----');
+    // try {
+    //     let test = await songs.updateAll();
+    //     console.log(`failed no input case: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.updateAll('this is going to fail');
+    //     console.log(`1 failed missing input case: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.updateAll(ps3, parseUser3, 'hahah', 'hahaha', ['kidz bop'], [["Youtube", "https://youtu.be/61ymOWwOwuk"], ["Spotify", "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13"]]);
+    //     console.log(`failed not admin case: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.updateAll(ps3, parseUser2, 'Kill bill', 'sZa', ['kidz bop'], [["Youtube", "https://youtu.be/61ymOWwOwuk"], ["Spotify", "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13"]]);
+    //     // console.log(test);
+    // } catch (e) {
+    //     console.log(`failed update when admin but not poster case: ${e}`);
+    // }
+    // try {
+    //     let test = await songs.updateAll(ps3, parseUser2, 'kill bill', 'SZA', ['R&B', 'sad'], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
+    //     // console.log(test);
+    // } catch (e) {
+    //     console.log(`failed update when admin and poster case: ${e}`);
+    // }
     
+    // TODO : test updateSong() with routes
     // // updateSong()
     // console.log('----updateSong() test----');
     
