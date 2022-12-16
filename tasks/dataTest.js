@@ -2,6 +2,7 @@
 const connection = require("../config/mongoConnection");
 const { ObjectId } = require("mongodb");
 const data = require("../data");
+const { updateSong } = require("../data/songs");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
@@ -104,8 +105,12 @@ const main = async () => {
 
     // * user interactions
 
-    // ! Testing functions only output messages when there is an undesirable output
-    // * TESTING SONG FUNCTIONS
+    // * Testing functions only output messages when there is an undesirable output
+    // ! TESTING USER FUNCTIONS
+    // console.log('!-----TESTING SONG FUNCTIONS-----!');
+
+    // ! TESTING SONG FUNCTIONS
+    console.log('!-----TESTING SONG FUNCTIONS-----!');
     // postSong()
     console.log('----postSong() test----');
     // invalid inputs
@@ -135,61 +140,88 @@ const main = async () => {
     } catch (e) {}
     try {
         let test = await songs.deleteSong(song1._id, parseUser3);
-        console.log(`Invalid input test fail: ${test}`);
+        console.log(`Not admin test fail: ${test}`);
     } catch (e) {}
     // song doesn't exist
     try {
-        let test = await songs.deleteSong(ObjectId(), );
-    } catch (e) {
-        
-    }
+        let test = await songs.deleteSong(ObjectId(), parseUser1);
+        console.log(`Song doesn't exist test fail: ${test}`);
+    } catch (e) {}
     // not poster but admin
     try {
-        let test = await songs.deleteSong();
-        console.log(`Input check test fail: ${test}`);
-    } catch (e) {}
-
+        let test = await songs.deleteSong(song1._id, parseUser2);
+        console.log(test);
+        song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
+        ps1 = song1["_id"].toString();
+        s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
+        s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
+        parseS1c1 = s1c1["_id"].toString();
+        parseS1c2 = s1c2["_id"].toString();
+    } catch (e) {
+        console.log(`Not poster but admin test fail: ${e}`);
+    }
+    // poster and admin
+    try {
+        let test = await songs.deleteSong(song6._id, parseUser2);
+        console.log(test);
+        song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
+        ps6 = song6["_id"].toString();
+        s6c1 = await comments.createComment(ps1, parseUser2, "so happy", 4);
+        s6c2 = await comments.createComment(ps1, parseUser3, "the original was better", 1);
+        parseS6c1 = s6c1["_id"].toString();
+        parseS6c2 = s6c2["_id"].toString();
+    } catch (e) {
+        console.log(`poster and admin test fail: ${e}`);
+    }
     // getAllSongs()
+    console.log('----getAllSongs() test----');
+    try {
+        let test = await songs.getAllSongs();
+    } catch (e) {
+        console.log(`get all songs test failed: ${e}`)
+    }
     
+    // // updateAll()
+    // console.log('----updateAll() test----');
     
-    // updateAll()
+    // // updateSong()
+    // console.log('----updateSong() test----');
     
+    // // * WORK OF THESE IS DONE BY updateSong()
+    // // // updateSongTitle()
+    // // // updateArtist()
+    // // // updateGenre()
+    // // // updateSongLinks()
     
-    // updateSong()
+    // // searchSongs()
+    // console.log('----searchSongs() test----');
     
+    // // searchGenres()
+    // console.log('----searchGenres() test----');
     
-    // updateSongTitle()
+    // // searchArtist()
+    // console.log('----searchArtist() test----');
     
+    // // filterByRating()
+    // console.log('----filterByRating() test----');
     
-    // updateArtist()
-    
-    
-    // updateGenre()
-    
-    
-    // updateSongLinks()
-    
-    
-    // searchSongs()
-    
-    
-    // searchGenres()
-    
-    
-    // searchArtist()
-    
-    
-    // filterByRating()
-    
-    
-    // sortSongs()
-    
-    // recommendedSongs()
-    
-    
-    // mostPopularArtists()
+    // // sortSongs()
+    // console.log('----sortSongs() test----');
 
+    // // recommendedSongs()
+    // console.log('----recommendedSongs() test----');
+    
+    // // mostPopularArtists()
+    // console.log('----mostPopularArtists() test----');
 
+    // // ! TESTING COMMENT FUNCTIONS
+    // console.log('!-----TESTING COMMENT FUNCTIONS-----!');
+
+    // // ! TESTING PLAYLIST FUNCTIONS
+    // console.log('!-----TESTING PLAYLIST FUNCTIONS-----!');
+
+    await connection.closeConnection();
+    console.log("Done!")
 };
 
 main();
