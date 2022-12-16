@@ -1,7 +1,7 @@
 // test
 const connection = require("../config/mongoConnection");
 const { ObjectId } = require("mongodb");
-const data = require("../data/");
+const data = require("../data");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
