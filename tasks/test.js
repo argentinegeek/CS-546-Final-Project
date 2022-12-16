@@ -277,20 +277,22 @@ const main = async () => {
     // } catch (e) {}
 
     // recommendedSongs()
-    // console.log('----recommendedSongs() test----');
+    console.log('----recommendedSongs() test----');
     // try {
     //     let test = await songs.recommendedSongs();
     //     console.log(`recommendedSongs() invalid input case failed: ${test}`);
     // } catch (e) {
     //     console.log(`error: ${e}`);
     // }
-    // TODO
-    // try {
-    //     let test = await songs.recommendedSongs(ps3);
-    //     console.log(`recommended songs for song ${song2.title}: ${test}`)
-    // } catch (e) {
-    //     console.log(`recommended songs failed: ${e}`);
-    // }
+    try {
+        let t1 = await songs.postSong(parseUser1, 'test', 'SZA', ['test'], [['Spotify', 'test']]);
+        let test = await songs.recommendedSongs(ps3);
+        console.log(`recommended songs for song ${song3.title}: ${test}`);
+        // let deleted = await songs.deleteSong(t1._id, parseUser2);
+        // console.log(deleted);
+    } catch (e) {
+        console.log(`recommended songs failed: ${e}`);
+    }
     
     // // mostPopularArtists()
     // console.log('----mostPopularArtists() test----');

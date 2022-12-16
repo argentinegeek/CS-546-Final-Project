@@ -668,27 +668,39 @@ const recommendedSongs = async (songId) => {
   const song = await getSongById(songId);
 
   // get all songs with similar genres to current song
+  // console.log('genres');
   for (let i = 0; i < song.genres.length ; i++) {
     let matches = await searchGenres(song.genres[i]);
     // removing current song
+    // console.log(i)
     let filtered = matches.filter((ms) => {
-      console.log(ms);
+      // console.log(ms);
       if (ms._id.toString() !== songId) return ms;
     });
     // removing duplicate additions and updating matches
     genreMatches = [...new Set([...genreMatches, ...filtered])];
   }
+  // console.log(genreMatches);
 
   // get all songs with same artist
+  // console.log('artist')
   let artistSongs = await searchArtist(song.artist);
-  let filtered = artistSongs.filter((ms) => {
-    if (ms.songId.toString() !== songId) return ms;
-  });
-  artistMatches = [...new Set([...artistMatches, ...filtered])];
+  // console.log(artistSongs);
+  if (artistSongs.length > 1) {
+    let filtered = artistSongs.filter((ms) => {
+      console.log(ms);
+      if (ms.songId.toString() !== songId) return ms;
+    });
+    console.log('1');
+    console.log(filtered)
+    artistMatches = [...new Set([...artistMatches, ...filtered])];
+    // console.log(artistMatches);
+  }
 
   // sort them from highest to lowest rating
   recommendations = [...new Set([...genreMatches, ...artistMatches])];
   recommendations = recommendations.sort((a, b) => b.overallRating - a.overallRating);
+  // console.log(recommendations);
   
   let result = [];
   if (recommendations.length > 5) {
