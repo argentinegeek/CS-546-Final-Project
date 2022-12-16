@@ -658,11 +658,10 @@ const sortSongs = async (songList, order, flag) => {
  */
 const recommendedSongs = async (songId) => {
   // checking input
-  console.log(!undefined);
   if (!songId) throw "missing songId";
   if (typeof songId !== "string") throw "input must be string";
   if (validation.validString(songId.trim())) songId = songId.trim();
-  if (!ObjectId.idValid(songId)) throw "invalid songId";
+  if (!ObjectId.isValid(songId)) throw "invalid songId";
 
   // variables
   let genreMatches = [];
@@ -673,18 +672,19 @@ const recommendedSongs = async (songId) => {
   const song = await getSongById(songId);
 
   // get all songs with similar genres to current song
-  for (const genre in song.genres) {
-    let matches = searchGenres(genre);
+  for (let i = 0; i < song.genres.length ; i++) {
+    let matches = await searchGenres(song.genres[i]);
     // removing current song
     let filtered = matches.filter((ms) => {
-      if (ms.songId.toString() !== songId) return ms;
+      console.log(ms);
+      if (ms._id.toString() !== songId) return ms;
     });
     // removing duplicate additions and updating matches
     genreMatches = [...new Set([...genreMatches, ...filtered])];
   }
 
   // get all songs with same artist
-  let artistSongs = searchArtist(song.artist);
+  let artistSongs = await searchArtist(song.artist);
   let filtered = artistSongs.filter((ms) => {
     if (ms.songId.toString() !== songId) return ms;
   });

@@ -219,14 +219,14 @@ const main = async () => {
 
     // recommendedSongs()
     console.log('----recommendedSongs() test----');
+    // try {
+    //     let test = await songs.recommendedSongs();
+    //     console.log(`recommendedSongs() invalid input case failed: ${test}`);
+    // } catch (e) {
+    //     console.log(`error: ${e}`);
+    // }
     try {
-        let test = songs.recommendedSongs();
-        console.log(`recommendedSongs() invalid input case failed: ${test}`);
-    } catch (e) {
-        console.log(`error: ${e}`);
-    }
-    try {
-        let test = songs.recommendedSongs(ps3);
+        let test = await songs.recommendedSongs(ps3);
         console.log(`recommended songs for song ${song2.title}: ${test}`)
     } catch (e) {
         console.log(`recommended songs failed: ${e}`);
@@ -234,12 +234,12 @@ const main = async () => {
     
     // mostPopularArtists()
     console.log('----mostPopularArtists() test----');
-    try {
-        let test = songs.mostPopularArtists();
-        console.log(test);
-    } catch (e) {
-        console.log(e);
-    }
+    // try {
+    //     let test = await songs.mostPopularArtists();
+    //     console.log(test);
+    // } catch (e) {
+    //     console.log(e);
+    // }
 
     // // ! TESTING COMMENT FUNCTIONS
     // console.log('!-----TESTING COMMENT FUNCTIONS-----!');
