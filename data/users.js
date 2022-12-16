@@ -4,7 +4,7 @@ const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
 const helper = require("../helpers");
 const bcrypt = require("bcryptjs");
-const saltRounds = 16;
+const saltRounds = 8;
 const validation = require('../helpers');
 
 // data functions for users
@@ -17,7 +17,7 @@ const checkUser = async (username, password) => {
   const userCollection = await users();
 
   let found = await userCollection.findOne({
-    username: username.toLowerCase(),
+    userName: username.toLowerCase(),
   });
   //checking for duplicates
   if (!found) {

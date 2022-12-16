@@ -74,7 +74,9 @@ const checkUsername = (username) => {
  const checkPassword = (password) => {
     //check password for any character
     let pwRegex = /^(?=.*?[A-Z])(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{6,}$/gm;
-  
+    let verify = true;
+
+
     if (password.trim().match(pwRegex) === null) {
       verify = false;
     }
