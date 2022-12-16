@@ -3,18 +3,20 @@
 
 --}}
 
-<h1>Create Your Account</h1>
-<form>
-    <label for="">First Name</label>
-    <input>
-    <label for="">Last Name</label>
-    <input>
-    <label for="">Username</label>
-    <input>
-    <label for="">Password</label>
-    <input>
-    <label>Confirm Password</label>
-    <input>
-    <button type="submit">Create Account</button>
+<h1>Create Your Musicmania Account</h1>
+
+<div class="square"></div>
+<form id="register-page" method="POST" action="/register">
+    <label for="first-name-rp">First Name</label>
+    <input name="first-name-rp" id="first-name-rp">
+    <label for="last-name-rp">Last Name</label>
+    <input name="last-name-rp" id="last-name-rp">
+    <label for="username-rp" id="username-rp">Username</label>
+    <input name="username-rp" id="username-rp">
+    <label for="password-rp" id="password-rp">Password</label>
+    <input name="password-rp" id="password-rp">
+    <label for="confirm-password-rp" id="confirm-password-rp">Confirm Password</label>
+    <input name="confirm-password-rp" id="confirm-password-rp">
+    <button type="submit" id="create-account-rp">Create Account</button>
 </form>
-<a href>Login</a>
+<a href="/login" id="login-rp">Login</a>
