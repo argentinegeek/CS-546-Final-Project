@@ -6,6 +6,7 @@ const { getAllSongs } = require("../data/songs");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
+const playlists = data.playlists;
 
 const main = async () => {
     const db = await connection.dbConnection();
@@ -107,7 +108,18 @@ const main = async () => {
     let parseS10c2 = s10c2["_id"].toString();
 
     // * user interactions
-    // console.log("MAKING USER INTERACTIONS");
+    console.log("MAKING USER INTERACTIONS");
+    let userInteraction1 = await comments.createUserInteraction(parseS1c1, parseUser3, ps1, true);
+    let userInteraction2 = await comments.createUserInteraction(parseS3c2, parseUser4, ps3, false);
+    let userInteraction3 = await comments.createUserInteraction(parseS8c1, parseUser3, ps8, true);
+    let userInteraction4 = await comments.createUserInteraction(parseS8c2, parseUser3, ps8, true);
+    let userInteraction5 = await comments.createUserInteraction(parseS1c1, parseUser4, ps1, false);
+    
+    let parsedInteraction1 = userInteraction1["_id"].toString();
+    let parsedInteraction2 = userInteraction2["_id"].toString();
+    let parsedInteraction3 = userInteraction3["_id"].toString();
+    let parsedInteraction4 = userInteraction4["_id"].toString();
+    let parsedInteraction5 = userInteraction5["_id"].toString();
 
     // * playlists
     // console.log("MAKING PLAYLISTS");
@@ -136,7 +148,6 @@ const main = async () => {
 
     // // deleteSong()
     // console.log('----deleteSong() test----');
-    // // invalid inputs
     // try {
     //     let test = await songs.deleteSong();
     //     console.log(`1 invalid input test case: ${test}`);
@@ -149,15 +160,16 @@ const main = async () => {
     //     let test = await songs.deleteSong(ps1, parseUser3);
     //     console.log(`failed not admin case: ${test}`);
     // } catch (e) {}
-    // // song doesn't exist
     // try {
     //     let test = await songs.deleteSong(ObjectId(), parseUser1);
     //     console.log(`failed song doesn't exist case: ${test}`);
     // } catch (e) {}
-    // // not poster but admin
     // try {
     //     let test = await songs.deleteSong(ps1, parseUser2);
     //     // console.log(test);
+    //     // console.log(await users.getUserById(parseUser1));
+    //     // console.log(await users.getUserById(parseUser3));
+    //     // console.log(await users.getUserById(parseUser4));
     //     // song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
     //     // ps1 = song1["_id"].toString();
     //     // s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
@@ -167,10 +179,9 @@ const main = async () => {
     // } catch (e) {
     //     console.log(`failed to delete when not poster but admin: ${e}`);
     // }
-    // // poster and admin
     // try {
     //     let test = await songs.deleteSong(ps6, parseUser2);
-    //     // console.log(test);
+    //     console.log(test);
     //     // song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
     //     // ps6 = song6["_id"].toString();
     //     // s6c1 = await comments.createComment(ps1, parseUser2, "so happy", 4);

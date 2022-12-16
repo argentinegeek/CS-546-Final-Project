@@ -193,8 +193,7 @@ const deleteSong = async (songId, userId) => {
       let deleted = comment._id.toString();
       let commentId = comment._id.toString(); // id of comment
       let commenter = comment.userId;
-      let interactions = comment.userInteractions; // array of userIds of people who interacted
-
+      let interactions = comment.usersInteractions; // array of userIds of people who interacted
       // remove commentId from user
       const updateCommenter = await userCollection.updateOne(
         { _id: ObjectId(commenter) },
@@ -202,9 +201,10 @@ const deleteSong = async (songId, userId) => {
       );
       if (updateCommenter.modifiedCount === 0) throw `Could not remove comment from commenter (${commenter}) profile`;
       // removing interactions
-      if (interactions !== []) {
+      if (interactions.length !== 0) {
         // remove commentId from interactions
-        for (const interaction in interactions) {
+        for (let i = 0; i < interactions.length; i++) {
+          let interaction = interactions[i];
           let interactor = interaction.userId;
           const updateInteractor = await userCollection.updateOne(
             { _id: ObjectId(interactor) },
