@@ -233,7 +233,7 @@ const main = async () => {
     }
     
     // mostPopularArtists()
-    console.log('----mostPopularArtists() test----');
+    // console.log('----mostPopularArtists() test----');
     // try {
     //     let test = await songs.mostPopularArtists();
     //     console.log(test);
