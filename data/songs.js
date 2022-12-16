@@ -2,7 +2,7 @@
 const mongoCollections = require("../config/mongoCollections");
 const songs = mongoCollections.songs;
 const users = mongoCollections.users;
-const { ObjectId } = require("mongodb");
+const {ObjectId} = require("mongodb");
 const validation = require("../helpers");
 const user = require("./users");
 const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Tidal"];
@@ -49,7 +49,6 @@ const postSong = async (posterId, title, artist, genres, links) => {
       }
     }
   }
-  //console.log(links);
   if (validation.validArray(links, 1)) {
     // checking link pairs
     for (let link of links) {
@@ -77,10 +76,12 @@ const postSong = async (posterId, title, artist, genres, links) => {
   }
 
   // getting DB
-  let songCollection = await songs();
+  const songCollection = await songs();
+  const userCollection = await users();
+
   // creating song object
   let newSong = {
-    posterId: ObjectId(posterId),
+    posterId: posterId,
     title: title,
     artist: artist,
     genres: genres,
@@ -99,6 +100,10 @@ const postSong = async (posterId, title, artist, genres, links) => {
   let song = await getSongById(newId);
   song._id = song._id.toString();
 
+  // updating poster
+  const updatedInfo = await userCollection.updateOne({_id: ObjectId(posterId)}, {$push: {songPosts: song._id}});
+  if (updatedInfo.modifiedCount === 0) throw `Could not update poster ${posterId}`;
+
   // outputting newly made song
   return song;
 };
@@ -112,7 +117,7 @@ const getAllSongs = async () => {
   let songList = await songCollection.find({}).toArray();
   if (!songList) throw "Could not get all songs";
 
-  // formatting output
+  // turning songIds to string form
   for (let i = 0; i < songList.length; i++) {
     songList[i]._id = songList[i]._id.toString();
     let comments = songList[i].comments;
@@ -159,8 +164,7 @@ const deleteSong = async (songId, userId) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -172,57 +176,56 @@ const deleteSong = async (songId, userId) => {
 
   // getting song and individual tags
   const song = await getSongById(songId);
-  // if (userId !== song.posterId) throw `Song must be deleted by poster`;
+  const posterId = song.posterId.toString()
   const title = song.title;
   const artist = song.artist;
   const comments = song.comments;
 
   // deleting song from DB
+  const deletionInfo = await songCollection.deleteOne({_id: ObjectId(songId)});
 
-  const deletionInfo = await songCollection.deleteOne({
-    _id: ObjectId(songId),
-  });
+  if (deletionInfo.deleteCount === 0) throw `Could not delete song with id of ${songId}`;
 
-  if (deletionInfo.deleteCount === 0)
-    throw `Could not delete song with id of ${songId}`;
+  if (comments.length !== 0) {
+    // delete comment connections for comment commentId on song
+    // remove from user's songReview
+    let deletes = [];
+    for (const comment in comments) {
+      let deleted = comment._id.toString();
+      let commentId = comment._id.toString(); // id of comment
+      let commenter = comment.userId;
+      let interactions = comment.userInteractions; // array of userIds of people who interacted
 
-  // delete comment connections for comment commentId on song
-  // remove from user's songReview
-  let deletes = [];
-  for (const comment in comments) {
-    let deleted = comment._id.toString();
-    let commentId = comment._id.toString(); // id of comment
-    let commenter = comment.userId;
-    let interactions = comment.userInteractions; // array of userIds of people who interacted
-
-    // remove commentId from user
-    const updateCommenter = await userCollection.updateOne(
-      { _id: ObjectId(commenter) },
-      { $pull: { songReviews: songId } }
-    );
-    if (updateCommenter.modifiedCount === 0)
-      throw `Could not remove comment from commenter (${commenter}) profile`;
-
-    // remove commentId from interactions
-    for (const interaction in interactions) {
-      let interactor = interaction.userId;
-      const updateInteractor = await userCollection.updateOne(
-        { _id: ObjectId(interactor) },
-        { $pull: { commentInteractions: commentId } }
+      // remove commentId from user
+      const updateCommenter = await userCollection.updateOne(
+        { _id: ObjectId(commenter) },
+        { $pull: { songReviews: songId } }
       );
-      if (updateInteractor.modifiedCount === 0)
-        throw `Could not remove interaction from interactor (${interactor}) profile`;
+      if (updateCommenter.modifiedCount === 0) throw `Could not remove comment from commenter (${commenter}) profile`;
+      // removing interactions
+      if (interactions !== []) {
+        // remove commentId from interactions
+        for (const interaction in interactions) {
+          let interactor = interaction.userId;
+          const updateInteractor = await userCollection.updateOne(
+            { _id: ObjectId(interactor) },
+            { $pull: { commentInteractions: commentId } }
+          );
+          if (updateInteractor.modifiedCount === 0) throw `Could not remove interaction from interactor (${interactor}) profile`;
+        }
+      }
+      deletes.push(deleted);
     }
-    deletes.push(deleted);
+    // deleting songId from admin's songPosts
+    if (deletes.length !== comments.length)
+      throw `Could not delete all comments for song ${songId}`;
   }
-  // deleting songId from admin's songPosts
-  if (deletes.length !== comments.length)
-    throw `Could not delete all comments for song ${songId}`;
-  const updateAdmin = await userCollection.updateOne(
+  // update poster
+  const updatePoster = await userCollection.updateOne(
     { _id: ObjectId(posterId) },
     { $pull: { songPosts: songId } }
   );
-  if (updateAdmin.modifiedCount === 0)
+  if (updatePoster.modifiedCount === 0)
     throw `Could not remove the song from the poster (${posterId}) profile`;
 
   //output
@@ -249,8 +252,7 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -320,6 +322,48 @@ const updateAll = async (songId, userId, nt, na, ng, nl) => {
 };
 
 /**
+ * updates a song
+ * @param {*} songId : ObjectId of song - string
+ * @param {*} updatedSong Song : Object containing what is requested to be udpated - string/array
+ */
+const updateSong = async (songId, updatedSong) => {
+  const songCollection = await songs();
+  const updatedSongData = {};
+  if (updatedSong.posterId) {
+    updatedSongData.posterId = validation.checkId(
+      updatedSong.posterId,
+      "Poster ID"
+    );
+  }
+  if (updatedSong.title) {
+    updatedSongData.title = validation.checkString(updatedSong.title, "Title");
+  }
+  if (updatedSong.artist) {
+    updatedSongData.artist = validation.checkString(
+      updatedSong.artist,
+      "Artist"
+    );
+  }
+  if (updatedSong.genres) {
+    updatedSongData.genres = validation.checkStringArray(
+      updatedSong.genres,
+      "Genres"
+    );
+  }
+  if (updatedSong.links) {
+    updatedSongData.links = validation.checkStringArray(
+      updatedSong.links,
+      "Links"
+    );
+  }
+  await songCollection.updateOne(
+    { _id: ObjectId(songId) },
+    { $set: updatedSongData }
+  );
+  return await this.getSongById(songId);
+};
+
+/**
  * updates title of song
  * @param {*} songId : ObjectId of song - string
  * @param {*} userId : ObjectId of user invoking function - string
@@ -331,8 +375,7 @@ const updateSongTitle = async (songId, userId, nt) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -366,8 +409,7 @@ const updateArtist = async (songId, userId, na) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -403,8 +445,7 @@ const updateGenre = async (songId, userId, ng) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -452,8 +493,7 @@ const updateSongLinks = async (songId, userId, nl) => {
   // checking if user posted
   if (typeof userId !== "string") throw "invalid data type";
   let admin = await user.isAdmin(userId);
-  let og = await getSongById(songId); // original song
-  if (!admin || userId !== og.posterId) throw "Not admin or did not post song";
+  if (!admin) throw "Not admin";
   // checking songId and nl
   if (typeof songId !== "string") throw "invalid data type";
   if (validation.validString(songId.trim())) songId = songId.trim();
@@ -494,48 +534,6 @@ const updateSongLinks = async (songId, userId, nl) => {
   // outputting updated song
   let song = await getSongById(songId);
   return song;
-};
-
-/**
- * updates a song
- * @param {*} songId : ObjectId of song - string
- * @param {*} updatedSong : Object containing what is requested to be udpated - string/array
- */
-const updateSong = async (songId, updatedSong) => {
-  const songCollection = await songs();
-  const updatedSongData = {};
-  if (updatedSong.posterId) {
-    updatedSongData.posterId = validation.checkId(
-      updatedSong.posterId,
-      "Poster ID"
-    );
-  }
-  if (updatedSong.title) {
-    updatedSongData.title = validation.checkString(updatedSong.title, "Title");
-  }
-  if (updatedSong.artist) {
-    updatedSongData.artist = validation.checkString(
-      updatedSong.artist,
-      "Artist"
-    );
-  }
-  if (updatedSong.genres) {
-    updatedSongData.genres = validation.checkStringArray(
-      updatedSong.genres,
-      "Genres"
-    );
-  }
-  if (updatedSong.links) {
-    updatedSongData.links = validation.checkStringArray(
-      updatedSong.links,
-      "Links"
-    );
-  }
-  await songCollection.updateOne(
-    { _id: ObjectId(songId) },
-    { $set: updatedSongData }
-  );
-  return await this.getSongById(songId);
 };
 
 /**
@@ -663,7 +661,7 @@ const recommendedSongs = async (songId) => {
   if (!songId) throw "missing songId";
   if (typeof songId !== "string") throw "input must be string";
   if (validation.validString(songId.trim())) songId = songId.trim();
-  if (!ObjectId.idValid(songId)) throw "invalid songId";
+  if (!ObjectId.isValid(songId)) throw "invalid songId";
 
   // variables
   let genreMatches = [];
@@ -674,18 +672,19 @@ const recommendedSongs = async (songId) => {
   const song = await getSongById(songId);
 
   // get all songs with similar genres to current song
-  for (const genre in song.genres) {
-    let matches = searchGenres(genre);
+  for (let i = 0; i < song.genres.length ; i++) {
+    let matches = await searchGenres(song.genres[i]);
     // removing current song
     let filtered = matches.filter((ms) => {
-      if (ms.songId.toString() !== songId) return ms;
+      console.log(ms);
+      if (ms._id.toString() !== songId) return ms;
     });
     // removing duplicate additions and updating matches
     genreMatches = [...new Set([...genreMatches, ...filtered])];
   }
 
   // get all songs with same artist
-  let artistSongs = searchArtist(song.artist);
+  let artistSongs = await searchArtist(song.artist);
   let filtered = artistSongs.filter((ms) => {
     if (ms.songId.toString() !== songId) return ms;
   });
@@ -693,55 +692,53 @@ const recommendedSongs = async (songId) => {
 
   // sort them from highest to lowest rating
   recommendations = [...new Set([...genreMatches, ...artistMatches])];
-  recommendations = recommendations.sort(
-    (a, b) => a.overallRating - b.overallRating
-  );
-
+  recommendations = recommendations.sort((a, b) => b.overallRating - a.overallRating);
+  
   let result = [];
   if (recommendations.length > 5) {
     result = recommendations.slice(0, 5);
   } else {
     result = recommendations;
   }
-
+  console.log(recommendations);
   return recommendations;
 };
 
 /**
- * makes list of all artists in order from highest to lowest rating
+ * makes list of all artists in order from highest to lowest rating or an empty list if no songs in db
  * @returns list of artists from most popular to least popular in form [{artist: artistName, rating: rating}, ...]
  * artist - string
  * rating - number
  */
 const mostPopularArtists = async () => {
-  // making map
-  let artistRating = new Map();
   // get all songs
   const songCollection = await songs();
+  let ranked = [];
 
-  // build map
-  for (const song in songCollection) {
-    let artist = song.artist;
-    let songRating = song.overallRating;
-    // check if in map
-    if (artistRating.has(artist)) {
-      // if they are, compute new average score
-      let currentRating = artistRating.get(artist);
-      let newRating = (currentRating + songRating) / 2;
-      // updating map
-      artistRating.set(artist, newRating);
-    } else {
-      // if not, enter tuple into map
-      artistRating.set(artist, songRating);
-    }
+  if (songCollection.length !== 0) {
+    // making map
+    let artistRating = new Map();
+    // build map
+    for (const song in songCollection) {
+      let artist = song.artist;
+      let songRating = song.overallRating;
+      // check if in map
+      if (artistRating.has(artist)) {
+        // if they are, compute new average score
+        let currentRating = artistRating.get(artist);
+        let newRating = (currentRating + songRating) / 2;
+        // updating map
+        artistRating.set(artist, newRating);
+      } else {
+        // if not, enter tuple into map
+        artistRating.set(artist, songRating);
+      }
+    } 
+    // convert map to array to store found artists in form [{artist, rating}, ...] and sorting
+    ranked = Array.from(artistRating, ([artist, rating]) => ({artist, rating}));
+    ranked = ranked.sort((a, b) => b.rating - a.rating);
   }
-
-  // convert map to array to store found artists in form [{artist, rating}, ...] and sorting
-  let ranked = Array.from(artistRating, ([artist, rating]) => ({
-    artist,
-    rating,
-  }));
-  ranked = ranked.sort((a, b) => a.rating - b.rating);
+  
   return ranked;
 };
 
