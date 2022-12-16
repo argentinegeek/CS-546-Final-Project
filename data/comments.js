@@ -35,6 +35,7 @@ const createComment = async (songId, userId, comment, commentRating) => {
         _id: ObjectId(),
         userId: userId,
         rating: commentRating,
+        content: comment,
         likes: 0,
         dislikes: 0,
         usersInteractions: [],
@@ -68,6 +69,7 @@ const createComment = async (songId, userId, comment, commentRating) => {
 
     //all the comments under that song
     let songComments = songFound.comments;
+
     songComments.push(newSongReview);
 
     //update the overall rating of the songs
@@ -122,7 +124,7 @@ const getComment = async (commentId) => {
     return grabComment;
 };
 
-const deleteComment = async (commentId, userId) => {
+const deleteComment = async (commentId, userId, songId) => {
     commentId = validation.checkId(commentId, "ID");
     userId = validation.checkId(userId, "ID");
 
@@ -132,8 +134,8 @@ const deleteComment = async (commentId, userId) => {
         throw "user is not found";
     }
 
-    //isolate the comment
-    //let findComment = await getComment(commentId);
+    //deleting the interactions before deleting the comment
+    removeAllinteractions(commentId, songId);
 
     //go into the user database and pulling out the comment 
     const userCollection = await users();
@@ -153,6 +155,37 @@ const deleteComment = async (commentId, userId) => {
 
     if (updateUser.modifiedCount === 0) {
         throw "could not remove comment from user's post"
+    }
+
+    //removing from the song side
+
+    //find the song
+    let songFound = await song.getSongById(songId)
+    if (!songFound) {
+        throw "song is not found";
+    }
+
+    //find that specific comment in the song and get all the users that interacted with it
+    let currentComments = songFound.comments;
+    //is the current comment[i]._id the same id as the interaction id
+    for (let i = 0; i < currentComments.length; i++) {
+
+        if (currentComments[i]._id.toString() === commentId) {
+            currentComments.splice(i, 1);
+            break;
+        }
+    }
+
+    //update song with that updated comment
+    const songCollection = await songs();
+
+    const updateSong = await songCollection.updateOne(
+        { _id: ObjectId(songId) },
+        { $set: { comments: currentComments } }
+    )
+
+    if (updateSong.modifiedCount === 0) {
+        throw "could not remove interaction from songs"
     }
 
     return "comment removed successfully";
@@ -186,11 +219,21 @@ const createUserInteraction = async (commentId, userId, songId, interactionType)
     //gets the userInteraction array
     let profile = findUser.commentInteractions;
 
-    profile.push(newUI["_id"].toString()); //pushing userinteraction id into the user's commentInteractions
+    profile.push(commentId); //pushing userinteraction id into the user's commentInteractions
 
 
     let userCollection = await users();
     let parseUser = ObjectId(userId);
+
+    let count = 0;
+    for (let i = 0; i < profile.length; i++) {
+        if (profile[i] === commentId) {
+            count++;
+        }
+    }
+    if (count > 1) {
+        throw "you can only downvote or upvote";
+    }
 
     //update from the user side
     const updateUser = await userCollection.updateOne(
@@ -224,7 +267,7 @@ const createUserInteraction = async (commentId, userId, songId, interactionType)
     let songCollection = await songs();
     const updateSong = await songCollection.updateOne(
         { _id: ObjectId(songId), "comments._id": ObjectId(commentId) },
-        { $set: { "comments": currentUI } }
+        { $set: { "comments.$": currentUI } }
     )
 
     if (updateSong.modifiedCount === 0) throw `Could not update song successfully`;
@@ -232,14 +275,11 @@ const createUserInteraction = async (commentId, userId, songId, interactionType)
     return newUI;
 }
 
-const addInteraction = async (commentId, usersInteractionId) => {
-    commentId = validation.checkId(commentId, "ID");
-
-}
-
 const removeInteraction = async (commentId, userId, songId, interactionId) => {
     commentId = validation.checkId(commentId, "ID");
     userId = validation.checkId(userId, "ID");
+    songId = validation.checkId(songId, "ID");
+
     //validation done
 
     //removing the interaction from the user side
@@ -253,8 +293,6 @@ const removeInteraction = async (commentId, userId, songId, interactionId) => {
     const userCollection = await users();
     let currentSongReviews = userFound.commentInteractions;
 
-
-
     for (let i = 0; i < currentSongReviews.length; i++) {
         if (currentSongReviews[i] === interactionId) {
             //takes out the interaction from that comment
@@ -262,7 +300,6 @@ const removeInteraction = async (commentId, userId, songId, interactionId) => {
             break;
         }
     }
-
 
     const updateUser = await userCollection.updateOne(
         { _id: ObjectId(userId) },
@@ -307,13 +344,57 @@ const removeInteraction = async (commentId, userId, songId, interactionId) => {
 
 }
 
-//removes all interaction from comment and registered user
-const removeAllinteractions = async (commentId) => {
+//removes all interaction from the comment and registered user
+const removeAllinteractions = async (commentId, songId) => {
+    commentId = validation.checkId(commentId, "ID");
+    songId = validation.checkId(songId, "ID");
+
+    //check to make sure the song is in db
+    let songFound = await song.getSongById(songId)
+    if (!songFound) {
+        throw "song is not found";
+    }
+
+    // getting DB
+    const songCollection = await songs();
+    const userCollection = await users();
+
+    //find the comment to remove interactions from
+    let currentComment = await getComment(commentId);
+    //all the interactions in the comment
+    let interactions = currentComment[0].usersInteractions;
+    let empty = [];
+
+    const updateSong = await songCollection.updateOne(
+        { _id: ObjectId(songId), "comments._id": ObjectId(commentId) },
+        { $set: { "comments.$.usersInteractions": empty, "comments.$.likes": 0, "comments.$.dislikes": 0 } }
+    )
+
+    if (updateSong.modifiedCount === 0) {
+        throw "could not remove interaction from songs"
+    }
+
+    //array of userID's that interacted with the comment
+    let userIds = [];
+
+    for (let interaction of interactions) {
+        userIds.push(interaction.userId);
+    }
+    console.log(userIds);
+
+    for (let i = 0; i < userIds.length; i++) {
+        let updateUser = await userCollection.updateOne(
+            { _id: ObjectId(userIds[i]) },
+            { $pull: { commentInteractions: { $in: [commentId] } } }
+        )
+        if (updateUser.modifiedCount === 0) {
+            throw "could not remove interaction from user's commentInteractions";
+        }
+    }
+
+    return "successfully deleted all interactions";
 
 }
-
-
-
 
 module.exports = {
     createComment,
@@ -321,5 +402,6 @@ module.exports = {
     getComment,
     deleteComment,
     createUserInteraction,
-    removeInteraction
+    removeInteraction,
+    removeAllinteractions
 };
