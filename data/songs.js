@@ -176,7 +176,8 @@ const deleteSong = async (songId, userId) => {
 
   // getting song and individual tags
   const song = await getSongById(songId);
-  const posterId = song.posterId.toString()
+  console.log(song);
+  const posterId = song.posterId
   const title = song.title;
   const artist = song.artist;
   const comments = song.comments;
@@ -190,7 +191,8 @@ const deleteSong = async (songId, userId) => {
     // delete comment connections for comment commentId on song
     // remove from user's songReview
     let deletes = [];
-    for (const comment in comments) {
+    for (let i = 0; i < comments.length; i++) {
+      let comment = comments[i];
       let deleted = comment._id.toString();
       let commentId = comment._id.toString(); // id of comment
       let commenter = comment.userId;
@@ -663,44 +665,30 @@ const recommendedSongs = async (songId) => {
   let genreMatches = [];
   let artistMatches = [];
   let recommendations = [];
-
   // get song
   const song = await getSongById(songId);
 
   // get all songs with similar genres to current song
-  // console.log('genres');
   for (let i = 0; i < song.genres.length ; i++) {
     let matches = await searchGenres(song.genres[i]);
     // removing current song
-    // console.log(i)
     let filtered = matches.filter((ms) => {
-      // console.log(ms);
       if (ms._id.toString() !== songId) return ms;
     });
     // removing duplicate additions and updating matches
     genreMatches = [...new Set([...genreMatches, ...filtered])];
   }
-  // console.log(genreMatches);
-
   // get all songs with same artist
-  // console.log('artist')
   let artistSongs = await searchArtist(song.artist);
-  console.log(artistSongs);
   if (artistSongs.length > 1) {
     let filtered = artistSongs.filter((ms) => {
-      console.log(ms);
       if (ms._id.toString() !== songId) return ms;
     });
-    // console.log('1');
-    // console.log(filtered)
     artistMatches = [...new Set([...artistMatches, ...filtered])];
-    // console.log(artistMatches);
   }
-
   // sort them from highest to lowest rating
   recommendations = [...new Set([...genreMatches, ...artistMatches])];
   recommendations = recommendations.sort((a, b) => b.overallRating - a.overallRating);
-  // console.log(recommendations);
   
   let result = [];
   if (recommendations.length > 5) {
@@ -708,7 +696,6 @@ const recommendedSongs = async (songId) => {
   } else {
     result = recommendations;
   }
-  console.log(recommendations);
   return recommendations;
 };
 
