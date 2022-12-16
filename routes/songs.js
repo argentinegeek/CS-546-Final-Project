@@ -46,6 +46,7 @@ router.post("/", async (req, res) => {
       songPostData.links,
       "Links"
     );
+    res.render('song_page', {songTitle: songPostData.title});
   } catch (e) {
     return res.status(400).json({ error: e });
   }
