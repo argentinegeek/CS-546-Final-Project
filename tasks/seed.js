@@ -1,5 +1,6 @@
 const connection = require("../config/mongoConnection");
 const data = require("../data/");
+const { checkUser } = require("../data/users");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
@@ -10,13 +11,19 @@ async function main() {
     await db.dropDatabase();
 
     //creating users
-    const user1 = await users.createUser("Mya", "Phu", "mxfu", "KevinsucksD32!", "KevinsucksD32!");
+    const user1 = await users.createUser("Mya", "Phu", "mxfu", "KevinsucksD32!", "Kevinsucks$32");
     let parseUser1 = user1["_id"].toString();
     await users.createAdmin(parseUser1);
 
     const user2 = await users.createUser("Serena", "Lee", "cargi", "Meow123!", "Meow123!");
     let parseUser2 = user2["_id"].toString();
     await users.createAdmin(parseUser2);
+
+    //check for duplicate usernames, usernames cannot duplicate
+    // const user3 = await users.createUser("Kevin", "Nguyen", "mxfu", "KevinsucksD32!", "Kevinsucks$32");
+    // let parseUser3 = user1["_id"].toString();
+    // await users.createAdmin(parseUser3);
+    // await users.checkUser(user3["userName"], user3["password"]);
 
     //creating songs
     let song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]])

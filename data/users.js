@@ -2,26 +2,31 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const { ObjectId } = require('mongodb');
-const helper = require("../helpers");
+//const helper = require("../helpers");
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
 const validation = require('../helpers');
 
-// data functions for users
-
+/**
+ * @param {*} username : username of the user
+ * @param {*} password : password of the user
+ * @returns if the user is already in the system or not
+ */
 const checkUser = async (username, password) => {
+  //validation of the username and password
   username = validation.checkUsername(username);
   password = validation.checkPassword(password);
 
-  //actual creation of user into db
+  //user db
   const userCollection = await users();
 
+  //checking for duplicates in the usercollection 
   let found = await userCollection.findOne({
-    username: username.toLowerCase(),
+    userName: username.toLowerCase(),
   });
   //checking for duplicates
-  if (!found) {
-    throw "user does not exist";
+  if (found) {
+    throw "username already used";
   }
 
   if (!(await bcrypt.compare(password.trim(), found.password))) {
