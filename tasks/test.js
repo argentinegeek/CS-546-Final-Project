@@ -118,48 +118,46 @@ const main = async () => {
 
     // ! TESTING SONG FUNCTIONS
     // console.log('!-----TESTING SONG FUNCTIONS-----!');
-    // postSong()
+    // // postSong()
     // console.log('----postSong() test----');
     // // invalid inputs
     // try { // missing inputs
     //     let test = await songs.postSong();
-    //     console.log(`Invalid input test fail: ${test}`);
+    //     console.log(`1 failed invalid input case: ${test}`);
     // } catch (e) {}
     // try { // wrong types
     //     let test = await songs.postSong(user1, "x", "x", [5, "test"], ['test']);
-    //     console.log(`Invalid input test fail: ${test}`);
+    //     console.log(`2 failed invalid input case: ${test}`);
     // } catch (e) {}
     // try { // not admin
     //     let test = await songs.postSong(user2, 'x', 'x', ['x'], [['Youtube', 'x']]);
-    //     console.log(`Invalid input test fail: ${test}`);
+    //     console.log(`3 failed invalid input case: ${test}`);
     // } catch (e) {}
 
-    // deleteSong()
+    // // deleteSong()
     // console.log('----deleteSong() test----');
     // // invalid inputs
     // try {
     //     let test = await songs.deleteSong();
-    //     console.log(`Invalid input test fail: ${test}`);
+    //     console.log(`1 invalid input test case: ${test}`);
     // } catch (e) {}
     // try {
     //     let test = await songs.deleteSong(1, parseUser1);
-    //     console.log(`Invalid input test fail: ${test}`);
+    //     console.log(`2 failed invalid input case: ${test}`);
     // } catch (e) {}
     // try {
     //     let test = await songs.deleteSong(ps1, parseUser3);
-    //     console.log(`Not admin test fail: ${test}`);
-    // } catch (e) {
-    //     console.log(e);
-    // }
+    //     console.log(`failed not admin case: ${test}`);
+    // } catch (e) {}
     // // song doesn't exist
     // try {
     //     let test = await songs.deleteSong(ObjectId(), parseUser1);
-    //     console.log(`Song doesn't exist test fail: ${test}`);
+    //     console.log(`failed song doesn't exist case: ${test}`);
     // } catch (e) {}
     // // not poster but admin
     // try {
     //     let test = await songs.deleteSong(ps1, parseUser2);
-    //     console.log(test);
+    //     // console.log(test);
     //     // song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
     //     // ps1 = song1["_id"].toString();
     //     // s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
@@ -167,12 +165,12 @@ const main = async () => {
     //     // parseS1c1 = s1c1["_id"].toString();
     //     // parseS1c2 = s1c2["_id"].toString();
     // } catch (e) {
-    //     console.log(`Not poster but admin test fail: ${e}`);
+    //     console.log(`failed to delete when not poster but admin: ${e}`);
     // }
     // // poster and admin
     // try {
     //     let test = await songs.deleteSong(ps6, parseUser2);
-    //     console.log(test);
+    //     // console.log(test);
     //     // song6 = await songs.postSong(parseUser2, "Holly Jolly Christmas", "Michael Buble", ["Christmas"], [["Youtube", "https://youtu.be/Dkq3LD-4pmM"], ["Spotify", "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"]]);
     //     // ps6 = song6["_id"].toString();
     //     // s6c1 = await comments.createComment(ps1, parseUser2, "so happy", 4);
@@ -180,7 +178,7 @@ const main = async () => {
     //     // parseS6c1 = s6c1["_id"].toString();
     //     // parseS6c2 = s6c2["_id"].toString();
     // } catch (e) {
-    //     console.log(`poster and admin test fail: ${e}`);
+    //     console.log(`failed to delete when poster and admin: ${e}`);
     // }
 
     // // getAllSongs()
@@ -188,7 +186,7 @@ const main = async () => {
     // try {
     //     let test = await songs.getAllSongs();
     // } catch (e) {
-    //     console.log(`get all songs test failed: ${e}`)
+    //     console.log(`failed to get all songs: ${e}`)
     // }
     
     // // updateAll()
@@ -207,17 +205,25 @@ const main = async () => {
     // console.log('----searchSongs() test----');
     // try {
     //     let test = await songs.searchSongs();
-    //     console.log( `search song invalid input test failed: ${test}`);
+    //     console.log( `1 failed invalid input case: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.searchSongs('test');
+    //     console.log( `2 failed invalid input case: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.searchSongs('   ');
+    //     console.log( `3 failed invalid input case: ${test}`);
     // } catch (e) {}
     // try {
     //     let test = await songs.searchSongs('kill bill');
     // } catch (e) {
-    //     console.log( `search song failed to find a match: ${e}`);
+    //     console.log( `1 failed failed to find a match: ${e}`);
     // }
     // try {
     //     let test = await songs.searchSongs('Kill Bill');       
     // } catch (e) {
-    //     console.log( `search song failed to find a match: ${e}`);
+    //     console.log( `2 failed to find a match: ${e}`);
     // }
     
     // // searchGenres()
@@ -235,7 +241,7 @@ const main = async () => {
     // } catch (e) {}
     // try {
     //     let test = await songs.searchArtist('sza');
-    //     console.log(test);
+    //     // console.log(test);
     // } catch (e) {
     //     console.log(`failed search case: ${e}`);
     // }
@@ -256,7 +262,7 @@ const main = async () => {
     // } catch (e) {}
     // try {
     //     let test = await songs.filterByRating(2, 4);
-    //     console.log(test);
+    //     // console.log(test);
     // } catch (e) {
     //     console.log(`failed filter case: ${e}`)
     // }
@@ -264,34 +270,50 @@ const main = async () => {
     // // sortSongs()
     // console.log('----sortSongs() test----');
     // try {
-    //     let test = await songs.sortSongs(-1, 'overallRating')
-    //     console.log(test);
+    //     let test = await songs.sortSongs();
+    //     console.log(`failed no input: ${test}`);
     // } catch (e) {}
+    // try {
+    //     let test = await songs.sortSongs(1, 'pie');
+    //     console.log(`failed bad first input: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.sortSongs();
+    //     console.log(`failed bad second input: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.sortSongs(-1, 'overallRating')
+    //     // console.log(test);
+    // } catch (e) {
+    //     console.log(`failed soritng by overallRating: ${e}`)
+    // }
     // try {
     //     let test = await songs.sortSongs(1, 'artist')
-    //     console.log(test);
-    // } catch (e) {}
+    //     // console.log(test);
+    // } catch (e) {
+    //     console.log(`failed sorting by artist: ${e}`)
+    // }
     // try {
     //     let test = await songs.sortSongs(-1, 'title')
-    //     console.log(test);
-    // } catch (e) {}
+    //     // console.log(test);
+    // } catch (e) {
+    //     console.log(`failed sorting by title: ${e}`);
+    // }
 
-    // recommendedSongs()
+    // // recommendedSongs()
     // console.log('----recommendedSongs() test----');
     // try {
     //     let test = await songs.recommendedSongs();
-    //     console.log(`recommendedSongs() invalid input case failed: ${test}`);
-    // } catch (e) {
-    //     console.log(`error: ${e}`);
-    // }
+    //     console.log(`failed invalid input case: ${test}`);
+    // } catch (e) {}
     // try {
     //     let t1 = await songs.postSong(parseUser1, 'test', 'SZA', ['test'], [['Spotify', 'test']]);
     //     let test = await songs.recommendedSongs(ps3);
-    //     console.log(`recommended songs for song ${song3.title}: ${test}`);
+    //     // console.log(`recommended songs for song ${song3.title}: ${test}`);
     //     let deleted = await songs.deleteSong(t1._id, parseUser2);
-    //     console.log(deleted);
+    //     // console.log(deleted);
     // } catch (e) {
-    //     console.log(`recommended songs failed: ${e}`);
+    //     console.log(`failed to give recommendations: ${e}`);
     // }
     
     // // mostPopularArtists()
@@ -300,7 +322,7 @@ const main = async () => {
     //     let test = await songs.mostPopularArtists();
     //     console.log(test);
     // } catch (e) {
-    //     console.log(e);
+    //     console.log(`failed to get artsits: ${e}`);
     // }
 
     // // ! TESTING COMMENT FUNCTIONS

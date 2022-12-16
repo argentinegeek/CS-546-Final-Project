@@ -385,7 +385,6 @@ const updateSongTitle = async (songId, userId, nt) => {
   if (validation.validString(nt.trim())) nt = nt.trim();
 
   const songCollection = await songs();
-
   // updating song title
   let updatedTitle = { title: nt };
   let updatedInfo = await songCollection.updateOne(
@@ -419,7 +418,6 @@ const updateArtist = async (songId, userId, na) => {
   if (validation.validString(na.trim())) na = na.trim();
 
   const songCollection = await songs();
-
   // updating song artist
   let updatedArtist = { artist: na };
   let updatedInfo = await songCollection.updateOne(
@@ -465,9 +463,7 @@ const updateGenre = async (songId, userId, ng) => {
       }
     }
   }
-
   const songCollection = await songs();
-
   // updating song genres
   let updatedGenres = { genres: ng };
   let updatedInfo = await songCollection.updateOne(
@@ -522,7 +518,6 @@ const updateSongLinks = async (songId, userId, nl) => {
   }
 
   const songCollection = await songs();
-
   // updating song genres
   let updatedLinks = { listenLinks: nl };
   let updatedInfo = await songCollection.updateOne(
@@ -625,6 +620,7 @@ const filterByRating = async (min, max) => {
   const matches = await songCollection.find({overallRating: {$gte: min, $lte: max}}).toArray();
   return matches;
 };
+
 /**
  * sorts all songs in DB in a predetermined order based on flag
  * @param {*} order : integer representing order, 1 = ascending (lowest to highest), -1 = descending (highest to lowest)
@@ -633,18 +629,14 @@ const filterByRating = async (min, max) => {
  */
 const sortSongs = async (order, flag) => {
   // input checking
-  if (!songList || !order || !flag) throw "missing input parameters";
-  if (!validation.validArray(songList)) throw "input must be an array";
+  if (!order || !flag) throw "missing input parameters";
   if (typeof order !== 'number') throw "order must be a number";
   if (order !== 1 && order !== -1) throw "order must be 1 or -1";
   if (typeof flag !== "string") throw "flag must be a string";
-  if (flag !== "title" && flag === "artist" && flag === "overallRating")
-    throw "invalid flag";
-
+  if (flag !== "title" && flag !== "artist" && flag !== "overallRating") throw "invalid flag";
   // sorting
   const songCollection = await songs();
   const sorted = await songCollection.find({}).sort({ title: order }).toArray();
-
   return sorted;
 };
 /**
@@ -741,10 +733,10 @@ module.exports = {
   getSongById,
   updateAll,
   updateSong,
-  updateSongTitle,
-  updateArtist,
-  updateGenre,
-  updateSongLinks,
+  // updateSongTitle,
+  // updateArtist,
+  // updateGenre,
+  // updateSongLinks,
   searchSongs,
   searchGenres,
   searchArtist,
