@@ -76,7 +76,7 @@ p {
 }
 
 /* Register Page */
-#first-name-rp {
+#firstName {
     font-family: Georgia;
     margin-left: auto;
     margin-right: auto;
@@ -85,7 +85,7 @@ p {
     align-items: center;
 }
 
-#last-name-rp {
+#lastName {
     font-family: Georgia;
     margin-left: auto;
     margin-right: auto;
@@ -94,19 +94,19 @@ p {
     align-items: center;
 }
 
-#username-rp {
+#userName {
     display: block;
     width: fit-content;
     align-items: center;
 }
 
-#password-rp {
+#password {
     display: block;
     width: fit-content;
     align-items: center;
 }
 
-#confirm-password-rp {
+#confirmPassword {
     display: block;
     width: fit-content;
     align-items: center;
@@ -144,13 +144,13 @@ p {
 
 
 /* Login Page */
-#username-lp {
+#username {
     display: block;
     width:fit-content;
     align-items: center;
 }
 
-#password-lp {
+#password {
     display: block;
     width: fit-content;
     align-items: center;

@@ -26,10 +26,15 @@ router
     let cPass = userInfo.confirmPassword;
     try {
       fName = validation.checkString(fName, "First Name");
+      console.log(fName);
       lName = validation.checkString(lName, "Last Name");
-      uName = validation.checkUsername(uName, "Username");
-      pass = validation.checkPassword(pass, "Password");
-      cPass = validation.checkPassword(cPass, "Confirm Password");
+      console.log(lName);
+      uName = validation.checkUsername(uName);
+      console.log(uName);
+      pass = validation.checkPassword(pass);
+      console.log(pass);
+      cPass = validation.checkPassword(cPass);
+      console.log(cPass);
     } catch (e) {
       res.status(400).json({ error: e });
     }
@@ -43,7 +48,8 @@ router
       );
       res.json(newUser);
     } catch (e) {
-      res.sendStatus(500);
+      res.status(500);
+      return;
     }
     //return res.redirect("/login");
   });
