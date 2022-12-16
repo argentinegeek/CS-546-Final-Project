@@ -708,29 +708,26 @@ const recommendedSongs = async (songId) => {
  */
 const mostPopularArtists = async () => {
   // get all songs
-  // const songCollection = await songs();
-  // let allSongs = songCollection.toArray();
   let allSongs = await getAllSongs()
   let ranked = [];
 
   if (allSongs.length !== 0) {
-    console.log(allSongs);
     let artistRating = [];
     for (let i = 0; i < allSongs.length; i++) {
+      // getting data
       let song = allSongs[i];
-      // console.log(song);
       let artistName = song.artist;
       let songRating = song.overallRating;
-      // console.log(artistName);
-      // console.log(songRating);
-
+      // seeing if artist is in array
       let found = artistRating.findIndex(element => element.artist === artistName);
       if (found >= 0) {
         let old = artistRating[found];
         let oldRating = old.rating;
         let newRating = (oldRating + songRating) / 2;
+        // updating
         artistRating[found].rating = newRating;
       } else {
+        // adding to array
         artistRating.push({artist: artistName, rating: songRating});
       }
     }
