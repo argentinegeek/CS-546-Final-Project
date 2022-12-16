@@ -605,8 +605,8 @@ const searchArtist = async (artistName) => {
 
 /**
  * gets all movies with rating from min to max
- * @param {*} min : minimum rating range, inclusive - whole number positive from 1 to 5
- * @param {*} max : maximum rating range, inclusive - whole number positive from 1 to 5
+ * @param {*} min : minimum rating range, inclusive - whole number positive from 1 to 4
+ * @param {*} max : maximum rating range, inclusive - whole number positive from 2 to 5
  * @returns list of songs with ratings greater than min and less than max
  */
 const filterByRating = async (min, max) => {
@@ -621,18 +621,16 @@ const filterByRating = async (min, max) => {
   if (min > max) throw "min must be less than max";
 
   const songCollection = await songs();
-  const matches = await songCollection.find({rating: { $gte: min, $lte: max }});
-  // console.log(matches);
+  const matches = await songCollection.find({overallRating: {$gte: min, $lte: max}}).toArray();
   return matches;
 };
 /**
- * takes in a list of songs and sorts them in a predetermined order based on rating
- * @param {*} songList : array of song objects
+ * sorts all songs in DB in a predetermined order based on flag
  * @param {*} order : integer representing order, 1 = ascending (lowest to highest), -1 = descending (highest to lowest)
  * @param {*} flag : category to sort by - string
  * @returns list of songs in a specific order
  */
-const sortSongs = async (songList, order, flag) => {
+const sortSongs = async (order, flag) => {
   // input checking
   if (!songList || !order || !flag) throw "missing input parameters";
   if (!validation.validArray(songList)) throw "input must be an array";
@@ -711,13 +709,15 @@ const recommendedSongs = async (songId) => {
 const mostPopularArtists = async () => {
   // get all songs
   // const songCollection = await songs();
+  // let allSongs = songCollection.toArray();
   let allSongs = await getAllSongs()
   let ranked = [];
 
   if (allSongs.length !== 0) {
     console.log(allSongs);
     let artistRating = [];
-    for (const song in allSongs) {
+    for (let i = 0; i < allSongs.length; i++) {
+      let song = allSongs[i];
       // console.log(song);
       let artistName = song.artist;
       let songRating = song.overallRating;
@@ -734,34 +734,6 @@ const mostPopularArtists = async () => {
         artistRating.push({artist: artistName, rating: songRating});
       }
     }
-    // // making map
-    // let artistRating = new Map();
-    // // build map
-    // for (const song in songCollection) { 
-    // // songCollection.forEach(song => {
-    //   let artist = song.artist;
-    //   let songRating = song.overallRating;
-    //   // check if in map
-    //   if (artistRating.has(artist)) {
-    //     // if they are, compute new average score
-    //     let currentRating = artistRating.get(artist);
-    //     let newRating = (currentRating + songRating) / 2;
-    //     // updating map
-    //     artistRating.set(artist, newRating);
-    //   } else {
-    //     // if not, enter tuple into map
-    //     artistRating.set(artist, songRating);
-    //   }
-    // }
-    // // ! artist rating is empty
-    // // console.log(artistRating);
-    // // convert map to array to store found artists in form [{artist : rating}, ...] and sorting
-    // ranked = Array.from(artistRating, ([name, value]) => ({name, value}));
-    // console.log(ranked);
-    // // artistRating.forEach(function(key, value) {
-    // //   ranked.push({artist: key, rating: value})
-    // // })
-    // console.log(artistRating);
     ranked = artistRating.sort((a, b) => b.rating - a.rating);
   }
   return ranked;
