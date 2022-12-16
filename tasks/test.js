@@ -129,7 +129,7 @@ const main = async () => {
     // console.log('!-----TESTING USER FUNCTIONS-----!');
 
     // ! TESTING SONG FUNCTIONS
-    console.log('!-----TESTING SONG FUNCTIONS-----!');
+    // console.log('!-----TESTING SONG FUNCTIONS-----!');
     // // postSong()
     // console.log('----postSong() test----');
     // // invalid inputs
@@ -147,7 +147,7 @@ const main = async () => {
     // } catch (e) {}
 
     // // deleteSong()
-    console.log('----deleteSong() test----');
+    // console.log('----deleteSong() test----');
     // try {
     //     let test = await songs.deleteSong();
     //     console.log(`1 invalid input test case: ${test}`);
@@ -160,25 +160,25 @@ const main = async () => {
     //     let test = await songs.deleteSong(ps1, parseUser3);
     //     console.log(`failed not admin case: ${test}`);
     // } catch (e) {}
-    try {
-        let test = await songs.deleteSong(ObjectId(), parseUser1);
-        console.log(`failed song doesn't exist case: ${test}`);
-    } catch (e) {}
-    try {
-        let test = await songs.deleteSong(ps1, parseUser2);
-        console.log(test);
-        console.log(await users.getUserById(parseUser1));
-        console.log(await users.getUserById(parseUser3));
-        console.log(await users.getUserById(parseUser3));
-        // song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
-        // ps1 = song1["_id"].toString();
-        // s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
-        // s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
-        // parseS1c1 = s1c1["_id"].toString();
-        // parseS1c2 = s1c2["_id"].toString();
-    } catch (e) {
-        console.log(`failed to delete when not poster but admin: ${e}`);
-    }
+    // try {
+    //     let test = await songs.deleteSong(ObjectId(), parseUser1);
+    //     console.log(`failed song doesn't exist case: ${test}`);
+    // } catch (e) {}
+    // try {
+    //     let test = await songs.deleteSong(ps1, parseUser2);
+    //     // console.log(test);
+    //     // console.log(await users.getUserById(parseUser1));
+    //     // console.log(await users.getUserById(parseUser3));
+    //     // console.log(await users.getUserById(parseUser4));
+    //     // song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]);
+    //     // ps1 = song1["_id"].toString();
+    //     // s1c1 = await comments.createComment(ps1, parseUser1, "I love this song", 5);
+    //     // s1c2 = await comments.createComment(ps1, parseUser3, "Its ok", 3);
+    //     // parseS1c1 = s1c1["_id"].toString();
+    //     // parseS1c2 = s1c2["_id"].toString();
+    // } catch (e) {
+    //     console.log(`failed to delete when not poster but admin: ${e}`);
+    // }
     // try {
     //     let test = await songs.deleteSong(ps6, parseUser2);
     //     console.log(test);
