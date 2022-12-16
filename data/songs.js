@@ -206,6 +206,8 @@ const deleteSong = async (songId, userId) => {
         // remove commentId from interactions
         for (const interaction in interactions) {
           let interactor = interaction.userId;
+          // let ici = interaction.commentId;
+          console.log(commentId);
           const updateInteractor = await userCollection.updateOne(
             { _id: ObjectId(interactor) },
             { $pull: { commentInteractions: commentId } }
