@@ -710,14 +710,19 @@ const recommendedSongs = async (songId) => {
  */
 const mostPopularArtists = async () => {
   // get all songs
-  const songCollection = await songs();
+  // const songCollection = await songs();
+  let allSongs = await getAllSongs()
   let ranked = [];
 
-  if (songCollection.length !== 0) {
+  if (allSongs.length !== 0) {
+    console.log(allSongs);
     let artistRating = [];
-    for (const song in songCollection) {
+    for (const song in allSongs) {
+      // console.log(song);
       let artistName = song.artist;
       let songRating = song.overallRating;
+      // console.log(artistName);
+      // console.log(songRating);
 
       let found = artistRating.findIndex(element => element.artist === artistName);
       if (found >= 0) {
@@ -756,7 +761,8 @@ const mostPopularArtists = async () => {
     // // artistRating.forEach(function(key, value) {
     // //   ranked.push({artist: key, rating: value})
     // // })
-    ranked = ranked.sort((a, b) => b.artist - a.artist);
+    // console.log(artistRating);
+    ranked = artistRating.sort((a, b) => b.rating - a.rating);
   }
   return ranked;
 };
