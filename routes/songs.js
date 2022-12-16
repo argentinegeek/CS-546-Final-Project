@@ -2,6 +2,8 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data");
+const { getAllSongs } = require("../data/songs");
+const { isAdmin } = require("../data/users");
 const songData = data.songs;
 const validation = require("../helpers");
 
@@ -23,7 +25,14 @@ router.get("/:id", async (req, res) => {
   }
   try {
     const song = await songData.getSongById(req.params.id);
-    res.render('song_page', {songTitle: song.title, songArtist: song.artist, songGenres: song.genres, songLinks: song.links, songRating: song.overallRating, songComments: song.comments});
+    res.render("song_page", {
+      songTitle: song.title,
+      songArtist: song.artist,
+      songGenres: song.genres,
+      songLinks: song.links,
+      songRating: song.overallRating,
+      songComments: song.comments,
+    });
   } catch (e) {
     res.status(404).json({ error: e });
   }
@@ -31,6 +40,11 @@ router.get("/:id", async (req, res) => {
 //route to post a song
 router.post("/", async (req, res) => {
   const songPostData = req.body;
+  try {
+    if (!isAdmin(req.session.user.userId)) throw "User is not admin.";
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
   try {
     songPostData.posterId = validation.checkId(
       songPostData.posterId,
@@ -46,8 +60,6 @@ router.post("/", async (req, res) => {
       songPostData.links,
       "Links"
     );
-    let createSong = await songData.postSong(songPostData.posterId, songPostData.title, songPostData.artist, songPostData.genres, songPostData.links);
-    res.redirect('/songs');
   } catch (e) {
     return res.status(400).json({ error: e });
   }
@@ -65,10 +77,18 @@ router.post("/", async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e });
   }
+  //TODO: for handlebars, pass in parameter for database to display all the songs
+  let songs = getAllSongs();
+  return res.render("songs_page", { songs: songs });
 });
 //route to update all elements of a song
 router.put("/:id", async (req, res) => {
   const updatedData = req.body;
+  try {
+    if (!isAdmin(req.session.user.userId)) throw "User is not admin.";
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
   try {
     req.params.id = validation.checkId(req.params.id, "ID url param");
     updatedData.posterId = validation.checkId(
@@ -104,6 +124,11 @@ router.put("/:id", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   const requestBody = req.body;
   let updatedObject = {};
+  try {
+    if (!isAdmin(req.session.user.userId)) throw "User is not admin.";
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
   try {
     req.params.id = validation.checkId(req.params.id, "Song ID");
     if (requestBody.posterId)
@@ -163,6 +188,11 @@ router.patch("/:id", async (req, res) => {
 
 //route to delete song
 router.delete("/:id", async (req, res) => {
+  try {
+    if (!isAdmin(req.session.user.userId)) throw "User is not admin.";
+  } catch (e) {
+    return res.status(400).json({ error: e });
+  }
   try {
     req.params.id = validation.checkId(req.params.id, "Id URL Param");
   } catch (e) {
