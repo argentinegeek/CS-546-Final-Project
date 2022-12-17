@@ -1,6 +1,7 @@
 // Functions for posts
 const mongoCollections = require("../config/mongoCollections");
-const playlists = mongoCollections.posts;
+const playlists = mongoCollections.playlists;
+const songs = mongoCollections.songs;
 const { ObjectId } = require("mongodb");
 const validation = require("../helpers");
 const { isAdmin } = require("./users");
@@ -29,7 +30,7 @@ const createPlaylist = async (posterId, name, description, songs) => {
   };
   const newInsert = await playlistCollection.insertOne(newPlaylist);
   if (newInsert.insertedCount === 0) throw "Insert failed!";
-  return await this.getPlaylistById(newInsert.insertedId.toString());
+  return await getPlaylistById(newInsert.insertedId.toString());
 };
 
 /**
@@ -41,7 +42,7 @@ const getPlaylistById = async (id) => {
   id = validation.checkId(id, "ID");
   const playlistCollection = await playlists();
   const playlist = await playlistCollection.findOne({ _id: ObjectId(id) });
-  if (!playlist) throw "Playlist not found";
+  if (playlist === null) throw "Playlist not found";
   // formatting output
   playlist._id = playlist._id.toString();
   return playlist;
@@ -71,91 +72,95 @@ const getAllPlaylists = async () => {
  * @param {*} n_Description : new description of the playlist - string
  * @param {*} n_Songs : new list of songs for the playlist - array
  * @returns updated playlist
- */
-const updateAllPlaylist = async (
-  playlistId,
-  posterId,
-  n_Name,
-  n_Description,
-  n_Songs
-) => {
-  const playlist = await this.getPlaylistById(playlistId);
-  if (playlist.posterId !== posterId || !isAdmin(posterId))
-    throw "User attempting to delete is not the original poster or an Admin.";
-  playlistId = validation.checkId(playlistId, "playlist ID");
-  posterId = validation.checkId(posterId, "Poster ID");
-  n_Name = validation.checkString(n_Name, "new name");
-  n_Description = validation.checkString(n_Description, "new description");
-  n_Songs = validation.checkStringArray(n_Songs, "new songs");
-  const playlistCollection = await playlists();
-  let updatedPlaylist = {
-    posterId: posterId,
-    playlistId: playlistId,
-    name: n_Name,
-    description: n_Description,
-    songs: n_Songs,
-  };
-  const updatedInfo = await playlistCollection.updateOne(
-    { _id: ObjectId(playlistId) },
-    { $set: updatedPlaylist }
-  );
-  if (!updatedInfo.modifiedCount === 0)
-    throw "Could not update playlist successfully";
-  let updatedPL = await this.getPlaylistById(playlistId);
-  updatedPL._id = updatedPL._id.toString();
+//  */
+// const updateAllPlaylist = async (
+//   playlistId,
+//   posterId,
+//   n_Name,
+//   n_Description,
+//   n_Songs
+// ) => {
+//   const playlist = await getPlaylistById(playlistId);
+//   if (playlist.posterId !== posterId || !isAdmin(posterId))
+//     throw "User attempting to delete is not the original poster or an Admin.";
+//   playlistId = validation.checkId(playlistId, "playlist ID");
+//   posterId = validation.checkId(posterId, "Poster ID");
+//   n_Name = validation.checkString(n_Name, "new name");
+//   n_Description = validation.checkString(n_Description, "new description");
+//   n_Songs = validation.checkStringArray(n_Songs, "new songs");
+//   const playlistCollection = await playlists();
+//   let updatedPlaylist = {
+//     posterId: posterId,
+//     playlistId: playlistId,
+//     name: n_Name,
+//     description: n_Description,
+//     songs: n_Songs,
+//   };
+//   const updatedInfo = await playlistCollection.updateOne(
+//     { _id: ObjectId(playlistId) },
+//     { $set: updatedPlaylist }
+//   );
+//   if (!updatedInfo.modifiedCount === 0)
+//     throw "Could not update playlist successfully";
+//   let updatedPL = await getPlaylistById(playlistId);
+//   updatedPL._id = updatedPL._id.toString();
 
-  return updatedPL;
-};
+//   return updatedPL;
+// };
 
 /**
  * updates a playlist
  * @param {*} playlistId : ObjectId of playlist - string
  * @param {*} posterId : ObjectId of poster of playlist - string
  * @param {*} updatedPlaylist : Object containing what is requested to be udpated - string/array
- */
-const updatePlaylist = async (posterId, playlistId, updatedPlaylist) => {
-  const playlistCollection = await songs();
-  const updatedPlaylistData = {};
-  const playlist = await this.getPlaylistById(playlistId);
-  if (playlist.posterId !== posterId || !isAdmin(posterId))
-    throw "User attempting to delete is not the original poster or an Admin.";
+//  */
+// const updatePlaylist = async (posterId, playlistId, updatedPlaylist) => {
+//   const playlistCollection = await songs();
+//   const updatedPlaylistData = {};
+//   const playlist = await getPlaylistById(playlistId);
+//   if (playlist.posterId !== posterId || !isAdmin(posterId))
+//     throw "User attempting to delete is not the original poster or an Admin.";
 
-  if (updatedPlaylist.posterId) {
-    updatedPlaylistData.posterId = validation.checkId(
-      updatedPlaylist.posterId,
-      "Poster ID"
-    );
-  }
-  if (updatedPlaylist.playlistId) {
-    updatedPlaylistData.playlistId = validation.checkId(
-      updatedPlaylist.playlistId,
-      "Playlist ID"
-    );
-  }
-  if (updatedPlaylist.name) {
-    updatedPlaylistData.name = validation.checkString(
-      updatedPlaylist.name,
-      "Name"
-    );
-  }
-  if (updatedPlaylist.description) {
-    updatedPlaylistData.description = validation.checkString(
-      updatedPlaylist.description,
-      "Description"
-    );
-  }
-  if (updatedPlaylist.songs) {
-    updatedPlaylistData.songs = validation.checkStringArray(
-      updatedSong.songs,
-      "Songs"
-    );
-  }
-  await playlistCollection.updateOne(
-    { _id: ObjectId(playlistId) },
-    { $set: updatedPlaylistData }
-  );
-  return await this.getPlaylistById(playlistId);
-};
+//   // if (updatedPlaylist.posterId) {
+//   //   updatedPlaylistData.posterId = validation.checkId(
+//   //     updatedPlaylist.posterId,
+//   //     "Poster ID"
+//   //   );
+//   // }
+//   if (updatedPlaylist.playlistId) {
+//     updatedPlaylistData.playlistId = validation.checkId(
+//       updatedPlaylist.playlistId,
+//       "Playlist ID"
+//     );
+//   }
+//   if (updatedPlaylist.name) {
+//     updatedPlaylistData.name = validation.checkString(
+//       updatedPlaylist.name,
+//       "Name"
+//     );
+//   }
+//   if (updatedPlaylist.description) {
+//     updatedPlaylistData.description = validation.checkString(
+//       updatedPlaylist.description,
+//       "Description"
+//     );
+//   }
+//   if (updatedPlaylist.songs) {
+//     updatedPlaylistData.songs = validation.checkStringArray(
+//       updatedPlaylist.songs,
+//       "Songs"
+//     );
+//   }
+//   const updatePlaylistStuff = await playlistCollection.updateOne(
+//     { _id: ObjectId(playlistId) },
+//     { $set: updatedPlaylistData }
+//   );
+//   if (updatePlaylistStuff.modifiedCount === 0)
+//     throw `Could not udpate the playlist (${playlistId}) from the poster (${posterId}) profile`;
+//   let updatedPL = await getPlaylistById(playlistId);
+//   updatedPL._id = updatedPL._id.toString();
+//   return updatedPL;
+// };
 
 /**
  * @param {*} playlistId : ObjectId of playlist - string
@@ -167,12 +172,12 @@ const deletePlaylist = async (posterId, playlistId) => {
   playlistId = validation.checkId(playlistId, "playlistID");
   const playlistCollection = await playlists();
   try {
-    await this.getPlaylistById(playlistId);
+    await getPlaylistById(playlistId);
   } catch (e) {
     console.log(e);
     return;
   }
-  const playlist = await this.getPlaylistById(playlistId);
+  const playlist = await getPlaylistById(playlistId);
   if (playlist.posterId !== posterId || !isAdmin(posterId))
     throw "User attempting to delete is not the original poster or an Admin.";
   const deletionInfo = await playlistCollection.deleteOne({
@@ -181,7 +186,7 @@ const deletePlaylist = async (posterId, playlistId) => {
   if (deletionInfo.deletedCount === 0)
     throw `Could not delete playlist with id of ${playlistId}`;
 
-  const message = `${name} has been successfully deleted`;
+  const message = `Playlist has been successfully deleted`;
   return message;
 };
 
@@ -189,7 +194,7 @@ module.exports = {
   createPlaylist,
   getPlaylistById,
   getAllPlaylists,
-  updateAllPlaylist,
-  updatePlaylist,
+  // updateAllPlaylist,
+  // updatePlaylist,
   deletePlaylist,
 };
