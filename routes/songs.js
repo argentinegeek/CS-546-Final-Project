@@ -81,8 +81,9 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: e });
   }
   //TODO: for handlebars, pass in parameter for database to display all the songs
-  let songs = getAllSongs();
-  return res.render("songs_page", { songs: songs });
+  let songs = await songData.getAllSongs();
+  console.log(songs);
+  return res.render("songs_page", { song: songs });
 });
 //route to update all elements of a song
 router.put("/:id", async (req, res) => {
