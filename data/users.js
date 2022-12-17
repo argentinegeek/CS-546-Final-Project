@@ -28,14 +28,13 @@ const checkUser = async (username, password) => {
   if (!found) {
     throw "username already used";
   }
-
-  if ((await bcrypt.compare(password.trim(), found.password))) {
+  let comparepw = (await bcrypt.compare(password.trim(), found.password));
+  if (comparepw) {
     throw "Either the username or password is invalid";
   }
 
   return {
     authenticatedUser: true,
-    uID: found["_id"].toString(),
   };
 };
 

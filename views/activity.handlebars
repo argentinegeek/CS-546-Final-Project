@@ -1,11 +1,9 @@
-
-
 <h1>Activity Page</h1>
 
-
-
 {{#each songs}}
+<ul>
+    <li>{{{this.title}}}</li>
+    <li>{{{this.genre}}}</li>
+    <li>{{{this.artist}}} </li>
     <ul>
-        <li>{{{this.title}}}  {{{this.genre}}} {{{this.artist}}} </li>
-    <ul>
-{{{/each}}}
+        {{{/each}}}
