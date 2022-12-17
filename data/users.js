@@ -25,11 +25,11 @@ const checkUser = async (username, password) => {
     userName: username.toLowerCase(),
   });
   //checking for duplicates
-  if (found) {
+  if (!found) {
     throw "username already used";
   }
 
-  if (!(await bcrypt.compare(password.trim(), found.password))) {
+  if ((await bcrypt.compare(password.trim(), found.password))) {
     throw "Either the username or password is invalid";
   }
 
