@@ -81,13 +81,21 @@ router
 
 router.route("/private").get(async (req, res) => {
   //this should render the account info page
-  //12/16 - rendering to the songs page
-  return res.render("activity");
+  try {
+    return res.render("activity");  
+  } catch (e) {
+    res.status(500).json({error: e});
+  }
 });
 
 router.route("/logout").get(async (req, res) => {
-  req.session.destroy();
-  return res.render("logout_page");
+  try {
+    req.session.destroy();
+    return res.render("logout_page");  
+  } catch (e) {
+    res.status(500).json({error: e});
+  }
+  
 });
 
 module.exports = router;
