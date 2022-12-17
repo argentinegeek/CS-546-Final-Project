@@ -66,7 +66,7 @@ router
       pass = validation.checkPassword(pass);
       console.log(pass);
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.status(400).render('login_page', { error: true, errorMsg: e});
     }
     try {
       const auth = await userData.checkUser(uName, pass);
@@ -77,7 +77,7 @@ router
       }
       // res.json(auth);
     } catch (e) {
-      res.status(400).json({error: e});
+      return res.status(400).render('login_page', { error: true, errorMsg: e});
     }
     // req.session.user = { userName: uName, userId: auth.uID };
     return res.redirect("/private");
