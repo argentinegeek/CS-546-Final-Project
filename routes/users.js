@@ -4,6 +4,7 @@ const router = express.Router();
 const data = require("../data");
 const userData = data.users;
 const validation = require("../helpers");
+const xss = require('xss');
 //make sure to include error checking for routes
 router.route("/").get(async (req, res) => {
   if (req.session.user) return res.redirect("/private");
@@ -32,11 +33,11 @@ router
       pass = validation.checkPassword(pass);
       cPass = validation.checkPassword(cPass);
       const newUser = await userData.createUser(
-        fName,
-        lName,
-        uName,
-        pass,
-        cPass
+        xss(fName),
+        xss(lName),
+        xss(uName),
+        xss(pass),
+        xss(cPass)
       );
       if (!newUser) {
         res.status(500).json({ error: "Internal Server Error" });
@@ -62,8 +63,9 @@ router
     try {
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
-      const auth = await userData.checkUser(uName, pass);
-      console.log(auth);
+      const auth = await userData.checkUser(xss(uName), xss(pass));
+      console.log(auth)
+      
       if (auth) {
         console.log("logging them in");
         req.session.user = { userName: uName, userId: auth.uID };
@@ -79,13 +81,21 @@ router
 
 router.route("/private").get(async (req, res) => {
   //this should render the account info page
-  //12/16 - rendering to the songs page
-  return res.render("activity");
+  try {
+    return res.render("activity");  
+  } catch (e) {
+    res.status(500).json({error: e});
+  }
 });
 
 router.route("/logout").get(async (req, res) => {
-  req.session.destroy();
-  return res.render("logout_page");
+  try {
+    req.session.destroy();
+    return res.render("logout_page");  
+  } catch (e) {
+    res.status(500).json({error: e});
+  }
+  
 });
 
 module.exports = router;
