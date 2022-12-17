@@ -75,7 +75,7 @@ const createUser = async (
   if (!password === confirmPassword)
     throw "Error: password must match confirmPassword";
   const userCollection = await users();
-  
+
   let found = await userCollection.findOne({
     userName: userName.toLowerCase(),
   });
