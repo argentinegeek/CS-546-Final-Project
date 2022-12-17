@@ -21,7 +21,7 @@ router
     let userInfo = req.body;
     let fName = userInfo.firstName;
     let lName = userInfo.lastName;
-    let uName = userInfo.userName; //<-- register page inputs have no IDs yet
+    let uName = userInfo.userName;
     let pass = userInfo.password;
     let cPass = userInfo.confirmPassword;
 
@@ -53,7 +53,6 @@ router
   .route("/login")
   .get(async (req, res) => {
     if (req.session.user) return res.redirect("/private");
-    //line 34 may need data passed as second parameter
     return res.render("login_page");
   })
   .post(async (req, res) => {
@@ -71,11 +70,19 @@ router
         req.session.user = { userName: uName, userId: auth.uID };
         console.log('made them in the session')
       } else {
+<<<<<<< Updated upstream
         res.status(400).render('login_page', { error: true, errorMsg: e});
+=======
+        throw "error";
+>>>>>>> Stashed changes
       }
       return res.redirect("/private");
     } catch (e) {
+<<<<<<< Updated upstream
       res.status(400).render('login_page', { error: true, errorMsg: e});
+=======
+      res.status(400).json({ error: e });
+>>>>>>> Stashed changes
     }
   });
 
