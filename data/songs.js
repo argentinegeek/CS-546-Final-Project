@@ -364,11 +364,15 @@ const updateSong = async (userId, songId, updatedSong) => {
       "Links"
     );
   }
-  await songCollection.updateOne(
+  const updateSongStuff = await songCollection.updateOne(
     { _id: ObjectId(songId) },
     { $set: updatedSongData }
   );
-  return await this.getSongById(songId);
+  if (updateSongStuff.modifiedCount === 0)
+    throw `Could not udpate the song from the poster (${userId}) profile`;
+  let updatedSng = await getSongById(songId);
+  updatedSng._id = updatedSng._id.toString();
+  return updatedSng;
 };
 
 /**

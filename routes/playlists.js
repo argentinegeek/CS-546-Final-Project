@@ -166,7 +166,7 @@ router.patch("/:id", async (req, res) => {
     if (requestBody.songs && requestBody.songs !== oldPlaylist.songs)
       updatedObject.songs = requestBody.songs;
   } catch (e) {
-    return res.status(404).json({ error: "Song not found" });
+    return res.status(404).json({ error: "Playlist not found" });
   }
   if (Object.keys(updatedObject).length !== 0) {
     try {
