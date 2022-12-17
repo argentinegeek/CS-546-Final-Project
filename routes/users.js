@@ -40,12 +40,12 @@ router
         xss(cPass)
       );
       if (!newUser) {
-        res.status(500).json({error: 'Internal Server Error'});
+        res.status(500).json({ error: 'Internal Server Error' });
       } else {
-        return res.redirect("/private");
+        res.render('private', { username: req.session.user.username, ct: curTimeStamp });
       }
     } catch (e) {
-      res.status(400).render('register_page', { error: true, errorMsg: e});
+      res.status(400).render('register_page', { error: true, errorMsg: e });
     }
   });
 
@@ -69,11 +69,11 @@ router
       if (auth) {
         req.session.user = { userName: uName, userId: auth.uID };
       } else {
-        res.status(400).render('login_page', { error: true, errorMsg: e});
+        res.status(400).render('login_page', { error: true, errorMsg: e });
       }
-      return res.redirect("/private");
+      res.render('private', { username: req.session.user.username, ct: curTimeStamp });
     } catch (e) {
-      res.status(400).render('login_page', { error: true, errorMsg: e});
+      res.status(400).render('login_page', { error: true, errorMsg: e });
     }
   });
 
