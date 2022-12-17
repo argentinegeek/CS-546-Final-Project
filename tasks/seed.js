@@ -1,6 +1,5 @@
 const connection = require("../config/mongoConnection");
 const data = require("../data/");
-// const { checkUser } = require("../data/users");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
@@ -58,7 +57,12 @@ async function main() {
       "Ghost",
       "Justin Bieber",
       ["Pop", "Rap"],
-      [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]]
+      [
+        ["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"],
+        ["Spotify", "https://open.spotify.com/track/6I3mqTwhRpn34SLVafSH7G?si=4a4a221146fc4c60"],
+        ["Apple Music", "https://music.apple.com/us/album/ghost/1556175419?i=1556175854"],
+        ["Pandora", "https://www.pandora.com/artist/justin-bieber/justice-triple-chucks-deluxe/ghost/TRtxvxzqZhPg949?part=ug-desktop&corr=214880858098631730"],
+      ]
     );
     let song2 = await songs.postSong(
       parseUser1,
@@ -66,10 +70,14 @@ async function main() {
       "Mariah Carey",
       ["Pop", "Christmas"],
       [
+        ["Youtube", "https://youtu.be/aAkMkVFwAoo"],
         [
           "Spotify",
-          "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn?si=14779c5fc14f4f23",
+          "https://open.spotify.com/track/0bYg9bo50gSsH3LtXe2SQn?si=14779c5fc14f4f23"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/all-i-want-for-christmas-is-you/585972750?i=585972803"],
+        ["Soundcloud", "https://soundcloud.com/mariahcarey/all-i-want-for-christmas-is-5?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
+        ["Pandora", "https://www.pandora.com/playlist/PL:1407374969209471:1133813906?part=ug-desktop&corr=214880858098631730"],
       ]
     );
     let song3 = await songs.postSong(
@@ -81,8 +89,11 @@ async function main() {
         ["Youtube", "https://youtu.be/61ymOWwOwuk"],
         [
           "Spotify",
-          "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13",
+          "https://open.spotify.com/track/2dHHgzDwk4BJdRwy9uXhTO?si=ec675d4488a64d13"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/kill-bill/1657869377?i=1657869393"],
+        ["Soundcloud", "https://soundcloud.com/szababy2/kill-bill?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
+        ["Pandora", "https://www.pandora.com/artist/sza/sos/kill-bill/TRfxz6X6hphprfg?part=ug-desktop&corr=214880858098631730"],
       ]
     );
     let song4 = await songs.postSong(
@@ -94,8 +105,11 @@ async function main() {
         ["Youtube", "https://youtu.be/SQnc1QibapQ"],
         [
           "Spotify",
-          "https://open.spotify.com/track/1Qrg8KqiBpW07V7PNxwwwL?si=ab67351382194aa0",
+          "https://open.spotify.com/track/1Qrg8KqiBpW07V7PNxwwwL?si=ab67351382194aa0"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/me-porto-bonito/1622045624?i=1622045634"],
+        ["Soundcloud", "https://soundcloud.com/badbunny15/bad-bunny-chencho-corleone-me?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
+        ["Pandora", "https://www.pandora.com/artist/bad-bunny-and-chencho-corleone/un-verano-sin-ti/me-porto-bonito/TRP954KlPK7ppw9?part=ug-desktop&corr=214880858098631730"],
       ]
     );
     let song5 = await songs.postSong(
@@ -107,8 +121,11 @@ async function main() {
         ["Youtube", "https://youtu.be/VF-FGf_ZZiI"],
         [
           "Spotify",
-          "https://open.spotify.com/track/4k6Uh1HXdhtusDW5y8Gbvy?si=72d31a366f8e4a70",
+          "https://open.spotify.com/track/4k6Uh1HXdhtusDW5y8Gbvy?si=72d31a366f8e4a70"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/bad-habit/1631909576?i=1631909584"],
+        ["Soundcloud", "https://soundcloud.com/steevlacy/bad-habit?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
+        ["Pandora", "https://www.pandora.com/artist/steve-lacy/gemini-rights/bad-habit/TR2pzKcg6wbggj4?part=ug-desktop&corr=214880858098631730"],
       ]
     );
     // made by user 2
@@ -121,8 +138,10 @@ async function main() {
         ["Youtube", "https://youtu.be/Dkq3LD-4pmM"],
         [
           "Spotify",
-          "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2",
+          "https://open.spotify.com/track/6tjituizSxwSmBB5vtgHZE?si=84e5c0c1423347a2"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/holly-jolly-christmas/669854820?i=669854837"],
+        ["Soundcloud", "https://soundcloud.com/michaelbuble/holly-jolly-christmas?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
       ]
     );
     let song7 = await songs.postSong(
@@ -134,8 +153,11 @@ async function main() {
         ["Youtube", "https://youtu.be/NgsWGfUlwJI"],
         [
           "Spotify",
-          "https://open.spotify.com/track/4ewazQLXFTDC8XvCbhvtXs?si=2890b48175514471",
+          "https://open.spotify.com/track/4ewazQLXFTDC8XvCbhvtXs?si=2890b48175514471"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/glimpse-of-us/1640829780?i=1640829782"],
+        ["Soundcloud", "https://soundcloud.com/jojiofficial/joji-glimpse-of-us?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
+        ["Pandora", "https://www.pandora.com/artist/joji/smithereens/glimpse-of-us/TR2kxvP9pKwZ2pX?part=ug-desktop&corr=214880858098631730"],
       ]
     );
     let song8 = await songs.postSong(
@@ -147,8 +169,11 @@ async function main() {
         ["Youtube", "https://youtu.be/TLDflhhdPCg"],
         [
           "Spotify",
-          "https://open.spotify.com/track/0aWMVrwxPNYkKmFthzmpRi?si=a60071f9e3714f6e",
+          "https://open.spotify.com/track/0aWMVrwxPNYkKmFthzmpRi?si=a60071f9e3714f6e"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/blue-in-green/300865074?i=300865222"],
+        ["Soundcloud", "https://soundcloud.com/milesdavissonymusic/blue-in-green-263067290?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
+        ["Pandora", "https://www.pandora.com/artist/miles-davis/kind-of-blue-legacy-edition/blue-in-green-feat-john-coltrane-and-bill-evans/TRzZtjrctqnvcrm?part=ug-desktop&corr=214880858098631730"],
       ]
     );
     let song9 = await songs.postSong(
@@ -160,8 +185,11 @@ async function main() {
         ["Youtube", "https://youtu.be/Odh9ddPUkEY"],
         [
           "Spotify",
-          "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad",
+          "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/midnight-rain/1645937249?i=1645937261"],
+        ["Soundcloud", "https://soundcloud.com/taylorswiftofficial/midnight-rain?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
+        ["Pandora", "https://www.pandora.com/artist/taylor-swift/midnights-3am-edition/midnight-rain/TRxXmdgmxrV5Kv2?part=ug-desktop&corr=214880858098631730"],
       ]
     );
     let song10 = await songs.postSong(
@@ -173,10 +201,143 @@ async function main() {
         ["Youtube", "https://youtu.be/dQw4w9WgXcQ"],
         [
           "Spotify",
-          "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=832bcda624d84bd1",
+          "https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT?si=832bcda624d84bd1"
         ],
+        ["Apple Music", "https://music.apple.com/us/album/never-gonna-give-you-up/1558533900?i=1558534271"],
+        ["Soundcloud", "https://soundcloud.com/rick-astley-official/never-gonna-give-you-up-4?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"],
+        ["Pandora", "https://www.pandora.com/artist/rick-astley/whenever-you-need-somebody-deluxe-edition-2022-remaster/never-gonna-give-you-up-2022-remaster/TRPqk6lxwZqzPwK?part=ug-desktop&corr=214880858098631730"],
       ]
     );
+    let song11 = await songs.postSong(
+      parseUser1,
+      "Anti-Hero",
+      "Taylor Swift",
+      ['Pop'],
+      [
+        ["Youtube", "https://youtu.be/b1kbLwvqugk"],
+        ["Spotify", ""],
+        ["Apple Music", ""],
+        ["Soundcloud", ""],
+        ["Pandora", ""],
+      ]
+    );
+    let song12 = await songs.postSong(
+        parseUser1,
+        "Lift Me Up",
+        "Rihanna",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
+    let song13 = await songs.postSong(
+        parseUser1,
+        "Golden Hour",
+        "JVKE",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
+    let song14 = await songs.postSong(
+        parseUser1,
+        "Just Wanna Rock",
+        "Lil Uzi Vert",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
+    let song15 = await songs.postSong(
+        parseUser1,
+        "Umbrella",
+        "Rihanna",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
+    let song16 = await songs.postSong(
+        parseUser2,
+        "La Jumpa",
+        "Arcangel",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
+    let song17 = await songs.postSong(
+        parseUser2,
+        "Closer",
+        "Nine Inch Nails",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
+    let song18 = await songs.postSong(
+        parseUser2,
+        "Hurt",
+        "Nine Inch Nails",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
+    let song19 = await songs.postSong(
+        parseUser2,
+        "Hotline Bling",
+        "Drake",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
+    let song20 = await songs.postSong(
+        parseUser2,
+        "Last Last",
+        "Burna Boy",
+        ['genres'],
+        [
+          ["Youtube", ""],
+          ["Spotify", ""],
+          ["Apple Music", ""],
+          ["Soundcloud", ""],
+          ["Pandora", ""],
+        ]
+      );
     // parse songs
     let ps1 = song1["_id"].toString();
     let ps2 = song2["_id"].toString();
@@ -188,6 +349,16 @@ async function main() {
     let ps8 = song8["_id"].toString();
     let ps9 = song9["_id"].toString();
     let ps10 = song10["_id"].toString();
+    let ps11 = song11["_id"].toString();
+    let ps12 = song12["_id"].toString();
+    let ps13 = song13["_id"].toString();
+    let ps14 = song14["_id"].toString();
+    let ps15 = song15["_id"].toString();
+    let ps16 = song16["_id"].toString();
+    let ps17 = song17["_id"].toString();
+    let ps18 = song18["_id"].toString();
+    let ps19 = song19["_id"].toString();
+    let ps20 = song20["_id"].toString();
 
     //making playlists
     console.log("MAKING PLAYLISTS");
@@ -352,61 +523,3 @@ async function main() {
 main().catch((error) => {
     console.log(error);
 });
-
-//creating users
-    // const user1 = await users.createUser("Mya", "Phu", "mxfu", "KevinsucksD32!", "Kevinsucks$32");
-    // let parseUser1 = user1["_id"].toString();
-    // await users.createAdmin(parseUser1);
-
-    // const user2 = await users.createUser("Serena", "Lee", "cargi", "Meow123!", "Meow123!");
-    // let parseUser2 = user2["_id"].toString();
-    // await users.createAdmin(parseUser2);
-
-    // //check for duplicate usernames, usernames cannot duplicate
-    // // const user3 = await users.createUser("Kevin", "Nguyen", "mxfu", "KevinsucksD32!", "Kevinsucks$32");
-    // // let parseUser3 = user1["_id"].toString();
-    // // await users.createAdmin(parseUser3);
-    // // await users.checkUser(user3["userName"], user3["password"]);
-
-    // //creating songs
-    // let song1 = await songs.postSong(parseUser1, "Ghost", "Justin Bieber", ["Pop", "Rap"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]])
-    // let parseSong1 = song1["_id"].toString();
-    // let song2 = await songs.postSong(parseUser2, "Gone Girl", "SZA ", ["Disco", "RnB"], [["Youtube", "https://www.youtube.com/watch?v=p6U7zIY6zkA"]])
-    // let parseSong2 = song2["_id"].toString();
-
-    // //creating comments
-    // let comment1 = await comments.createComment(parseSong1, parseUser1, "I love this song", 5);
-    // let comment2 = await comments.createComment(parseSong1, parseUser2, "I have this song", 3);
-    // let comment3 = await comments.createComment(parseSong1, parseUser2, "It's mid, this song", 2);
-    // let comment4 = await comments.createComment(parseSong2, parseUser2, "Amazing, im gone", 4);
-    // let comment5 = await comments.createComment(parseSong2, parseUser1, "SZA does it again", 5);
-    // let parseComment1 = comment1["_id"].toString();
-    // let parseComment2 = comment2["_id"].toString();
-    // let parseComment3 = comment3["_id"].toString();
-    // let parseComment4 = comment4["_id"].toString();
-    // let parseComment5 = comment5["_id"].toString();
-
-
-
-    // //testing comment functions (minus deleteComment)
-    // let testGetComment = await comments.getComment(parseComment1);
-    // let testGetAllComments = await comments.getAllComments(parseSong1);
-
-    // //creating user interactions
-    // let userInteraction1 = await comments.createUserInteraction(parseComment1, parseUser1, parseSong1, true);
-    // let userInteraction2 = await comments.createUserInteraction(parseComment1, parseUser2, parseSong1, false);
-    // let userInteraction3 = await comments.createUserInteraction(parseComment2, parseUser1, parseSong1, false);
-    // let userInteraction4 = await comments.createUserInteraction(parseComment4, parseUser1, parseSong2, true);
-    // let userInteraction5 = await comments.createUserInteraction(parseComment4, parseUser2, parseSong2, true);
-
-
-    // let parseInteraction1 = userInteraction1["_id"].toString();
-
-    // //testing if delete comment works: working
-    // // let testDeleteComment = await comments.deleteComment(parseComment2, parseUser2, parseSong1);
-
-    // //testing if deleteinteraction works: working
-    // //let testDeleteInteraction = await comments.removeInteraction(parseComment1, parseUser1, parseSong1, parseInteraction1);
-
-    // //testing removeAllInteractions
-    // let testRemoveAllUI = await comments.removeAllinteractions(parseComment4, parseSong2);
