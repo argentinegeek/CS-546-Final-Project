@@ -20,11 +20,11 @@ router
   })
   .post(async (req, res) => {
     let userInfo = req.body;
-    let fName = userInfo.firstName;
-    let lName = userInfo.lastName;
-    let uName = userInfo.userName;
-    let pass = userInfo.password;
-    let cPass = userInfo.confirmPassword;
+    let fName = xss(userInfo.firstName);
+    let lName = xss(userInfo.lastName);
+    let uName = xss(userInfo.userName); //<-- register page inputs have no IDs yet
+    let pass = xss(userInfo.password);
+    let cPass = xss(userInfo.confirmPassword);
 
     try {
       fName = validation.checkString(fName, "First Name");
@@ -33,11 +33,11 @@ router
       pass = validation.checkPassword(pass);
       cPass = validation.checkPassword(cPass);
       const newUser = await userData.createUser(
-        xss(fName),
-        xss(lName),
-        xss(uName),
-        xss(pass),
-        xss(cPass)
+        fName,
+        lName,
+        uName,
+        pass,
+        cPass
       );
       if (!newUser) {
         res.status(500).json({ error: "Internal Server Error" });
@@ -52,18 +52,27 @@ router
 router
   .route("/login")
   .get(async (req, res) => {
-    if (req.session.user) return res.redirect("/private");
-    return res.render("login_page");
+    // if (req.session.user) return res.redirect("/private");
+    //line 34 may need data passed as second parameter
+    try {
+      return res.render("login_page");  
+    } catch (e) {
+      res.status(500).json({error: e});
+    }
+    
   })
   .post(async (req, res) => {
-    let userInfo = req.body;
-    let uName = userInfo.userName; //<-- register page inputs have no IDs yet
-    let pass = userInfo.password;
+    let userInfo = xss(req.body);
+    let uName = xss(userInfo.userName); //<-- register page inputs have no IDs yet
+    let pass = xss(userInfo.password);
 
     try {
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
+
       const auth = await userData.checkUser(xss(uName), xss(pass));
+
+      
       if (auth) {
         console.log("logging them in");
         req.session.user = { userName: uName, userId: auth.uID };
@@ -93,6 +102,10 @@ router.route("/logout").get(async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e });
   }
+});
+
+router.route("/settings").get(async (req, res) => {
+  if (req.session.user) return res.render("settings_page", {userName: req.session.user.uName});
 });
 
 module.exports = router;
