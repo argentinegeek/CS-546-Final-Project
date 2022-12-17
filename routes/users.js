@@ -104,4 +104,8 @@ router.route("/logout").get(async (req, res) => {
   
 });
 
+router.route("/settings").get(async (req, res) => {
+  if (req.session.user) return res.render("settings_page", {userName: req.session.user.uName});
+});
+
 module.exports = router;
