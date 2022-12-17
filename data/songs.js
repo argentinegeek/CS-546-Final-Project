@@ -5,7 +5,7 @@ const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 const validation = require("../helpers");
 const user = require("./users");
-const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Tidal"];
+const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Pandora"];
 
 /**
  * creates song post
