@@ -24,16 +24,13 @@ router
     let uName = userInfo.userName; //<-- register page inputs have no IDs yet
     let pass = userInfo.password;
     let cPass = userInfo.confirmPassword;
+
     try {
       fName = validation.checkString(fName, "First Name");
       lName = validation.checkString(lName, "Last Name");
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
       cPass = validation.checkPassword(cPass);
-    } catch (e) {
-      return res.status(400).json({ error: `${e}` });
-    }
-    try {
       const newUser = await userData.createUser(
         fName,
         lName,
@@ -41,12 +38,15 @@ router
         pass,
         cPass
       );
-      // res.json(newUser);
+      if (!newUser) {
+        res.status(500).json({error: 'Internal Server Error'});
+      } else {
+        return res.redirect("/private");
+      }
+      
     } catch (e) {
-      res.status(500);
-      return;
+      res.status(400).render('register_page', { error: true, errorMsg: e});
     }
-    return res.redirect("/login");
   });
 
 router
@@ -77,28 +77,6 @@ router
     } catch (e) {
       res.status(400).render('login_page', { error: true, errorMsg: e});
     }
-
-    // try {
-    //   uName = validation.checkUsername(uName);
-    //   console.log(uName);
-    //   pass = validation.checkPassword(pass);
-    //   console.log(pass);
-    // } catch (e) {
-    //   return res.status(400).render('login_page', { error: true, errorMsg: e});
-    // }
-    // try {
-    //   const auth = await userData.checkUser(uName, pass);
-    //   if (auth) {
-    //     req.session.user = { userName: uName, userId: auth.uID };
-    //   } else {
-    //     throw 'error';
-    //   }
-    //   // res.json(auth);
-    // } catch (e) {
-    //   return res.status(400).render('login_page', { error: true, errorMsg: e});
-    // }
-    // // req.session.user = { userName: uName, userId: auth.uID };
-    // return res.redirect("/private");
   });
 
 router.route("/private").get(async (req, res) => {
