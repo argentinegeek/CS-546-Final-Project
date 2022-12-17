@@ -1,13 +1,17 @@
 <h1>Songs</h1> 
-<table>
+<table id="songs-table">
     {{#each song}}
     <tr>
+        <th>Song Title</th>
         <th>Artist</th>
-            <td>{{{this.artist}}}</td>
         <th>Genre</th>
-            <td>{{{this.genres}}}</td>
         <th>Overall Rating</th>
-            <td>{{{this.overallRating}}}</td>
+    </tr>
+    <tr>
+        <td>{{title}}</td>
+        <td>{{artist}}</td>
+        <td>{{genres}}</td>
+        <td>{{overallRating}}</td>
     </tr>
     {{/each}}
 </table>
