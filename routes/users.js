@@ -39,13 +39,12 @@ router
         cPass
       );
       if (!newUser) {
-        res.status(500).json({error: 'Internal Server Error'});
+        res.status(500).json({ error: "Internal Server Error" });
       } else {
         return res.redirect("/private");
       }
-      
     } catch (e) {
-      res.status(400).render('register_page', { error: true, errorMsg: e});
+      res.status(400).render("register_page", { error: true, errorMsg: e });
     }
   });
 
@@ -64,25 +63,17 @@ router
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
       const auth = await userData.checkUser(uName, pass);
-      console.log(auth)
+      console.log(auth);
       if (auth) {
-        console.log('logging them in')
+        console.log("logging them in");
         req.session.user = { userName: uName, userId: auth.uID };
-        console.log('made them in the session')
+        console.log("made them in the session");
       } else {
-<<<<<<< Updated upstream
-        res.status(400).render('login_page', { error: true, errorMsg: e});
-=======
-        throw "error";
->>>>>>> Stashed changes
+        res.status(400).render("login_page", { error: true, errorMsg: e });
       }
       return res.redirect("/private");
     } catch (e) {
-<<<<<<< Updated upstream
-      res.status(400).render('login_page', { error: true, errorMsg: e});
-=======
-      res.status(400).json({ error: e });
->>>>>>> Stashed changes
+      res.status(400).render("login_page", { error: true, errorMsg: e });
     }
   });
 
