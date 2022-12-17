@@ -4,6 +4,7 @@ const router = express.Router();
 const data = require("../data");
 const userData = data.users;
 const validation = require("../helpers");
+const xss = require('xss');
 //make sure to include error checking for routes
 router.route("/").get(async (req, res) => {
   if (req.session.user) return res.redirect("/private");
@@ -32,18 +33,17 @@ router
       pass = validation.checkPassword(pass);
       cPass = validation.checkPassword(cPass);
       const newUser = await userData.createUser(
-        fName,
-        lName,
-        uName,
-        pass,
-        cPass
+        xss(fName),
+        xss(lName),
+        xss(uName),
+        xss(pass),
+        xss(cPass)
       );
       if (!newUser) {
         res.status(500).json({error: 'Internal Server Error'});
       } else {
         return res.redirect("/private");
       }
-      
     } catch (e) {
       res.status(400).render('register_page', { error: true, errorMsg: e});
     }
@@ -64,7 +64,7 @@ router
     try {
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
-      const auth = await userData.checkUser(uName, pass);
+      const auth = await userData.checkUser(xss(uName), xss(pass));
       console.log(auth)
       if (auth) {
         console.log('logging them in')
