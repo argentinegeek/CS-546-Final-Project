@@ -64,7 +64,6 @@ router
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
       const auth = await userData.checkUser(xss(uName), xss(pass));
-      console.log(auth);
       if (auth) {
         console.log("logging them in");
         req.session.user = { userName: uName, userId: auth.uID };
