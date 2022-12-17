@@ -60,27 +60,43 @@ router
     let userInfo = req.body;
     let uName = userInfo.userName; //<-- register page inputs have no IDs yet
     let pass = userInfo.password;
+
     try {
       uName = validation.checkUsername(uName);
-      console.log(uName);
       pass = validation.checkPassword(pass);
-      console.log(pass);
-    } catch (e) {
-      return res.status(400).json({ error: e });
-    }
-    try {
       const auth = await userData.checkUser(uName, pass);
+      console.log(auth)
       if (auth) {
-        req.session.user = { userName: uName };
+        req.session.user = { userName: uName, userId: auth.uID };
       } else {
-        throw 'error';
+        res.status(400).render('login_page', { error: true, errorMsg: e});
       }
-      // res.json(auth);
+      return res.redirect("/private");
     } catch (e) {
-      res.status(400).json({ error: e });
+      res.status(400).render('login_page', { error: true, errorMsg: e});
     }
-    // req.session.user = { userName: uName, userId: auth.uID };
-    return res.redirect("/private");
+
+    // try {
+    //   uName = validation.checkUsername(uName);
+    //   console.log(uName);
+    //   pass = validation.checkPassword(pass);
+    //   console.log(pass);
+    // } catch (e) {
+    //   return res.status(400).render('login_page', { error: true, errorMsg: e});
+    // }
+    // try {
+    //   const auth = await userData.checkUser(uName, pass);
+    //   if (auth) {
+    //     req.session.user = { userName: uName, userId: auth.uID };
+    //   } else {
+    //     throw 'error';
+    //   }
+    //   // res.json(auth);
+    // } catch (e) {
+    //   return res.status(400).render('login_page', { error: true, errorMsg: e});
+    // }
+    // // req.session.user = { userName: uName, userId: auth.uID };
+    // return res.redirect("/private");
   });
 
 router.route("/private").get(async (req, res) => {
