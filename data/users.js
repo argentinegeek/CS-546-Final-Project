@@ -75,6 +75,13 @@ const createUser = async (
   if (!password === confirmPassword)
     throw "Error: password must match confirmPassword";
   const userCollection = await users();
+  
+  let found = await userCollection.findOne({
+    userName: userName.toLowerCase(),
+  });
+  if (found) throw 'Username is already taken';
+
+
   const hash = await bcrypt.hash(password, saltRounds);
   let newUser = {
     firstName: firstName,
@@ -145,8 +152,6 @@ const createAdmin = async (userId) => {
   //need to error check
   return true;
 };
-
-
 
 module.exports = {
   createUser,
