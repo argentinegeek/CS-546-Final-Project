@@ -1,5 +1,6 @@
 // All routes related to song pages
 const express = require("express");
+const xss = require("xss");
 const router = express.Router();
 const data = require("../data");
 const { getAllSongs } = require("../data/songs");
@@ -12,8 +13,9 @@ router.get("/", async (req, res) => {
   try {
     const songList = await songData.getAllSongs();
     // res.json(songList);
-    console.log(songList)
-    res.render("songs_page", {song: songList});
+    console.log(songList);
+    
+    res.render("songs_page", { song: songList });
   } catch (e) {
     res.status(500).json({ error: e });
   }
@@ -21,12 +23,12 @@ router.get("/", async (req, res) => {
 //route to any specific song that is clicked on
 router.get("/:id", async (req, res) => {
   try {
-    req.params.id = validation.checkId(req.params.id, "Id URL Param");
+    req.params.id = validation.checkId(xss(req.params.id), "Id URL Param");
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    const song = await songData.getSongById(req.params.id);
+    const song = await songData.getSongById(xss(req.params.id));
     res.render("song_page", {
       songTitle: song.title,
       songArtist: song.artist,
@@ -41,9 +43,9 @@ router.get("/:id", async (req, res) => {
 });
 //route to post a song
 router.post("/", async (req, res) => {
-  const songPostData = req.body;
+  const songPostData = xss(req.body);
   try {
-    if (!isAdmin(req.session.user.userId)) throw "User is not admin.";
+    if (!isAdmin(xss(req.session.user.userId))) throw "User is not admin.";
   } catch (e) {
     return res.status(400).json({ error: e });
   }
@@ -80,19 +82,20 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: e });
   }
   //TODO: for handlebars, pass in parameter for database to display all the songs
-  let songs = getAllSongs();
-  return res.render("songs_page", { songs: songs });
+  let songs = await songData.getAllSongs();
+  console.log(songs);
+  return res.render("songs_page", { song: songs });
 });
 //route to update all elements of a song
 router.put("/:id", async (req, res) => {
-  const updatedData = req.body;
+  const updatedData = xss(req.body);
   try {
-    if (!isAdmin(req.session.user.userId)) throw "User is not admin.";
+    if (!isAdmin(xss(req.session.user.userId))) throw "User is not admin.";
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    req.params.id = validation.checkId(req.params.id, "ID url param");
+    req.params.id = validation.checkId(xss(req.params.id), "ID url param");
     updatedData.posterId = validation.checkId(
       updatedData.posterId,
       "Poster ID"
@@ -109,13 +112,16 @@ router.put("/:id", async (req, res) => {
   }
 
   try {
-    await songData.getSongById(req.params.id);
+    await songData.getSongById(xss(req.params.id));
   } catch (e) {
     return res.status(404).json({ error: "Song not found" });
   }
 
   try {
-    const updatedSong = await songData.updateAll(req.params.id, updatedData);
+    const updatedSong = await songData.updateAll(
+      xss(req.params.id),
+      updatedData
+    );
     res.json(updatedSong);
   } catch (e) {
     res.status(500).json({ error: e });
@@ -124,15 +130,15 @@ router.put("/:id", async (req, res) => {
 
 //route to update specific part of song post
 router.patch("/:id", async (req, res) => {
-  const requestBody = req.body;
+  const requestBody = xss(req.body);
   let updatedObject = {};
   try {
-    if (!isAdmin(req.session.user.userId)) throw "User is not admin.";
+    if (!isAdmin(xss(req.session.user.userId))) throw "User is not admin.";
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    req.params.id = validation.checkId(req.params.id, "Song ID");
+    req.params.id = validation.checkId(xss(req.params.id), "Song ID");
     if (requestBody.posterId)
       requestBody.posterId = validation.checkId(
         requestBody.posterId,
@@ -156,7 +162,7 @@ router.patch("/:id", async (req, res) => {
     return res.status(400).json({ error: e });
   }
   try {
-    const oldSong = await songData.getSongById(req.params.id);
+    const oldSong = await songData.getSongById(xss(req.params.id));
     if (requestBody.posterId && requestBody.posterId !== oldSong.posterId)
       updatedObject.posterId = requestBody.posterId;
     if (requestBody.title && requestBody.title !== oldSong.title)
@@ -173,7 +179,7 @@ router.patch("/:id", async (req, res) => {
   if (Object.keys(updatedObject).length !== 0) {
     try {
       const updatedSong = await songData.updateSong(
-        req.params.id,
+        xss(req.params.id),
         updatedObject
       );
       res.json(updatedSong);
@@ -191,22 +197,22 @@ router.patch("/:id", async (req, res) => {
 //route to delete song
 router.delete("/:id", async (req, res) => {
   try {
-    if (!isAdmin(req.session.user.userId)) throw "User is not admin.";
+    if (!isAdmin(xss(req.session.user.userId))) throw "User is not admin.";
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    req.params.id = validation.checkId(req.params.id, "Id URL Param");
+    req.params.id = validation.checkId(xss(req.params.id), "Id URL Param");
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    await songData.getSongById(req.params.id);
+    await songData.getSongById(xss(req.params.id));
   } catch (e) {
     return res.status(404).json({ error: "Song not found" });
   }
   try {
-    await songData.deleteSong(req.params.id);
+    await songData.deleteSong(xss(req.params.id));
     res.status(200).json({ deleted: true });
   } catch (e) {
     res.status(500).json({ error: e });

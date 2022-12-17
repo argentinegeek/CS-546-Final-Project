@@ -28,7 +28,7 @@ app.use(
 
 app.use('/private', (req, res, next) => {
   if (!req.session.user) {
-    return res.status(401).render('homepage', {error: "You are not logged in"});
+    return res.status(401).render('home_page', {error: "You are not logged in"});
   } else {
     next();
   }
@@ -41,6 +41,14 @@ app.use('/register', (req, res, next) => {
     next();
   }
 });
+
+app.use('/login', (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect('/protected');
+  } else {
+    next();
+  }
+})
 
 configRoutes(app);
 
