@@ -1,6 +1,7 @@
 // All routes related to singular posts
 const express = require("express");
 const router = express.Router();
+const xss = require("xss");
 const data = require("../data");
 const { getPlaylistById } = require("../data/playlists");
 const playlistData = data.playlists;
@@ -18,12 +19,12 @@ router.get("/", async (req, res) => {
 //route to any specific playlist that is clicked on
 router.get("/:id", async (req, res) => {
   try {
-    req.params.id = validation.checkId(req.params.id, "Id URL Param");
+    req.params.id = validation.checkId(xss(req.params.id), "Id URL Param");
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    const playlist = await playlistData.getPlaylistById(req.params.id);
+    const playlist = await playlistData.getPlaylistById(xss(req.params.id));
     res.json(playlist);
   } catch (e) {
     res.status(404).json({ error: e });
@@ -31,7 +32,7 @@ router.get("/:id", async (req, res) => {
 });
 //route to post a playlist
 router.post("/", async (req, res) => {
-  const playlistPostData = req.body;
+  const playlistPostData = xss(req.body);
   try {
     playlistPostData.posterId = validation.checkId(
       playlistPostData.posterId,
@@ -68,19 +69,19 @@ router.post("/", async (req, res) => {
 });
 //route to update all elements of a playlist
 router.put("/:id", async (req, res) => {
-  const updatedData = req.body;
+  const updatedData = xss(req.body);
   try {
     if (
-      !isAdmin(req.session.user.userId) ||
-      req.session.user.userId !==
-        (await getPlaylistById(req.params.id)).posterId
+      !isAdmin(xss(req.session.user.userId)) ||
+      xss(req.session.user.userId) !==
+        (await getPlaylistById(xss(req.params.id))).posterId
     )
       throw "User is original poster or admin.";
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    req.params.id = validation.checkId(req.params.id, "ID url param");
+    req.params.id = validation.checkId(xss(req.params.id), "ID url param");
     updatedData.playlistId = validation.checkId(
       updatedData.playlistId,
       "Playlist ID"
@@ -100,14 +101,14 @@ router.put("/:id", async (req, res) => {
   }
 
   try {
-    await playlistData.getPlaylistById(req.params.id);
+    await playlistData.getPlaylistById(xss(req.params.id));
   } catch (e) {
     return res.status(404).json({ error: "Playlist not found" });
   }
 
   try {
     const updatedPlaylist = await playlistData.updateAllPlaylist(
-      req.params.id,
+      xss(req.params.id),
       updatedData
     );
     res.json(updatedPlaylist);
@@ -118,20 +119,20 @@ router.put("/:id", async (req, res) => {
 
 //route to update specific part of song post
 router.patch("/:id", async (req, res) => {
-  const requestBody = req.body;
+  const requestBody = xss(req.body);
   let updatedObject = {};
   try {
     if (
-      !isAdmin(req.session.user.userId) ||
-      req.session.user.userId !==
-        (await getPlaylistById(req.params.id)).posterId
+      !isAdmin(xss(req.session.user.userId)) ||
+      xss(req.session.user.userId) !==
+        (await getPlaylistById(xss(req.params.id))).posterId
     )
       throw "User is original poster or admin.";
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    req.params.id = validation.checkId(req.params.id, "Playlist ID");
+    req.params.id = validation.checkId(xss(req.params.id), "Playlist ID");
     if (requestBody.posterId)
       requestBody.posterId = validation.checkId(
         requestBody.posterId,
@@ -153,7 +154,7 @@ router.patch("/:id", async (req, res) => {
     return res.status(400).json({ error: e });
   }
   try {
-    const oldPlaylist = await playlistData.getPlaylistById(req.params.id);
+    const oldPlaylist = await playlistData.getPlaylistById(xss(req.params.id));
     if (requestBody.posterId && requestBody.posterId !== oldPlaylist.posterId)
       updatedObject.posterId = requestBody.posterId;
     if (requestBody.name && requestBody.name !== oldPlaylist.name)
@@ -171,7 +172,7 @@ router.patch("/:id", async (req, res) => {
   if (Object.keys(updatedObject).length !== 0) {
     try {
       const updatedPlaylist = await playlistData.updateSong(
-        req.params.id,
+        xss(req.params.id),
         updatedObject
       );
       res.json(updatedPlaylist);
@@ -190,26 +191,26 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     if (
-      !isAdmin(req.session.user.userId) ||
-      req.session.user.userId !==
-        (await getPlaylistById(req.params.id)).posterId
+      !isAdmin(xss(req.session.user.userId)) ||
+      xss(req.session.user.userId) !==
+        (await getPlaylistById(xss(req.params.id))).posterId
     )
       throw "User is original poster or admin.";
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    req.params.id = validation.checkId(req.params.id, "Id URL Param");
+    req.params.id = validation.checkId(xss(req.params.id), "Id URL Param");
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   try {
-    await playlistData.getPlaylistById(req.params.id);
+    await playlistData.getPlaylistById(xss(req.params.id));
   } catch (e) {
     return res.status(404).json({ error: "Playlist not found" });
   }
   try {
-    await playlistData.deletePlaylist(req.params.id);
+    await playlistData.deletePlaylist(xss(req.params.id));
     res.status(200).json({ deleted: true });
   } catch (e) {
     res.status(500).json({ error: e });
