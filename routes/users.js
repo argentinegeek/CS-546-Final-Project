@@ -66,18 +66,18 @@ router
       pass = validation.checkPassword(pass);
       console.log(pass);
     } catch (e) {
-      return res.status(400).json({ error: e });
+      return res.status(400).json({ error: `${e}` });
     }
     try {
       const auth = await userData.checkUser(uName, pass);
-      if (auth) {
-        req.session.user = { userName: uName, userId: auth.uID };
-      } else {
-        throw 'error';
-      }
+      // if (auth) {
+      //   req.session.user = { userName: uName, userId: auth.uID };
+      // } else {
+      //   throw 'error';
+      // }
       // res.json(auth);
     } catch (e) {
-      res.status(400).json({error: e});
+      res.status(400).json({error: `${e}`});
     }
     // req.session.user = { userName: uName, userId: auth.uID };
     return res.redirect("/private");
@@ -85,13 +85,16 @@ router
 
 router.route("/private").get(async (req, res) => {
   //this should render the account info page
-  //12/16 - rendering to the songs page
   return res.render("activity_page");
 });
 
 router.route("/logout").get(async (req, res) => {
   req.session.destroy();
   return res.render("logout_page");
+});
+
+router.route("/settings").get(async (req, res) => {
+  if (req.session.user) return res.render("settings_page", {userName: req.session.user.uName});
 });
 
 module.exports = router;

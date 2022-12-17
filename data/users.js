@@ -29,6 +29,7 @@ const checkUser = async (username, password) => {
     throw "username already used";
   }
 
+  console.log(found);
   if (!(await bcrypt.compare(password.trim(), found.password))) {
     throw "Either the username or password is invalid";
   }
