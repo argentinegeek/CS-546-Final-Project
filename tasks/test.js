@@ -2,7 +2,7 @@
 const connection = require("../config/mongoConnection");
 const { ObjectId } = require("mongodb");
 const data = require("../data");
-const { getAllSongs, updateSong } = require("../data/songs");
+// const { getAllSongs, updateSong } = require("../data/songs");
 const users = data.users;
 const songs = data.songs;
 const comments = data.comments;
@@ -370,12 +370,12 @@ const main = async () => {
   //       console.log(e);
   //     }
   //deletePlaylist
-  try {
-    let test = await playlists.deletePlaylist(parseUser2, parlsePl4);
-    console.log(test);
-  } catch (e) {
-    console.log(e);
-  }
+//   try {
+//     let test = await playlists.deletePlaylist(parseUser2, parlsePl4);
+//     console.log(test);
+//   } catch (e) {
+//     console.log(e);
+//   }
 
   // * Testing functions only output messages when there is an undesirable output
   // // ! TESTING USER FUNCTIONS
