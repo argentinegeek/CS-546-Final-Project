@@ -4,7 +4,7 @@ const router = express.Router();
 const data = require("../data");
 const userData = data.users;
 const validation = require("../helpers");
-const xss = require('xss');
+const xss = require("xss");
 //make sure to include error checking for routes
 router.route("/").get(async (req, res) => {
   if (req.session.user) return res.redirect("/private");
@@ -69,8 +69,9 @@ router
     try {
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
-      const auth = await userData.checkUser(uName, pass);
-      console.log(auth)
+
+      const auth = await userData.checkUser(xss(uName), xss(pass));
+
       
       if (auth) {
         console.log("logging them in");
@@ -88,20 +89,19 @@ router
 router.route("/private").get(async (req, res) => {
   //this should render the account info page
   try {
-    return res.render("activity");  
+    return res.render("activity");
   } catch (e) {
-    res.status(500).json({error: e});
+    res.status(500).json({ error: e });
   }
 });
 
 router.route("/logout").get(async (req, res) => {
   try {
     req.session.destroy();
-    return res.render("logout_page");  
+    return res.render("logout_page");
   } catch (e) {
-    res.status(500).json({error: e});
+    res.status(500).json({ error: e });
   }
-  
 });
 
 router.route("/settings").get(async (req, res) => {
