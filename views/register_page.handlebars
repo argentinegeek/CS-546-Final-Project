@@ -1,6 +1,10 @@
 
 <h1>Create Your Musicmania Account</h1>
 
+{{#if error}}
+    <div class="error">Error: {{errorMsg}}</div>
+{{/if}}
+
 <div class="square"></div>
 <form id="register-page" method="POST" action="/register">
     <label for="firstName">First Name</label>
