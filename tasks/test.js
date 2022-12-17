@@ -12,6 +12,7 @@ const main = async () => {
   const db = await connection.dbConnection();
   await db.dropDatabase();
 
+  // ? POPULATING DATABASE
   // * users
   console.log("MAKING USERS");
   const user1 = await users.createUser(
@@ -191,6 +192,7 @@ const main = async () => {
   let ps9 = song9["_id"].toString();
   let ps10 = song10["_id"].toString();
 
+  //   * playlists
   //making playlists
   console.log("MAKING PLAYLISTS");
   let playlist1 = await playlists.createPlaylist(
@@ -345,47 +347,15 @@ const main = async () => {
   let parsedInteraction4 = userInteraction4["_id"].toString();
   let parsedInteraction5 = userInteraction5["_id"].toString();
 
-  //   * playlists
-  //     //   updateAllPlaylist
-  //     try {
-  //       let test = await playlists.updateAllPlaylist(
-  //         parsePl1,
-  //         parseUser1,
-  //         "New songs",
-  //         "New songs are in my playlist",
-  //         [song6.title, song10.title, song7.title, song3.title]
-  //       );
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   updatePlaylist
-  //     try {
-  //       let test = await playlists.updatePlaylist(parseUser1, parsePl2, {
-  //         name: "Bad songs",
-  //         description: "New songs are in my playlist that I don't like",
-  //         songs: [song6.title, song10.title, song7.title, song3.title],
-  //       });
-  //       console.log(test);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //deletePlaylist
-//   try {
-//     let test = await playlists.deletePlaylist(parseUser2, parlsePl4);
-//     console.log(test);
-//   } catch (e) {
-//     console.log(e);
-//   }
-
+  // ? TESTING DATABASE FUNCTIONS
   // * Testing functions only output messages when there is an undesirable output
   // // ! TESTING USER FUNCTIONS
   // console.log('!-----TESTING USER FUNCTIONS-----!');
 
-  // ! TESTING SONG FUNCTIONS
+  // // ! TESTING SONG FUNCTIONS
   // console.log('!-----TESTING SONG FUNCTIONS-----!');
   // // postSong()
   // console.log('----postSong() test----');
-  // // invalid inputs
   // try { // missing inputs
   //     let test = await songs.postSong();
   //     console.log(`1 failed invalid input case: ${test}`);
@@ -398,6 +368,25 @@ const main = async () => {
   //     let test = await songs.postSong(user2, 'x', 'x', ['x'], [['Youtube', 'x']]);
   //     console.log(`3 failed invalid input case: ${test}`);
   // } catch (e) {}
+  // try { // song by artist already exists
+  //   let test = await songs.postSong(
+  //     parseUser2,
+  //     "Midnight Rain",
+  //     "Taylor Swift",
+  //     ["Pop"],
+  //     [
+  //       ["Youtube", "https://youtu.be/Odh9ddPUkEY"],
+  //       [
+  //         "Spotify",
+  //         "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad",
+  //       ],
+  //     ]
+  //   );
+  //   console.log(`failed duplicate song case: ${test}`);
+  // } catch (e) {
+  //   // console.log(`passed duplicate song case: ${e}`);
+  // }
+
 
   // // deleteSong()
   // console.log('----deleteSong() test----');
@@ -623,6 +612,37 @@ const main = async () => {
 
   // // ! TESTING PLAYLIST FUNCTIONS
   // console.log('!-----TESTING PLAYLIST FUNCTIONS-----!');
+  //     //   updateAllPlaylist
+  //     try {
+  //       let test = await playlists.updateAllPlaylist(
+  //         parsePl1,
+  //         parseUser1,
+  //         "New songs",
+  //         "New songs are in my playlist",
+  //         [song6.title, song10.title, song7.title, song3.title]
+  //       );
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   updatePlaylist
+  //     try {
+  //       let test = await playlists.updatePlaylist(parseUser1, parsePl2, {
+  //         name: "Bad songs",
+  //         description: "New songs are in my playlist that I don't like",
+  //         songs: [song6.title, song10.title, song7.title, song3.title],
+  //       });
+  //       console.log(test);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  // console.log('----deletePlaylist() test----');
+  //deletePlaylist
+//   try {
+//     let test = await playlists.deletePlaylist(parseUser2, parlsePl4);
+//     console.log(test);
+//   } catch (e) {
+//     console.log(e);
+//   }
 
   await connection.closeConnection();
   console.log("Done!");

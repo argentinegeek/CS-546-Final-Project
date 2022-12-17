@@ -77,6 +77,13 @@ const postSong = async (posterId, title, artist, genres, links) => {
   const songCollection = await songs();
   const userCollection = await users();
 
+  // checking if song exists
+  let found = await songCollection.findOne({
+    title: title,
+    artist: artist
+  });
+  if (found) throw `The song ${title} by ${artist} already exists`;
+
   // creating song object
   let newSong = {
     posterId: posterId,
