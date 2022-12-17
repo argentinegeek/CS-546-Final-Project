@@ -71,25 +71,27 @@ const checkUsername = (username) => {
  * @param {*} password 
  * @returns 
  */
-const checkPassword = (password) => {
-  //check password for any character
-  let pwRegex = /^(?=.*?[A-Z])(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{6,}$/gm;
-  let verify = true;
-  if (password.trim().match(pwRegex) === null) {
-    verify = false;
-  }
+ const checkPassword = (password) => {
+    //check password for any character
+    let pwRegex = /^(?=.*?[A-Z])(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{6,}$/gm;
+    let verify = true;
 
-  if (verify === false) {
-    throw "password must have at least 1 uppercase letter, 1 number, and 1 special character";
-  }
 
-  //check password is at least 6 characters
-  if (password.trim().length < 6) {
-    throw "password must be at least 6 characters";
-  }
-
-  return password;
-};
+    if (password.trim().match(pwRegex) === null) {
+      verify = false;
+    }
+  
+    if (verify === false) {
+      throw "password must have at least 1 uppercase letter, 1 number, and 1 special character";
+    }
+  
+    //check password is at least 6 characters
+    if (password.trim().length < 6) {
+      throw "password must be at least 6 characters";
+    }
+  
+    return password;
+  };
 
 /**
  * 
