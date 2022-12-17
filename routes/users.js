@@ -20,11 +20,11 @@ router
   })
   .post(async (req, res) => {
     let userInfo = req.body;
-    let fName = xss(userInfo.firstName);
-    let lName = xss(userInfo.lastName);
-    let uName = xss(userInfo.userName); //<-- register page inputs have no IDs yet
-    let pass = xss(userInfo.password);
-    let cPass = xss(userInfo.confirmPassword);
+    let fName = (userInfo.firstName);
+    let lName = (userInfo.lastName);
+    let uName = (userInfo.userName); //<-- register page inputs have no IDs yet
+    let pass = (userInfo.password);
+    let cPass = (userInfo.confirmPassword);
 
     try {
       fName = validation.checkString(fName, "First Name");
@@ -42,7 +42,8 @@ router
       if (!newUser) {
         res.status(500).json({ error: "Internal Server Error" });
       } else {
-        res.render('private', { username: req.session.user.username, ct: curTimeStamp });
+        //res.render('private', { username: req.session.user.username, ct: curTimeStamp });
+        res.render('/private', { userName: req.session.user.username });
       }
     } catch (e) {
       res.status(400).render("register_page", { error: true, errorMsg: e });
@@ -55,24 +56,23 @@ router
     // if (req.session.user) return res.redirect("/private");
     //line 34 may need data passed as second parameter
     try {
-      return res.render("login_page");  
+      return res.render("login_page");
     } catch (e) {
-      res.status(500).json({error: e});
+      res.status(500).json({ error: e });
     }
-    
+
   })
   .post(async (req, res) => {
-    let userInfo = xss(req.body);
-    let uName = xss(userInfo.userName); //<-- register page inputs have no IDs yet
-    let pass = xss(userInfo.password);
+    let userInfo = (req.body);
+    let uName = (userInfo.userName); //<-- register page inputs have no IDs yet
+    let pass = (userInfo.password);
+    console.log(userInfo.userName);
 
     try {
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
 
-      const auth = await userData.checkUser(xss(uName), xss(pass));
-
-      
+      const auth = await userData.checkUser((uName), (pass));
       if (auth) {
         console.log("logging them in");
         req.session.user = { userName: uName, userId: auth.uID };
@@ -80,7 +80,9 @@ router
       } else {
         res.status(400).render("login_page", { error: true, errorMsg: e });
       }
-      res.render('private', { username: req.session.user.username, ct: curTimeStamp });
+      //res.render('private', { username: req.session.user.username, ct: curTimeStamp });
+      //console.log(req.session.user.username);
+      res.redirect('/private'); //, { userName: req.session.user.username }
     } catch (e) {
       res.status(400).render("login_page", { error: true, errorMsg: e });
     }
@@ -105,7 +107,12 @@ router.route("/logout").get(async (req, res) => {
 });
 
 router.route("/settings").get(async (req, res) => {
-  if (req.session.user) return res.render("settings_page", {userName: req.session.user.uName});
+  if (req.session.user) return res.render("settings_page", { userName: req.session.user.uName });
 });
 
 module.exports = router;
+
+/*
+* redirect = route
+* render = handlebar 
+*/
