@@ -5,7 +5,7 @@ const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 const validation = require("../helpers");
 const user = require("./users");
-const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Tidal"];
+const platforms = ["Youtube", "Soundcloud", "Apple Music", "Spotify", "Pandora"];
 
 /**
  * creates song post
@@ -77,6 +77,13 @@ const postSong = async (posterId, title, artist, genres, links) => {
   const songCollection = await songs();
   const userCollection = await users();
 
+  // checking if song exists
+  let found = await songCollection.findOne({
+    title: title,
+    artist: artist
+  });
+  if (found) throw `The song ${title} by ${artist} already exists`;
+
   // creating song object
   let newSong = {
     posterId: posterId,
@@ -118,7 +125,7 @@ const getAllSongs = async () => {
   let songCollection = await songs();
   let songList = await songCollection.find({}).toArray();
   if (!songList) throw "Could not get all songs";
-
+  console.log(songList);
   // turning songIds to string form
   for (let i = 0; i < songList.length; i++) {
     songList[i]._id = songList[i]._id.toString();
