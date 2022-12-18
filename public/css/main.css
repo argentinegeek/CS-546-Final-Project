@@ -252,11 +252,18 @@ p {
     margin-right: auto;
 }
 
-.td {
+td {
     font-size: 16px;
     font-family: Georgia;
+    text-align: center;
 }
 
+th {
+    font-size: 20px;
+    font-family: Georgia;
+    text-align: center;
+    padding: 15px;
+}
 
 
 /* Song Page */
