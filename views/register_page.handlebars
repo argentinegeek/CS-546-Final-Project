@@ -1,13 +1,13 @@
 
-<a href="/">Musicmania</a>
+<a href="/" id="website-home">Musicmania</a>
 
-<h2>Create Your Musicmania Account</h2> //Don't know if we need this
+<h2>Create Your Musicmania Account</h2>
 
 {{#if error}}
     <div class="error">Error: {{errorMsg}}</div>
 {{/if}}
 
-<div class="square"></div>
+{{!-- <div class="square"></div> --}}
 <form id="register-page" method="POST" action="/register">
     <label for="firstName">First Name</label>
     <input name="firstName" id="firstName">
