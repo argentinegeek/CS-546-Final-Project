@@ -19,24 +19,29 @@ const validation = require("../helpers");
 //     res.status(404).json({ error: e });
 //   }
 // });
-//route to post a playlist
+//route to post a comment
 router.post("/:songId", async (req, res) => {
-    const commentsPostData = req.body;
-    let userCom = commentsPostData.comment;
-    let userRate = commentsPostData.commentRating;
-    //   try {
-    //     //error check shit
+  const commentsPostData = req.body;
+  let userCom = commentsPostData.comment;
+  let userRate = commentsPostData.commentRating;
+  //   try {
+  //     //error check shit
 
-    //   } catch (e) {
-    //     return res.status(400).json({ error: e });
-    //   }
+  //   } catch (e) {
+  //     return res.status(400).json({ error: e });
+  //   }
 
-    try {
-        const newComment = await commentsData.createComment(req.params.songId, req.session.user.uId, userCom, userRate);
-        res.json(newComment);
-    } catch (e) {
-        res.status(500).json({ error: e });
-    }
+  try {
+    const newComment = await commentsData.createComment(
+      req.params.songId,
+      req.session.user.uId,
+      userCom,
+      userRate
+    );
+    res.json(newComment);
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
 });
 //route to update all elements of a playlist
 // router.put("/:id", async (req, res) => {
