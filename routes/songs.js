@@ -218,41 +218,53 @@ router.delete("/:id", async (req, res) => {
   }
 })
   
-   router.route("/searchsong").post(async (req, res) => {
-    //code here for POST
-    try {
-      let v = req.body;
-      let pname = (v.songName);
-      if (pname.length == 0) throw "no input"
-    }
-    catch {
-      res.render('error', { name: pname });
-    }
-  });
+router.route("/searchsong").post(async (req, res) => {
+  //code here for POST
+  try {
+    let v = req.body;
+    let pname = (v.songName);
+    if (pname.length == 0) throw "no input"
+  }
+  catch {
+    res.render('error', { name: pname });
+  }
+});
 
-   router.route("/searchgenre").post(async (req, res) => {
-    //code here for POST
-    try {
-      let v = req.body;
-      let pname = (v.genre);
-      if (pname.length == 0) throw "no input"
-    }
-    catch {
-      res.render('error', { name: pname });
-    }
-   });
-   router.route("/searchartist").post(async (req, res) => {
-    //code here for POST
-    try {
-      let v = req.body;
-      let pname = (v.searchArtist);
-      if (pname.length == 0) throw "no input"
-    }
-    catch {
-      res.render('error', { name: pname });
-    }
-   });
-  
+router.route("/searchgenre").post(async (req, res) => {
+//code here for POST
+  try {
+    let v = req.body;
+    let pname = (v.genre);
+    if (pname.length == 0) throw "no input"
+  }
+  catch {
+    res.render('error', { name: pname });
+  }
+  });
+  router.route("/searchartist").post(async (req, res) => {
+  //code here for POST
+  try {
+    let v = req.body;
+    let pname = (v.searchArtist);
+    if (pname.length == 0) throw "no input"
+  }
+  catch {
+    res.render('error', { name: pname });
+  }
+});
+
+//Code to get the most popular artists
+router.get(("/artists"), async (req, res) => {
+  try {
+    const artistsList = await songData.mostPopularArtists();
+    console.log(artistsList);
+    res.render("artists_page", { artists: artistsList });
+    
+  } catch (e) {
+    res.status(500).json({error: e});
+  }
+});
+   
 
 
 module.exports = router;
