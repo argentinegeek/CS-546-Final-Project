@@ -125,7 +125,7 @@ const getAllSongs = async () => {
   let songCollection = await songs();
   let songList = await songCollection.find({}).toArray();
   if (!songList) throw "Could not get all songs";
-
+  console.log(songList);
   // turning songIds to string form
   for (let i = 0; i < songList.length; i++) {
     songList[i]._id = songList[i]._id.toString();
