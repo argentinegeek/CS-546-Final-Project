@@ -44,7 +44,8 @@ app.use('/register', (req, res, next) => {
 
 app.use('/login', (req, res, next) => {
   if (req.session.user) {
-    return res.redirect('/protected');
+    // return res.redirect('/protected');
+    return res.redirect('/private');
   } else {
     next();
   }
