@@ -216,6 +216,43 @@ router.delete("/:id", async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: e });
   }
-});
+})
+  
+   router.route("/searchsong").post(async (req, res) => {
+    //code here for POST
+    try {
+      let v = req.body;
+      let pname = (v.songName);
+      if (pname.length == 0) throw "no input"
+    }
+    catch {
+      res.render('error', { name: pname });
+    }
+  });
+
+   router.route("/searchgenre").post(async (req, res) => {
+    //code here for POST
+    try {
+      let v = req.body;
+      let pname = (v.genre);
+      if (pname.length == 0) throw "no input"
+    }
+    catch {
+      res.render('error', { name: pname });
+    }
+   });
+   router.route("/searchartist").post(async (req, res) => {
+    //code here for POST
+    try {
+      let v = req.body;
+      let pname = (v.searchArtist);
+      if (pname.length == 0) throw "no input"
+    }
+    catch {
+      res.render('error', { name: pname });
+    }
+   });
+  
+
 
 module.exports = router;
