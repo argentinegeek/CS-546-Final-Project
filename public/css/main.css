@@ -9,7 +9,7 @@ h1 {
 }
 
 body {
-    background-color: #62EDD6; 
+    background-color: #7f7f7f; 
 }
 
 p {
@@ -37,8 +37,8 @@ p {
     margin-left: auto;
     margin-right: auto;
     border-style: solid;
-    border-color: #FE65B7;
-    background-color: #FE65B7;
+    border-color: #a32638;
+    background-color: #a32638;
     margin: 0;
     padding: 0;
 }
@@ -47,7 +47,7 @@ p {
 /* Home Page */
 #register {
     border-radius: 10px;
-    background-color: #8FC33A;
+    background-color: #3d1200;
     font-size: 24px;
     font-weight: bold;
     margin: 10px;
@@ -58,7 +58,7 @@ p {
     transform: translate(-50%, -50%);
     top: 40%;
     color: white;
-    border-color: #8FC33A;
+    border-color: #3d1200;
 }
 
 #login {
@@ -128,7 +128,7 @@ p {
 
 #login-rp {
     font-family: Georgia;
-    color:#FE65B7;
+    color:#a32638;
     font-size: 18px;
     display: block;
     position: absolute;
@@ -142,7 +142,7 @@ p {
 
 #create-account-rp {
     border-radius: 10px;
-    background-color: #8FC33A;
+    background-color: #3d1200;
     font-size: 20px;
     font-weight: bold;
     margin: 10px;
@@ -153,7 +153,7 @@ p {
     transform: translate(-50%, -50%);
     top: 60%;
     color: white;
-    border-color: #8FC33A;
+    border-color: #3d1200;
 }
 
 
@@ -172,7 +172,7 @@ p {
 
 #login-lp {
     border-radius: 10px;
-    background-color: #8FC33A;
+    background-color: #3d1200;
     font-size: 20px;
     font-weight: bold;
     margin: 10px;
@@ -183,12 +183,12 @@ p {
     transform: translate(-50%, -50%);
     top: 60%;
     color: white;
-    border-color: #8FC33A;
+    border-color: #3d1200;
 }
 
 #sign-up-lp {
     font-family: Georgia;
-    color:#FE65B7;
+    color:#a32638;
     font-size: 18px;
     display: block;
     position: absolute;
@@ -203,7 +203,7 @@ p {
 /* Logout Page */
 #logout {
     border-radius: 10px;
-    background-color: #8FC33A;
+    background-color: #3d1200;
     font-size: 20px;
     font-weight: bold;
     margin: 10px;
@@ -214,12 +214,12 @@ p {
     transform: translate(-50%, -50%);
     top: 60%;
     color: white;
-    border-color: #8FC33A;
+    border-color: #3d1200;
 }
 
 #home-logout {
     font-family: Georgia;
-    color:#FE65B7;
+    color:#a32638;
     font-size: 18px;
     display: block;
     position: absolute;
