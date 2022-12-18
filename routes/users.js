@@ -54,7 +54,6 @@ router
   .route("/login")
   .get(async (req, res) => {
     // if (req.session.user) return res.redirect("/private");
-    //line 34 may need data passed as second parameter
     try {
       return res.render("login_page");
     } catch (e) {
@@ -63,7 +62,7 @@ router
   })
   .post(async (req, res) => {
     let userInfo = req.body;
-    let uName = userInfo.userName; //<-- register page inputs have no IDs yet
+    let uName = userInfo.userName;
     let pass = userInfo.password;
     console.log(userInfo.userName);
 
