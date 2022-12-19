@@ -47,6 +47,10 @@ router.post("/:songId", async (req, res) => {
   }
 });
 
+// router.post("/like/:id", async (req, res) => {
+
+// });
+
 //route to delete a comment
 router.delete("/:commentId", async (req, res) => {
   //validating the id
