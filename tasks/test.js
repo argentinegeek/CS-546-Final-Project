@@ -352,7 +352,7 @@ const main = async () => {
   // // ! TESTING USER FUNCTIONS
   // console.log('!-----TESTING USER FUNCTIONS-----!');
 
-  // // ! TESTING SONG FUNCTIONS
+  // ! TESTING SONG FUNCTIONS
   // console.log('!-----TESTING SONG FUNCTIONS-----!');
   // // postSong()
   // console.log('----postSong() test----');
@@ -386,7 +386,24 @@ const main = async () => {
   // } catch (e) {
   //   // console.log(`passed duplicate song case: ${e}`);
   // }
-
+  // try { // song by artist already exists
+  //   let test = await songs.postSong(
+  //     parseUser2,
+  //     "Midnight Rain",
+  //     "Taylor_Swift",
+  //     ["Pop"],
+  //     [
+  //       ["Youtube", "https://youtu.be/Odh9ddPUkEY"],
+  //       [
+  //         "Spotify",
+  //         "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad",
+  //       ],
+  //     ]
+  //   );
+  //   console.log(`failed '_' case: ${test}`);
+  // } catch (e) {
+  //   console.log(`passed '_' song case: ${e}`);
+  // }
 
   // // deleteSong()
   // console.log('----deleteSong() test----');
@@ -527,24 +544,42 @@ const main = async () => {
   // } catch (e) {
   //     console.log(`failed search case: ${e}`);
   // }
+  // try {
+  //   let test = await songs.searchArtist('sz_a');
+  //   console.log(`failed '_' case: ${e}`);
+  // } catch (e) {
+  //     console.log(`passed '_' case: ${e}`);
+  // }
+  // try {
+  //   let test = await songs.searchArtist('busta rhymes');
+  //   console.log(`failed no match case: ${e}`);
+  // } catch (e) {
+  //     console.log(`passed no match case: ${e}`);
+  // }
 
   // // filterByRating()
   // console.log('----filterByRating() test----');
   // try {
   //     let test = await songs.filterByRating()
   //     console.log(`failed invalid input case: ${test}`)
-  // } catch (e) {}
+  // } catch (e) {
+  //   console.log(`passed invalid input case: ${e}`);
+  // }
   // try {
   //     let test = await songs.filterByRating(1)
   //     console.log(`failed invalid input case: ${test}`)
-  // } catch (e) {}
+  // } catch (e) {
+  //   console.log(`passed invalid input case: ${e}`);
+  // }
   // try {
   //     let test = await songs.filterByRating(5, 1)
   //     console.log(`failed invalid input case: ${test}`)
-  // } catch (e) {}
+  // } catch (e) {
+  //   console.log(`passed invalid input case: ${e}`);
+  // }
   // try {
   //     let test = await songs.filterByRating(2, 4);
-  //     // console.log(test);
+  //     console.log(`passed filter case: ${test}`);
   // } catch (e) {
   //     console.log(`failed filter case: ${e}`)
   // }

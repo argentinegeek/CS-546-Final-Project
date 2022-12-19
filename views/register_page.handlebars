@@ -1,11 +1,13 @@
 
-<h1>Create Your Musicmania Account</h1>
+<a href="/" id="website-home">Musicmania</a>
+
+<h2>Create Your Musicmania Account</h2>
 
 {{#if error}}
     <div class="error">Error: {{errorMsg}}</div>
 {{/if}}
 
-<div class="square"></div>
+{{!-- <div class="square"></div> --}}
 <form id="register-page" method="POST" action="/register">
     <label for="firstName">First Name</label>
     <input name="firstName" id="firstName">
@@ -22,6 +24,6 @@
     <label for="confirmPassword">Confirm Password</label>
     <input name="confirmPassword" id="confirmPassword" type="password">
     
-    <button type="submit" id="create-account-rp">Create Account</button>
+    <button type="submit" id="create-account-rp">Sign-up</button>
 </form>
-<a href="/login" id="login-rp">Login</a>
+<a href="/login" id="login-rp">Already have an account? Login</a>
