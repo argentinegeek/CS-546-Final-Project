@@ -28,6 +28,7 @@ const createComment = async (songId, userId, comment, commentRating) => {
         throw "rating must be 1-5"
     }
 
+
     //validation is done
 
     //creates a comment object

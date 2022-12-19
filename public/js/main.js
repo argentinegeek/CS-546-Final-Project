@@ -12,8 +12,6 @@ const user = require("./users");
  */
 const searchSongs = async (songName) => {
   // input checking
-  if (!songName) throw "missing input parameters";
-  if (typeof songName !== "string") throw "invalid data type";
   if (validation.validString(songName.trim())) songName = songName.trim();
 
   // searching for match
@@ -32,8 +30,6 @@ const searchSongs = async (songName) => {
  */
 const searchGenres = async (genre) => {
   // input checking
-  if (!genre) throw "missing input parameters";
-  if (typeof genre !== "string") throw "invalid data type";
   if (validation.validString(genre.trim())) genre = genre.trim();
   if (validation.hasNumbers(genre.trim())) throw "Genre cannot contain numbers";
   //testing for invalid characters
@@ -48,7 +44,7 @@ const searchGenres = async (genre) => {
   let matches = await songCollection
     .find({ genres: { $in: [search] } })
     .toArray();
-  if (matches.length === 0) `No songs in the genre ${genre}`;
+  if (matches.length === 0)`No songs in the genre ${genre}`;
 
   return matches;
 };
@@ -60,8 +56,6 @@ const searchGenres = async (genre) => {
  */
 const searchArtist = async (artistName) => {
   // input checking
-  if (!artistName) throw "missing input parameters";
-  if (typeof artistName !== "string") throw "invalid data type";
   if (validation.validString(artistName.trim())) artistName = artistName.trim();
 
   // searching for match

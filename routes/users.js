@@ -88,7 +88,7 @@ router
 router.route("/private").get(async (req, res) => {
   //this should render the account info page
   try {
-    return res.render("activity");
+    return res.render("activity", { userName: req.session.user.uName });
   } catch (e) {
     res.status(500).json({ error: e });
   }
