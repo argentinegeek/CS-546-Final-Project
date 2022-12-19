@@ -23,17 +23,16 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     //Input is a string, if string has spaces, spaces become underscores
     //Before calling searchArtist, need to replace underscores with spaces
-    for (let i = 0; i < req.params.id.length; i++) {
-        if(req.params.id.includes("_")) {
-            req.params.id.replace("_", " ");
+    let editedArtist = xss(req.params.id);
+    editedArtist = editedArtist.trim();
+    for (let i = 0; i < editedArtist.length; i++) {
+        if(editedArtist.includes("_")) {
+            editedArtist.replace("_", " ");
         }
     } 
   try {
-    const artist = await songData.searchArtist(xss(req.params.id));
-    res.render("artist_page", {
-      songTitle: song.title,
-      songRating: song.overallRating,
-    });
+    const artists = await songData.searchArtist(editedArtist);
+    res.render("artist_page", { artist: artists});
   } catch (e) {
     res.status(404).json({ error: e });
   }
