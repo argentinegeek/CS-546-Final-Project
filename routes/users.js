@@ -7,19 +7,19 @@ const validation = require("../helpers");
 const xss = require("xss");
 //make sure to include error checking for routes
 router.route("/").get(async (req, res) => {
-  if (req.session.user) return res.redirect("/private");
+  if (xss(req.session.user)) return res.redirect("/private");
   return res.render("home_page");
 });
 
 router
   .route("/register")
   .get(async (req, res) => {
-    if (req.session.user) return res.redirect("/private");
+    if (xss(req.session.user)) return res.redirect("/private");
     //line 15 may need data passed as second parameter
     return res.render("register_page");
   })
   .post(async (req, res) => {
-    let userInfo = req.body;
+    let userInfo = xss(req.body);
     let fName = userInfo.firstName;
     let lName = userInfo.lastName;
     let uName = userInfo.userName; //<-- register page inputs have no IDs yet
@@ -81,7 +81,7 @@ router
       const auth = await userData.checkUser(xss(uName), xss(pass));
       if (auth) {
         console.log("logging them in");
-        req.session.user = { userName: uName, userId: auth.uID };
+        req.session.user = { userName: xss(uName), userId: xss(auth.uID) };
         console.log("made them in the session");
       } else {
         res.status(400).render("login_page", { error: true, errorMsg: e });
@@ -101,8 +101,7 @@ router
 router.route("/private").get(async (req, res) => {
   //this should render the account info page
   try {
-    return res.render("activity", { userName: req.session.user.uName });
-
+    return res.render("activity", { userName: xss(req.session.user.uName) });
   } catch (e) {
     res.status(500).json({ error: e });
   }
@@ -119,7 +118,9 @@ router.route("/logout").get(async (req, res) => {
 
 router.route("/settings").get(async (req, res) => {
   if (req.session.user)
-    return res.render("settings_page", { userName: req.session.user.uName });
+    return res.render("settings_page", {
+      userName: xss(req.session.user.uName),
+    });
 });
 
 module.exports = router;
