@@ -1,2 +1,19 @@
 
- 
+ <table>
+
+   {{#each iplaylist.songs}}
+    <tr>
+        <th>Song Title</th>
+        <th>Artist</th>
+        <th>Genre</th>
+        <th>Overall Rating</th>
+    </tr>
+    <tr>
+        <td>{{title}}</td>
+        <td>{{artist}}</td>
+        <td>{{genres}}</td>
+        <td>{{overallRating}}</td>
+    </tr>
+    {{/each}}
+
+  </table>

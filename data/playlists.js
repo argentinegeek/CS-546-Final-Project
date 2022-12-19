@@ -13,14 +13,14 @@ const { isAdmin } = require("./users");
  * @param {*} posterId : ObjectId of user who created playlist - string
  * @param {*} name : Playlist title - string
  * @param {*} description : Playlist description - string
- * @param {*} songs : List of songs in the playlist - array
+ * @param {*} songs : List of songs objects in a playlist - array
  * @returns Playlist creation with its information
  */
 const createPlaylist = async (posterId, name, description, songs) => {
   validation.checkId(posterId, "ID");
   validation.checkString(name, "name");
   validation.checkString(description, "description");
-  validation.checkStringArray(songs, "songs");
+  //validation.checkStringArray(songs, "songs");
   const playlistCollection = await playlists();
   let newPlaylist = {
     posterId: posterId,
@@ -41,7 +41,8 @@ const createPlaylist = async (posterId, name, description, songs) => {
 const getPlaylistById = async (id) => {
   id = validation.checkId(id, "ID");
   const playlistCollection = await playlists();
-  const playlist = await playlistCollection.findOne({ _id: ObjectId(id) });
+  let playlist = await playlistCollection.findOne({ _id: ObjectId(id) });
+  console.log("this is : "+ playlist);
   if (playlist === null) throw "Playlist not found";
   // formatting output
   playlist._id = playlist._id.toString();

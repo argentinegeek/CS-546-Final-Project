@@ -32,6 +32,7 @@ const postSong = async (posterId, title, artist, genres, links) => {
   if (validation.validString(title.trim())) title = title.trim();
   if (typeof artist !== "string") throw "invalid data type";
   if (validation.validString(artist.trim())) artist = artist.trim();
+  if (artist.includes('_')) throw `string cannot contain character '_'`;
   if (validation.validArray(genres, 1, "string")) {
     for (let genre of genres) {
       if (validation.validString(genre.trim())) {
@@ -609,6 +610,7 @@ const searchArtist = async (artistName) => {
   if (!artistName) throw "missing input parameters";
   if (typeof artistName !== "string") throw "invalid data type";
   if (validation.validString(artistName.trim())) artistName = artistName.trim();
+  if (artistName.includes('_')) throw `string cannot contain character '_'`;
 
   // searching for match
   let search = new RegExp(".*" + artistName + ".*", "i");
@@ -627,7 +629,7 @@ const searchArtist = async (artistName) => {
  */
 const filterByRating = async (min, max) => {
   // input checking
-  if (!min || !max) throw "missing input parameters";
+  if (!min || !max) throw "input must in form: min, max. where both are integers 1-5";
   // if (typeof min !== 'number' || typeof max !== 'number')
   //   throw "inputs must be numbers";
   if (!Number.isInteger(min) || !Number.isInteger(max))

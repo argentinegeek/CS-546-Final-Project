@@ -573,25 +573,25 @@ async function main() {
     parseUser1,
     "Music",
     "My playlist with my music",
-    [song1.title, song2.title, song3.title, song4.title]
+    [song1, song2, song3, song4]
   );
   let playlist2 = await playlists.createPlaylist(
     parseUser1,
     "My favorite songs",
     "My playlist with my favorite songs",
-    [song5.title, song8.title, song9.title, song4.title]
+    [song5, song8, song9, song4]
   );
   let playlist3 = await playlists.createPlaylist(
     parseUser2,
     "I hate these eongs",
     "My playlist music I don't like",
-    [song4.title, song6.title, song7.title, song9.title]
+    [song4, song6, song7, song9]
   );
   let playlist4 = await playlists.createPlaylist(
     parseUser2,
     "Summer Jams",
     "Music that reminds me of summer",
-    [song6.title, song10.title, song7.title, song3.title]
+    [song6, song10, song7, song3]
   );
   //parsed playlists
   let parsePl1 = playlist1["_id"].toString();
