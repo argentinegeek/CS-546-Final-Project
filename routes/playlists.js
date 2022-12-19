@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
     return;
 
   } catch (e) {
-    res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
     return;
 
   }
@@ -26,7 +26,8 @@ router.get("/:id", async (req, res) => {
   try {
     req.params.id = validation.checkId(xss(req.params.id), "Id URL Param");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 
   try {
@@ -39,7 +40,7 @@ router.get("/:id", async (req, res) => {
 
 
   } catch (e) {
-    res.status(404).json({ error: e });
+    res.status(404).render("error", {error: "Oops, something went wrong"});
     return;
 
   }
@@ -65,7 +66,8 @@ router.post("/", async (req, res) => {
       "Songs"
     );
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 
   try {
@@ -78,7 +80,7 @@ router.post("/", async (req, res) => {
     );
     res.json(newPlaylist);
   } catch (e) {
-    res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
     return;
 
   }
@@ -94,7 +96,8 @@ router.put("/:id", async (req, res) => {
     )
       throw "User is original poster or admin.";
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   try {
     req.params.id = validation.checkId(xss(req.params.id), "ID url param");
@@ -119,7 +122,8 @@ router.put("/:id", async (req, res) => {
   try {
     await playlistData.getPlaylistById(xss(req.params.id));
   } catch (e) {
-    return res.status(404).json({ error: "Playlist not found" });
+    res.status(404).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 
   try {
@@ -129,7 +133,7 @@ router.put("/:id", async (req, res) => {
     );
     res.json(updatedPlaylist);
   } catch (e) {
-    res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
     return;
 
   }
@@ -147,7 +151,8 @@ router.patch("/:id", async (req, res) => {
     )
       throw "User is original poster or admin.";
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   try {
     req.params.id = validation.checkId(xss(req.params.id), "Playlist ID");
@@ -169,7 +174,8 @@ router.patch("/:id", async (req, res) => {
         "Songs"
       );
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   try {
     const oldPlaylist = await playlistData.getPlaylistById(xss(req.params.id));
@@ -185,7 +191,8 @@ router.patch("/:id", async (req, res) => {
     if (requestBody.songs && requestBody.songs !== oldPlaylist.songs)
       updatedObject.songs = requestBody.songs;
   } catch (e) {
-    return res.status(404).json({ error: "Playlist not found" });
+    res.status(404).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   if (Object.keys(updatedObject).length !== 0) {
     try {
@@ -195,13 +202,12 @@ router.patch("/:id", async (req, res) => {
       );
       res.json(updatedPlaylist);
     } catch (e) {
-      res.status(500).json({ error: e });
+      res.status(500).render("error", {error: "Oops, something went wrong"});
+    return;
     }
   } else {
-    res.status(400).json({
-      error:
-        "No fields have been changed from their inital values, so no update has occurred",
-    });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 });
 
@@ -215,24 +221,28 @@ router.delete("/:id", async (req, res) => {
     )
       throw "User is original poster or admin.";
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   try {
     req.params.id = validation.checkId(xss(req.params.id), "Id URL Param");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   try {
     await playlistData.getPlaylistById(xss(req.params.id));
   } catch (e) {
-    return res.status(404).json({ error: "Playlist not found" });
+    res.status(404).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   try {
     await playlistData.deletePlaylist(xss(req.params.id));
-    res.status(200).json({ deleted: true });
+    res.status(200).render("error", {error: "Oops, something went wrong"});
+    return;
 
   } catch (e) {
-    res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
     return;
 
   }

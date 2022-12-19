@@ -46,7 +46,8 @@ router
         cPass
       );
       if (!newUser) {
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).render("error", {error: "Oops, something went wrong"});
+        return;
       } else {
         //res.render('private', { username: req.session.user.username, ct: curTimeStamp });
         res.render("login_page");
@@ -66,7 +67,8 @@ router
     try {
       return res.render("login_page");
     } catch (e) {
-      res.status(500).json({ error: e });
+      res.status(500).render("error", {error: "Oops, something went wrong"});
+    return;
     }
   })
   .post(async (req, res) => {
@@ -103,7 +105,8 @@ router.route("/private").get(async (req, res) => {
   try {
     return res.render("activity", { userName: xss(req.session.user.uName) });
   } catch (e) {
-    res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 });
 
@@ -112,7 +115,8 @@ router.route("/logout").get(async (req, res) => {
     req.session.destroy();
     return res.render("logout_page");
   } catch (e) {
-    res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 });
 
