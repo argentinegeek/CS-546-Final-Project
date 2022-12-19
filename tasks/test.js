@@ -562,18 +562,24 @@ const main = async () => {
   // try {
   //     let test = await songs.filterByRating()
   //     console.log(`failed invalid input case: ${test}`)
-  // } catch (e) {}
+  // } catch (e) {
+  //   console.log(`passed invalid input case: ${e}`);
+  // }
   // try {
   //     let test = await songs.filterByRating(1)
   //     console.log(`failed invalid input case: ${test}`)
-  // } catch (e) {}
+  // } catch (e) {
+  //   console.log(`passed invalid input case: ${e}`);
+  // }
   // try {
   //     let test = await songs.filterByRating(5, 1)
   //     console.log(`failed invalid input case: ${test}`)
-  // } catch (e) {}
+  // } catch (e) {
+  //   console.log(`passed invalid input case: ${e}`);
+  // }
   // try {
   //     let test = await songs.filterByRating(2, 4);
-  //     // console.log(test);
+  //     console.log(`passed filter case: ${test}`);
   // } catch (e) {
   //     console.log(`failed filter case: ${e}`)
   // }
