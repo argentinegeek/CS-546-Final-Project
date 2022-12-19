@@ -25,7 +25,7 @@
     </tr>
     <tr>
         <td>{{songRating}}</td>
-        <td>{{username}}</td>
+        <td>{{userName}}</td>
     </tr>
     <button type="submit" href="">Like</button>
     <button type="submit" href="">Dislike</button>
@@ -52,5 +52,18 @@
         <td>{{this.artist}}</td>
     </tr>
      {{/each}}
+</table>
+
+<h3>Comments</h3>
+<table>
+    {{#each songComments}}
+    <tr>
+        <td>{{this.userId}}</td>
+        <td>{{this.rating}}</td>
+        <td>{{this.content}}</td>
+        <td>{{this.likes}}</td>
+        <td>{{this.dislikes}}</td>
+    </tr>
+    {{/each}}
 </table>
 
