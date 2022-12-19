@@ -1,8 +1,14 @@
-{{!-- // Make a list of all the playlists
 
-
-{{{#each name}}}
-<ul>
-    <li>{{{this.name}}} {{{this.description}}}</li>
-</ul>
-{{{/each}}} --}}
+<h1>Your Playlists</h1>
+<table id="playlists-table">
+  {{#each playlist}}
+      <tr>
+          <th>Playlist Name</th>
+          <th>Description</th>
+      </tr>
+      <tr>
+          <td> <a href="/playlists/{{_id}}">{{name}}</a></td>
+          <td>{{description}}</td>
+      </tr>
+  {{/each}}
+</table>

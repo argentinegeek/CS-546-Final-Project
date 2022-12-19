@@ -112,7 +112,7 @@ $(function () {
     if (typeOfSearch === "Songs") {
       url = "/songs/search/songs" + word;
     }
-    if (typeOfSearch === "Arist") {
+    if (typeOfSearch === "Artist") {
       url = "/songs/search/artists" + word;
     }
     if (typeOfSearch === "Genres") {

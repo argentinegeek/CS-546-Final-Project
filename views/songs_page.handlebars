@@ -1,5 +1,5 @@
 <script> src="/public/js/main.js"></script>
-
+{{!-- inlcude the routes in the main.js( the ones where its says url = ) --}}
 <form id="dropdown" >
   <label id = "search1" for="dropdown">Choose an option:</label><br>
   <select id = "searchType">
@@ -9,7 +9,7 @@
   </select>
 </form>
 
-<form id = "search" method="POST" action="/searchsong"> 
+<form id = "search" method="POST" action={{{url}}}> 
       <label for="name">Name:</label><br>
       <input type="text" id="searchTerm" name="searchsong"><br>
       <input type="submit" value="Submit">
@@ -33,7 +33,5 @@
     </tr>
     {{/each}}
 </table>
-{{!-- 
-<form>
-</form> --}}
+
 
