@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const xss = require("xss");
 const data = require("../data");
-const {getPlaylistById } = require("../data/playlists");
+const { getPlaylistById } = require("../data/playlists");
 const playlistData = data.playlists;
 const validation = require("../helpers");
 
@@ -13,8 +13,12 @@ router.get("/", async (req, res) => {
     const playlistList = await playlistData.getAllPlaylists();
     //res.json(playlistList);
     res.render("playlists", { playlist: playlistList });
+    return;
+
   } catch (e) {
     res.status(500).json({ error: e });
+    return;
+
   }
 });
 //route to any specific playlist that is clicked on
@@ -24,16 +28,20 @@ router.get("/:id", async (req, res) => {
   } catch (e) {
     return res.status(400).json({ error: e });
   }
-  
+
   try {
-    
+
     const playlist = await playlistData.getPlaylistById(xss(req.params.id));
     //res.json(playlist);
-    
+
     res.render("individual_playlist_page", { iplaylist: playlist });
-    
+    return;
+
+
   } catch (e) {
     res.status(404).json({ error: e });
+    return;
+
   }
 });
 //route to post a playlist
@@ -71,6 +79,8 @@ router.post("/", async (req, res) => {
     res.json(newPlaylist);
   } catch (e) {
     res.status(500).json({ error: e });
+    return;
+
   }
 });
 //route to update all elements of a playlist
@@ -80,7 +90,7 @@ router.put("/:id", async (req, res) => {
     if (
       !isAdmin(xss(req.session.user.userId)) ||
       xss(req.session.user.userId) !==
-        (await getPlaylistById(xss(req.params.id))).posterId
+      (await getPlaylistById(xss(req.params.id))).posterId
     )
       throw "User is original poster or admin.";
   } catch (e) {
@@ -120,6 +130,8 @@ router.put("/:id", async (req, res) => {
     res.json(updatedPlaylist);
   } catch (e) {
     res.status(500).json({ error: e });
+    return;
+
   }
 });
 
@@ -131,7 +143,7 @@ router.patch("/:id", async (req, res) => {
     if (
       !isAdmin(xss(req.session.user.userId)) ||
       xss(req.session.user.userId) !==
-        (await getPlaylistById(xss(req.params.id))).posterId
+      (await getPlaylistById(xss(req.params.id))).posterId
     )
       throw "User is original poster or admin.";
   } catch (e) {
@@ -199,7 +211,7 @@ router.delete("/:id", async (req, res) => {
     if (
       !isAdmin(xss(req.session.user.userId)) ||
       xss(req.session.user.userId) !==
-        (await getPlaylistById(xss(req.params.id))).posterId
+      (await getPlaylistById(xss(req.params.id))).posterId
     )
       throw "User is original poster or admin.";
   } catch (e) {
@@ -218,8 +230,11 @@ router.delete("/:id", async (req, res) => {
   try {
     await playlistData.deletePlaylist(xss(req.params.id));
     res.status(200).json({ deleted: true });
+
   } catch (e) {
     res.status(500).json({ error: e });
+    return;
+
   }
 });
 

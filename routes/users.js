@@ -32,6 +32,12 @@ router
       uName = validation.checkUsername(uName);
       pass = validation.checkPassword(pass);
       cPass = validation.checkPassword(cPass);
+    } catch (e) {
+      res.status(400).render("register_page", { error: true, errorMsg: e });
+      return;
+
+    }
+    try {
       const newUser = await userData.createUser(
         fName,
         lName,
@@ -43,10 +49,13 @@ router
         res.status(500).json({ error: "Internal Server Error" });
       } else {
         //res.render('private', { username: req.session.user.username, ct: curTimeStamp });
-        res.render("/private", { userName: xss(req.session.user.username) });
+        res.render("login_page");
+        return;
       }
     } catch (e) {
       res.status(400).render("register_page", { error: true, errorMsg: e });
+      return;
+
     }
   });
 
@@ -76,12 +85,16 @@ router
         console.log("made them in the session");
       } else {
         res.status(400).render("login_page", { error: true, errorMsg: e });
+        return;
+
       }
       //res.render('private', { username: req.session.user.username, ct: curTimeStamp });
       //console.log(req.session.user.username);
       res.redirect("/private"); //, { userName: req.session.user.username }
     } catch (e) {
       res.status(400).render("login_page", { error: true, errorMsg: e });
+      return;
+
     }
   });
 
