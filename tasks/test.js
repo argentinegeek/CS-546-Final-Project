@@ -352,7 +352,7 @@ const main = async () => {
   // // ! TESTING USER FUNCTIONS
   // console.log('!-----TESTING USER FUNCTIONS-----!');
 
-  // // ! TESTING SONG FUNCTIONS
+  // ! TESTING SONG FUNCTIONS
   // console.log('!-----TESTING SONG FUNCTIONS-----!');
   // // postSong()
   // console.log('----postSong() test----');
@@ -386,7 +386,24 @@ const main = async () => {
   // } catch (e) {
   //   // console.log(`passed duplicate song case: ${e}`);
   // }
-
+  // try { // song by artist already exists
+  //   let test = await songs.postSong(
+  //     parseUser2,
+  //     "Midnight Rain",
+  //     "Taylor_Swift",
+  //     ["Pop"],
+  //     [
+  //       ["Youtube", "https://youtu.be/Odh9ddPUkEY"],
+  //       [
+  //         "Spotify",
+  //         "https://open.spotify.com/track/3rWDp9tBPQR9z6U5YyRSK4?si=9a801a5a3d1643ad",
+  //       ],
+  //     ]
+  //   );
+  //   console.log(`failed '_' case: ${test}`);
+  // } catch (e) {
+  //   console.log(`passed '_' song case: ${e}`);
+  // }
 
   // // deleteSong()
   // console.log('----deleteSong() test----');
@@ -526,6 +543,18 @@ const main = async () => {
   //     // console.log(test);
   // } catch (e) {
   //     console.log(`failed search case: ${e}`);
+  // }
+  // try {
+  //   let test = await songs.searchArtist('sz_a');
+  //   console.log(`failed '_' case: ${e}`);
+  // } catch (e) {
+  //     console.log(`passed '_' case: ${e}`);
+  // }
+  // try {
+  //   let test = await songs.searchArtist('busta rhymes');
+  //   console.log(`failed no match case: ${e}`);
+  // } catch (e) {
+  //     console.log(`passed no match case: ${e}`);
   // }
 
   // // filterByRating()
