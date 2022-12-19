@@ -16,7 +16,8 @@ router.get("/", async (req, res) => {
     // console.log(songList);
     res.render("artists_page", { artists: artistsList });
   } catch (e) {
-    res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 });
 //route to any specific song that is clicked on
@@ -34,7 +35,9 @@ router.get("/:id", async (req, res) => {
     const artists = await songData.searchArtist(editedArtist);
     res.render("artist_page", { artist: artists});
   } catch (e) {
-    res.status(404).json({ error: e });
+    res.status(404).render("error", {error: "Oops, something went wrong"});
+    return;
+    // res.status(404).json({ error: e });
   }
 });
 

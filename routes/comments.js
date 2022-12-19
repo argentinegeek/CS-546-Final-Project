@@ -26,7 +26,8 @@ router.get('/:songId', async (req, res) => {
     }
     res.render("song_page", { comments: song });
   } catch {
-    res.status(404).json({ error });
+    res.status(404).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 })
 //route to post a comment
@@ -44,7 +45,8 @@ router.post("/:songId", async (req, res) => {
     );
     res.json(newComment);
   } catch (e) {
-    res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 });
 
@@ -58,14 +60,16 @@ router.delete("/:commentId", async (req, res) => {
   try {
     id = validation.checkId(req.params.id, "Id URL Param");
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   //making sure the person deleting is the owner of the comment
   try {
     if (req.session.user.userId !== (await getComment(commentId)).userId)
       throw "User is not the original poster or admin.";
   } catch (e) {
-    return res.status(400).json({ error: e });
+    res.status(400).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   //let song = null;
   //get the song
@@ -73,14 +77,16 @@ router.delete("/:commentId", async (req, res) => {
     //get the comment by id
     const comment = await commentsData.getComment(req.params.commentId);
   } catch (error) {
-    res.status(404).json({ error: "comment not found" });
+    res.status(404).render("error", {error: "Oops, something went wrong"});
+    return;
   }
   //delete the comment
   try {
     let deletion = await commentsData.deleteComment(req.params.commentId, req.session.user.uId, req.params.songId);
     return res.status(200).json(deletion);
   } catch {
-    return res.status(500).json({ error: e });
+    res.status(500).render("error", {error: "Oops, something went wrong"});
+    return;
   }
 });
 
