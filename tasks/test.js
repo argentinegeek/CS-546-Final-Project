@@ -644,6 +644,31 @@ const main = async () => {
 
   // // ! TESTING COMMENT FUNCTIONS
   // console.log('!-----TESTING COMMENT FUNCTIONS-----!');
+  // console.log('----createComment()----');
+  // try {
+  //   let test = await comments.createComment();
+  //   console.log(`1 failed invalid input case: ${test}`);
+  // } catch (e) {
+  //   console.log(`1 passed invalid input case: ${e}`);
+  // }
+  // try {
+  //   let test = await comments.createComment(ObjectId().toString(), parseUser4, "suffer", 1);
+  //   console.log(`failed song doesn't exist case: ${test}`);
+  // } catch (e) {
+  //   console.log(`passed song doesn't exist case: ${e}`);
+  // }
+  // try {
+  //   let test = await comments.createComment(ps5, ObjectId().toString(), "suffer", 1);
+  //   console.log(`failed user doesn't exist case: ${test}`);
+  // } catch (e) {
+  //   console.log(`passed user doesn't exist case: ${e}`);
+  // }
+  // try {
+  //   let test = await comments.createComment(ps5, parseUser4, "suffer", 1);
+  //   console.log(`failed duplicate case: ${test}`);
+  // } catch (e) {
+  //   console.log(`passed duplicate case: ${e}`);
+  // }
 
   // // ! TESTING PLAYLIST FUNCTIONS
   // console.log('!-----TESTING PLAYLIST FUNCTIONS-----!');
