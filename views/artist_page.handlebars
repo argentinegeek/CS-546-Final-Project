@@ -9,7 +9,7 @@
     </tr>
     {{#each artist}}
     <tr>
-        <td>{{title}}</td>
+        <td><a href="/artists/{{_id}}">{{title}}</a></td>
         <td>{{overallRating}}</td>
     </tr>
    {{/each}}
@@ -27,6 +27,10 @@
     <button type="submit">Account</button>
 </form>
 
-<formm action="">
-
+<formm action="/login">
+    <button type="submit">Login</button>
 </formm>
+
+<form action="/logout">
+    <button type="submit">Logout</button>
+</form>
