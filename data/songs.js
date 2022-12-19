@@ -629,7 +629,7 @@ const searchArtist = async (artistName) => {
  */
 const filterByRating = async (min, max) => {
   // input checking
-  if (!min || !max) throw "missing input parameters";
+  if (!min || !max) throw "input must in form: min, max. where both are integers 1-5";
   // if (typeof min !== 'number' || typeof max !== 'number')
   //   throw "inputs must be numbers";
   if (!Number.isInteger(min) || !Number.isInteger(max))
