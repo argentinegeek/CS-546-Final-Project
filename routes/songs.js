@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   try {
     const songList = await songData.getAllSongs();
     // res.json(songList);
-    // console.log(songList);
+    
     res.render("songs_page", { song: songList });
   } catch (e) {
     res.status(500).json({ error: e });
@@ -82,7 +82,6 @@ router.post("/", async (req, res) => {
   }
   //TODO: for handlebars, pass in parameter for database to display all the songs
   let songs = await songData.getAllSongs();
-  console.log(songs);
   return res.render("songs_page", { song: songs });
 });
 //route to update all elements of a song
@@ -218,53 +217,42 @@ router.delete("/:id", async (req, res) => {
   }
 })
   
-router.route("/searchsong").post(async (req, res) => {
-  //code here for POST
-  try {
-    let v = req.body;
-    let pname = (v.songName);
-    if (pname.length == 0) throw "no input"
-  }
-  catch {
-    res.render('error', { name: pname });
-  }
-});
-
-router.route("/searchgenre").post(async (req, res) => {
-//code here for POST
-  try {
-    let v = req.body;
-    let pname = (v.genre);
-    if (pname.length == 0) throw "no input"
-  }
-  catch {
-    res.render('error', { name: pname });
-  }
+   router.route("/searchsong").post(async (req, res) => {
+    //code here for POST
+    try {
+      let v = req.body;
+      let pname = (v.songName);
+      if (pname.length == 0) throw "no input"
+      res.render('', { name: pname });
+    }
+    catch {
+      res.render('error', { name: pname });
+    }
   });
-  router.route("/searchartist").post(async (req, res) => {
-  //code here for POST
-  try {
-    let v = req.body;
-    let pname = (v.searchArtist);
-    if (pname.length == 0) throw "no input"
-  }
-  catch {
-    res.render('error', { name: pname });
-  }
-});
 
-//Code to get the most popular artists
-router.get(("/artists"), async (req, res) => {
-  try {
-    const artistsList = await songData.mostPopularArtists();
-    console.log(artistsList);
-    res.render("artists_page", { artists: artistsList });
-    
-  } catch (e) {
-    res.status(500).json({error: e});
-  }
-});
-   
+   router.route("/searchgenre").post(async (req, res) => {
+    //code here for POST
+    try {
+      let v = req.body;
+      let pname = (v.genre);
+      if (pname.length == 0) throw "no input"
+    }
+    catch {
+      res.render('error', { name: pname });
+    }
+   });
+   router.route("/searchartist").post(async (req, res) => {
+    //code here for POST
+    try {
+      let v = req.body;
+      let pname = (v.searchArtist);
+      if (pname.length == 0) throw "no input"
+    }
+    catch {
+      res.render('error', { name: pname });
+    }
+   });
+  
 
 
 module.exports = router;

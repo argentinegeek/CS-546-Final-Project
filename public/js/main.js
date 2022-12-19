@@ -96,92 +96,31 @@ const filterByRating = async (min, max) => {
     .toArray();
   return matches;
 };
-//search client-side
-var form = document.createElement("form");
-form.id = "search-form";
 
-var input = document.createElement("input");
-input.type = "text";
-input.name = "search-term";
-input.placeholder = "Search...";
+$(function () {
+  var bar = $("#searchBar");
 
-var select = document.createElement("select");
-select.name = "search-category";
+  bar.submit(function (event) {
+    event.preventDefault();
 
-var songOption = document.createElement("option");
-songOption.value = "songs";
-songOption.innerText = "Songs";
-
-var artistOption = document.createElement("option");
-artistOption.value = "artists";
-artistOption.innerText = "Artists";
-
-var genreOption = document.createElement("option");
-genreOption.value = "genres";
-genreOption.innerText = "Genres";
-
-var ratingOption = document.createElement("option");
-ratingOption.value = "ratings";
-ratingOption.innerText = "Ratings";
-
-select.appendChild(songOption);
-select.appendChild(artistOption);
-select.appendChild(genreOption);
-select.appendChild(ratingOption);
-
-// create the submit button
-var button = document.createElement("button");
-button.type = "submit";
-button.innerText = "Search";
-
-// append the input field, select field, and button to the form
-form.appendChild(input);
-form.appendChild(select);
-form.appendChild(button);
-
-// add an event listener to the form that listens for the submit event
-form.addEventListener("submit", function (event) {
-  // prevent the form from submitting
-  event.preventDefault();
-
-  // retrieve the search term and category from the form elements
-  var searchTerm = input.value;
-  var searchCategory = select.value;
-
-  // perform the search using the search term and category
-  // you can add your own code here to search your database or perform some other action
-  console.log(`Searching for ${searchTerm} in category ${searchCategory}`);
+    //typeOfSearch is a dropdown, will always have a value
+    var typeOfSearch = $("#searchType").val();
+    var word = $("#searchTerm").val();
+    if (!word) throw "missing keyword";
+    if (typeof word !== "string") throw "invalid data type";
+    var url = "";
+    if (typeOfSearch === "Songs") {
+      url = "/songs/search/songs" + word;
+    }
+    if (typeOfSearch === "Artist") {
+      url = "/songs/search/artists" + word;
+    }
+    if (typeOfSearch === "Genres") {
+      url = "/songs/search/genres" + word;
+    }
+    if (typeOfSearch === "Rating") {
+      url = "/songs/search/rating" + word;
+    }
+    window.location = url;
+  });
 });
-
-// append the form to the body of the document
-document.body.appendChild(form);
-
-//Display links function
-//TODO: figure out how to pull links from song when user is on song page
-const displayLinks = async (links) => {
-  const songCollection = await songs();
-
-  var list = document.createElement("ul");
-
-  for (var i = 0; i < links.length; i++) {
-    var item = document.createElement("li");
-
-    var anchor = document.createElement("a");
-    anchor.href = links[i].url;
-    anchor.innerText = links[i].text;
-
-    item.appendChild(anchor);
-
-    list.appendChild(item);
-  }
-
-  document.body.appendChild(list);
-};
-/*How to use this function
-
-displayLinks([
-  { text: "Google", url: "https://www.google.com" },
-  { text: "Facebook", url: "https://www.facebook.com" },
-  { text: "Twitter", url: "https://www.twitter.com" },
-]);
-*/

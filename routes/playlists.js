@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const xss = require("xss");
 const data = require("../data");
-const { getPlaylistById } = require("../data/playlists");
+const {getPlaylistById } = require("../data/playlists");
 const playlistData = data.playlists;
 const validation = require("../helpers");
 
@@ -11,7 +11,8 @@ const validation = require("../helpers");
 router.get("/", async (req, res) => {
   try {
     const playlistList = await playlistData.getAllPlaylists();
-    res.json(playlistList);
+    //res.json(playlistList);
+    res.render("playlists", { playlist: playlistList });
   } catch (e) {
     res.status(500).json({ error: e });
   }
@@ -23,9 +24,14 @@ router.get("/:id", async (req, res) => {
   } catch (e) {
     return res.status(400).json({ error: e });
   }
+  
   try {
+    
     const playlist = await playlistData.getPlaylistById(xss(req.params.id));
-    res.json(playlist);
+    //res.json(playlist);
+    
+    res.render("individual_playlist_page", { iplaylist: playlist });
+    
   } catch (e) {
     res.status(404).json({ error: e });
   }
