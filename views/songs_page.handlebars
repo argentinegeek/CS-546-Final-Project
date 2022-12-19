@@ -1,17 +1,13 @@
-<script> src="/public/js/main.js"></script>
-{{!-- inlcude the routes in the main.js( the ones where its says url = ) --}}
-<form id="dropdown" >
-  <label id = "search1" for="dropdown">Choose an option:</label><br>
-  <select id = "searchType">
-    <option value="option1">Song</option>
-    <option value="option2">Artist</option>
-    <option value="option3">Genre</option>
+<form id="search" method = "post">
+  <label for="dropdown">Choose an option:</label><br>
+  <select id = "dropdown" name = "dropdown">
+    <option value="Song">Song</option>
+    <option value="Artist">Artist</option>
+    <option value="Genre">Genre</option>
+    
   </select>
-</form>
-
-<form id = "search" method="POST" action={{{url}}}> 
-      <label for="name">Name:</label><br>
-      <input type="text" id="searchTerm" name="searchsong"><br>
+  <label for="Term">Name:</label><br>
+      <input type="text" id="Term" name="Term"><br>
       <input type="submit" value="Submit">
 </form>
 

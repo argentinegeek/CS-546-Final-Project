@@ -216,12 +216,12 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ error: e });
   }
 })
-  
-   router.route("/searchsong").post(async (req, res) => {
+
+   router.route("/searchsong/:term").post(async (req, res) => {
     //code here for POST
     try {
       let v = req.body;
-      let pname = (v.songName);
+      let pname = v.term;
       if (pname.length == 0) throw "no input"
       res.render('', { name: pname });
     }
@@ -230,28 +230,28 @@ router.delete("/:id", async (req, res) => {
     }
   });
 
-   router.route("/searchgenre").post(async (req, res) => {
+   router.route("/searchgenre/:term").post(async (req, res) => {
     //code here for POST
     try {
       let v = req.body;
-      let pname = (v.genre);
+      let pname = v.term;
       if (pname.length == 0) throw "no input"
     }
     catch {
       res.render('error', { name: pname });
     }
    });
-   router.route("/searchartist").post(async (req, res) => {
+   router.route("/searchartist/:term").post(async (req, res) => {
     //code here for POST
     try {
       let v = req.body;
-      let pname = (v.searchArtist);
+      let pname = v.term;
       if (pname.length == 0) throw "no input"
     }
     catch {
       res.render('error', { name: pname });
     }
-   });
+   });;
   
 
 
