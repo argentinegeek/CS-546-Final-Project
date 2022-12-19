@@ -13,7 +13,7 @@ router.get('/:songId', async (req, res) => {
   //validating the id
   try {
     id = validation.checkId(id, "Id URL Param");
-    res.render()
+    
   } catch (e) {
     return res.status(400).json({ error: e });
   }
@@ -24,6 +24,7 @@ router.get('/:songId', async (req, res) => {
     if (song.comments.length === 0) {
       return res.status(404).json({ error: "no comments found" });
     }
+    res.render("song_page", { comments: song });
   } catch {
     res.status(404).json({ error });
   }
@@ -46,6 +47,10 @@ router.post("/:songId", async (req, res) => {
     res.status(500).json({ error: e });
   }
 });
+
+// router.post("/like/:id", async (req, res) => {
+
+// });
 
 //route to delete a comment
 router.delete("/:commentId", async (req, res) => {

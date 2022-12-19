@@ -96,6 +96,7 @@ router.post("/", async (req, res) => {
   let songs = await songData.getAllSongs();
   return res.render("songs_page", { song: songs });
 });
+
 //route to update all elements of a song
 router.put("/:id", async (req, res) => {
   const updatedData = xss(req.body);
