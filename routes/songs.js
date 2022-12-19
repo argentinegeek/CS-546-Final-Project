@@ -13,10 +13,14 @@ router.get("/", async (req, res) => {
   try {
     const songList = await songData.getAllSongs();
     // res.json(songList);
-    
+
     res.render("songs_page", { song: songList });
+    return;
+
   } catch (e) {
     res.status(500).json({ error: e });
+    return;
+
   }
 });
 //route to any specific song that is clicked on
@@ -38,8 +42,12 @@ router.get("/:id", async (req, res) => {
       songComments: song.comments,
       recommended: recommendedSongs
     });
+    return;
+
   } catch (e) {
     res.status(404).json({ error: e });
+    return;
+
   }
 });
 //route to post a song
@@ -81,6 +89,8 @@ router.post("/", async (req, res) => {
     res.json(newSong);
   } catch (e) {
     res.status(500).json({ error: e });
+    return;
+
   }
   //TODO: for handlebars, pass in parameter for database to display all the songs
   let songs = await songData.getAllSongs();
@@ -125,6 +135,8 @@ router.put("/:id", async (req, res) => {
     res.json(updatedSong);
   } catch (e) {
     res.status(500).json({ error: e });
+    return;
+
   }
 });
 
@@ -185,12 +197,16 @@ router.patch("/:id", async (req, res) => {
       res.json(updatedSong);
     } catch (e) {
       res.status(500).json({ error: e });
+      return;
+
     }
   } else {
     res.status(400).json({
       error:
         "No fields have been changed from their inital values, so no update has occurred",
     });
+    return;
+
   }
 });
 
@@ -214,47 +230,56 @@ router.delete("/:id", async (req, res) => {
   try {
     await songData.deleteSong(xss(req.params.id));
     res.status(200).json({ deleted: true });
+    return;
+
   } catch (e) {
     res.status(500).json({ error: e });
+    return;
+
   }
 })
-  
-   router.route("/searchsong").post(async (req, res) => {
-    //code here for POST
-    try {
-      let v = req.body;
-      let pname = (v.songName);
-      if (pname.length == 0) throw "no input"
-      res.render('', { name: pname });
-    }
-    catch {
-      res.render('error', { name: pname });
-    }
-  });
 
-   router.route("/searchgenre").post(async (req, res) => {
-    //code here for POST
-    try {
-      let v = req.body;
-      let pname = (v.genre);
-      if (pname.length == 0) throw "no input"
-    }
-    catch {
-      res.render('error', { name: pname });
-    }
-   });
-   router.route("/searchartist").post(async (req, res) => {
-    //code here for POST
-    try {
-      let v = req.body;
-      let pname = (v.searchArtist);
-      if (pname.length == 0) throw "no input"
-    }
-    catch {
-      res.render('error', { name: pname });
-    }
-   });
-  
+router.route("/searchsong").post(async (req, res) => {
+  //code here for POST
+  try {
+    let v = req.body;
+    let pname = (v.songName);
+    if (pname.length == 0) throw "no input"
+    res.render('', { name: pname });
+    return;
+
+  }
+  catch {
+    res.render('error', { name: pname });
+    return;
+
+  }
+});
+
+router.route("/searchgenre").post(async (req, res) => {
+  //code here for POST
+  try {
+    let v = req.body;
+    let pname = (v.genre);
+    if (pname.length == 0) throw "no input"
+  }
+  catch {
+    res.render('error', { name: pname });
+    return;
+  }
+});
+router.route("/searchartist").post(async (req, res) => {
+  //code here for POST
+  try {
+    let v = req.body;
+    let pname = (v.searchArtist);
+    if (pname.length == 0) throw "no input"
+  }
+  catch {
+    res.render('error', { name: pname });
+  }
+});
+
 
 
 module.exports = router;

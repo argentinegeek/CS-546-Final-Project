@@ -12,8 +12,9 @@
     <button type="submit" id="user-logout">Logout</button>
 </form>
 
-<h2>{{{userName}}}</h2>
+<h2>{{userName}}</h2>
 
+{{!-- {{#if auth}}
 <h1>Your Song Posts</h1>
 <table id="songposts-table">
     {{#each songs}}
@@ -26,7 +27,9 @@
     </tr>
     {{/each}}
 </table>
+{{/if}}
 
+{{#if notEmpty}}
 <h1>Your Comments</h1>
 <table id="comments-table">
     {{#each comment}}
@@ -39,6 +42,10 @@
     </tr>
     {{/each}}
 </table>
+{{/if}} --}}
+
+
+
 <h1>Your Playlists</h1>
 
 {{!-- {{#each songs}}

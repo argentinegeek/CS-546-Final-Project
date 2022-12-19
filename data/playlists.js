@@ -42,7 +42,6 @@ const getPlaylistById = async (id) => {
   id = validation.checkId(id, "ID");
   const playlistCollection = await playlists();
   let playlist = await playlistCollection.findOne({ _id: ObjectId(id) });
-  console.log("this is : "+ playlist);
   if (playlist === null) throw "Playlist not found";
   // formatting output
   playlist._id = playlist._id.toString();
