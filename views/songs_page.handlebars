@@ -18,20 +18,21 @@
 
 <h1>Songs</h1> 
 <table id="songs-table">
-    {{#each song}}
+   
     <tr>
         <th>Song Title</th>
         <th>Artist</th>
         <th>Genre</th>
         <th>Overall Rating</th>
     </tr>
+    {{#each song}}
     <tr>
         <td>{{title}}</td>
         <td>{{artist}}</td>
         <td>{{genres}}</td>
         <td>{{overallRating}}</td>
     </tr>
-    {{/each}}
+   {{/each}}
 </table>
 
 
