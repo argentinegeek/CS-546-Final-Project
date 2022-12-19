@@ -47,37 +47,27 @@ router.post("/:songId", async (req, res) => {
 });
 
 //route to delete a comment
-router.delete("/comment/:commentId", async (req, res) => {
-  const id = req.params.id;
+router.delete("/:commentId", async (req, res) => {
   //validating the id
   try {
-    id = validation.checkId(id, "Id URL Param");
+    id = validation.checkId(req.params.id, "Id URL Param");
   } catch (e) {
     return res.status(400).json({ error: e });
   }
   //making sure the person deleting is the owner of the comment
   try {
-    if (req.session.user.userId !== (await getComment(id)).userId)
+    if (req.session.user.userId !== (await getComment(commentId)).userId)
       throw "User is not the original poster or admin.";
   } catch (e) {
     return res.status(400).json({ error: e });
   }
-  let song = null;
-  //get the 
+  //let song = null;
+  //get the song
   try {
-    //get the comment
+    //get the comment by id
     const comment = await commentsData.getComment(req.params.commentId);
-    //get the songId
-    song = await getSongById(req.params.songId);
-
-    // const deletion = await commentsData.deleteComment(id, req.session.user.userId, req.params.songId);
-    // if (deletion) {
-    //   return res.status(202).json({ id, deleted: true });
-    // }
-
-    // return res.status(404).json({ error: "comment not found" });
   } catch (error) {
-    res.status(404).json({ error: e });
+    res.status(404).json({ error: "comment not found" });
   }
   //delete the comment
   try {
