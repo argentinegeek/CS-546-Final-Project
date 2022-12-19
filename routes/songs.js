@@ -28,6 +28,7 @@ router.get("/:id", async (req, res) => {
   }
   try {
     const song = await songData.getSongById(xss(req.params.id));
+    const recommendedSongs = await songData.recommendedSongs(xss(req.params.id));
     res.render("song_page", {
       songTitle: song.title,
       songArtist: song.artist,
@@ -35,6 +36,7 @@ router.get("/:id", async (req, res) => {
       songLinks: song.links,
       songRating: song.overallRating,
       songComments: song.comments,
+      recommended: recommendedSongs
     });
   } catch (e) {
     res.status(404).json({ error: e });

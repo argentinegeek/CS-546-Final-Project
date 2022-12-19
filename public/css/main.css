@@ -111,6 +111,7 @@ p {
     background: none;
 }
 
+
 /* Register Page */
 #firstName {
     font-family: Georgia;
@@ -261,12 +262,15 @@ p {
 }
 
 
-
-
 /* Settings Page */
 
 
+
+
 /* Individual Playlist Page */
+
+
+
 
 /* Songs Page */
 #songs-table {
@@ -291,6 +295,7 @@ th {
 /* Song Page */
 
 
+
 /* Playlists Page */
 #playlists-table {
     margin-left: auto;
@@ -302,7 +307,12 @@ th {
     font-family: Georgia;
 }
 
+
+
+
 /* Activity Page */
+
+
 
 
 /* Post Song Page */

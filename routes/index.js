@@ -2,6 +2,7 @@
 const playlistRoutes = require("./playlists");
 const songRoutes = require("./songs");
 const userRoutes = require("./users");
+const artistsRoutes = require("./artists")
 // const router = require("./users");
 
 const constructorMethod = (app) => {
@@ -10,6 +11,7 @@ const constructorMethod = (app) => {
   // app.use("/user", userRoutes);
   app.use("/songs", songRoutes);
   app.use("/playlists", playlistRoutes);
+  app.use("/artists", artistsRoutes);
   app.use("*", (req, res) => {
     res.sendStatus(404);
   });
