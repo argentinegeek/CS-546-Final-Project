@@ -27,12 +27,28 @@
     </tr>
     {{#each song}}
     <tr>
-        <td>{{title}}</td>
-        <td>{{artist}}</td>
+        <td><a href="/songs/{{_id}}">{{title}}</a></td>
+        <td><a href="/artists/{{_id}}">{{artist}}</a></td>
         <td>{{genres}}</td>
         <td>{{overallRating}}</td>
     </tr>
    {{/each}}
 </table>
+
+<form action="/artists">
+    <button type="submit">Artists</button>
+</form>
+
+<form action="">
+    <button type="submit">Account</button>
+</form>
+
+<formm action="/login">
+    <button type="submit">Login</button>
+</formm>
+
+<form action="/logout">
+    <button type="submit">Logout</button>
+</form>
 
 

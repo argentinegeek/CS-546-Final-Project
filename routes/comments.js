@@ -13,6 +13,7 @@ router.get('/:songId', async (req, res) => {
   //validating the id
   try {
     id = validation.checkId(id, "Id URL Param");
+    res.render()
   } catch (e) {
     return res.status(400).json({ error: e });
   }

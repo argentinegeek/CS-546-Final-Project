@@ -1,18 +1,45 @@
 
 
-<h1>{{{songTitle}}}</h1>
+<h1>{{songTitle}} by {{songArtist}}</h1>
+
+<div>
+    <p>Rating</p>
+    <p>{{songRating}}</p>
+</div>
 
 <table>
-    <tr></tr>
-        <th>Artist</th>
-            <td>{{{songArtist}}}</td>
-        <th>Genre(s)</th>
-            <td>{{{songGenres}}}</td>
+    <tr>
         <th>Rating</th>
-            <td>{{{songRating}}}</td>
-        <th>Song Links</th>
-            <td>{{{songLinks}}}</td>
-        <th>Song Comments</th>
-            <td>{{{songComments}}}</td>
+        <th>Username</th>
+    </tr>
+    <tr>
+        <td>{{songRating}}</td>
+        <td>{{username}}</td>
+    </tr>
+    <button type="submit">Like</button>
+    <button type="submit">Dislike</button>
+</table>
+
+<table>
+    <tr>
+        <th>Genres</th>
+        {{#each songGenres}}
+        <td>{{this}}</td>
+        {{/each}}
+    </tr>
+</table>
+
+<h3>Recommended Songs</h3>
+<table>
+    <tr>
+        <th>Song</th>
+        <th>Artist</th>
+    </tr>
+    {{#each recommended}}
+    <tr>
+        <td>{{this.title}}</td>
+        <td>{{this.artist}}</td>
+    </tr>
+     {{/each}}
 </table>
 
