@@ -9,26 +9,41 @@ const validation = require("../helpers");
 
 
 const createComment = async (songId, userId, comment, commentRating) => {
+    // input check
     if (!comment || !commentRating || !songId || !userId) {
-        throw "must enter an comment and rating";
+        throw "must enter a comment and rating";
     }
-
     songId = validation.checkId(songId, "ID");
     userId = validation.checkId(userId, "ID");
-
     if (typeof comment !== "string") {
         throw "comment must be a string";
     }
-
     if (typeof commentRating !== 'number') {
         throw "rating must be a number"
     }
-
     if (commentRating < 1 || commentRating > 5) {
         throw "rating must be 1-5"
     }
+    // checking if valid song
+    const songFound = await song.getSongById(songId);
+    //find the user and push the comment into it
+    let userFound = await user.getUserById(userId);
+    if (!userFound) {
+        throw "user is not found";
+    }
+    
+    // input validation is done
+    const songCollection = await songs();
+    const userCollection = await users();
 
-    //validation is done
+    // checking if already reviewed
+    let comments = songFound.comments;
+    if (comments.length !== 0) {
+        for (let i = 0; i < comments.length; i++) {
+            let curr = comments[i];
+            if (curr.userId === userId) throw `You already left a review on (${song._id}) ${song.title} by ${song.artist}`;
+        }
+    }
 
     //creates a comment object
     let newSongReview = {
@@ -41,19 +56,13 @@ const createComment = async (songId, userId, comment, commentRating) => {
         usersInteractions: [],
     };
 
-    //find the user and push the comment into it
-    let userFound = await user.getUserById(userId);
-    if (!userFound) {
-        throw "user is not found";
-    }
-
     //all the users comments, they've made
     let userComments = userFound.songReviews;
     //the commentId pushed into the array of comments
     userComments.push(newSongReview["_id"].toString());
 
     //update the user to have the new comment(s)
-    const userCollection = await users();
+    // const userCollection = await users();
     let updateUser = await userCollection.updateOne(
         { _id: ObjectId(userId) },
         { $set: { songReviews: userComments } }
@@ -63,9 +72,7 @@ const createComment = async (songId, userId, comment, commentRating) => {
     if (!updateUser.modifiedCount === 0) throw `Could not update song successfully`;
 
     //find the song and push the song into it
-    const songFound = await song.getSongById(songId)
-
-    if (songFound === null) throw `No song with id: ${songId}`;
+    // if (songFound === null) throw `No song with id: ${songId}`;
 
     //all the comments under that song
     let songComments = songFound.comments;
@@ -83,7 +90,6 @@ const createComment = async (songId, userId, comment, commentRating) => {
     //calculate overallRating
     let finalRating = parseFloat((sumOfRatings / songComments.length).toFixed(2));
 
-    const songCollection = await songs();
     let updateSong = await songCollection.updateOne(
         { _id: ObjectId(songId) },
         { $set: { comments: songComments, overallRating: finalRating } }
