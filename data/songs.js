@@ -559,8 +559,6 @@ const updateSongLinks = async (songId, userId, nl) => {
  */
 const searchSongs = async (songName) => {
   // input checking
-  if (!songName) throw "missing input parameters";
-  if (typeof songName !== "string") throw "invalid data type";
   if (validation.validString(songName.trim())) songName = songName.trim();
 
   // searching for match
@@ -579,8 +577,6 @@ const searchSongs = async (songName) => {
  */
 const searchGenres = async (genre) => {
   // input checking
-  if (!genre) throw "missing input parameters";
-  if (typeof genre !== "string") throw "invalid data type";
   if (validation.validString(genre.trim())) genre = genre.trim();
   if (validation.hasNumbers(genre.trim())) throw "Genre cannot contain numbers";
   //testing for invalid characters
@@ -607,8 +603,6 @@ const searchGenres = async (genre) => {
  */
 const searchArtist = async (artistName) => {
   // input checking
-  if (!artistName) throw "missing input parameters";
-  if (typeof artistName !== "string") throw "invalid data type";
   if (validation.validString(artistName.trim())) artistName = artistName.trim();
   if (artistName.includes('_')) throw `string cannot contain character '_'`;
 

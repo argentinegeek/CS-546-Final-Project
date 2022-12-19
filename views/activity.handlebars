@@ -1,11 +1,59 @@
+{{!-- top bar of the user page--}}
+<h1 id="colorstrip">Musicmania</h1>
+<form action="/songs">
+    <button type="submit" id="songs-page">Songs</button>
+</form>
 
-<h1>Activity</h1>
+<form action="/artists">
+    <button type="submit" id="artists-page">Artists</button>
+</form>
+
+<form action="/logout">
+    <button type="submit" id="user-logout">Logout</button>
+</form>
+
+<h2>{{{userName}}}</h2>
+
+<h1>Your Song Posts</h1>
+<table id="songposts-table">
+    {{#each songs}}
+    <tr>
+        <th>Song Name</th>
+        <th>Artist Name</th>
+    </tr>
+    <tr>
+        <td> <a href="/songs/{{_id}}">{{name}}</a></td>
+    </tr>
+    {{/each}}
+</table>
+
+<h1>Your Comments</h1>
+<table id="comments-table">
+    {{#each comment}}
+    <tr>
+        <th>Song Name</th>
+        <th>UserName</th>
+    </tr>
+    <tr>
+        <td> <a href="/songs/{{_id}}">{{name}}</a></td>
+    </tr>
+    {{/each}}
+</table>
+<h1>Your Playlists</h1>
+
+{{!-- {{#each songs}}
+<ul>
+    <li>{{{this.title}}} </li>
+    <li>{{{this.genre}}}</li>
+    <li>{{{this.artist}}}</li>
+</ul>
+{{/each}} --}}
 
 
-{{#each songs}}
-    <ul>
-        <li>{{{this.title}}} </li>
-        <li>{{{this.genre}}}</li>
-        <li>{{{this.artist}}}</li> 
-    </ul>
-{{/each}}
+{{!-- should have
+-logout button
+-playlist button :
+-songs button
+
+all there playlsit, comments with the songs, and any likes + dislikes
+--}}
